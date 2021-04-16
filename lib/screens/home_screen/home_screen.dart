@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:lazy_chair/chairs.dart';
+import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/screens/global.dart';
+import 'package:woocommerce/models/products.dart';
+import 'package:woocommerce/woocommerce.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -9,6 +13,34 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  List<WooProduct> products = [];
+
+  List<WooProduct> featuredProducts = [];
+  WooCommerce wooCommerce = WooCommerce(
+    baseUrl: Config.baseUrl,
+    consumerKey: Config.key,
+    consumerSecret: Config.secret,
+    isDebug: true,
+  );
+
+  getProducts() async{
+    products = await wooCommerce.getProducts(featured: true);
+    setState(() {
+    });
+    print(products.toString());
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProducts();
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'Hey, Masrafi!',
+                        "Hey, "+ GlobalData.niceName,
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize: MediaQuery.of(context).size.width * .04),
@@ -161,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 children: [
                   Text(
-                    'Popular Chair',
+                    'Featured Products',
                     style: TextStyle(
                         color: Colors.black,fontWeight: FontWeight.bold,
                         fontSize: MediaQuery.of(context).size.width * .05),
@@ -181,12 +213,12 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: chair.length,
+                    itemCount: products.length,
                     padding: EdgeInsets.only(right: 10),
                     itemBuilder: (context, index){
-                      final chairItem = chair[index];
+                      final product = products[index];
                       return ChairItem(
-                        chairItem: chairItem,
+                        products: product,
                         onTap: (){},
                       );
                     },
@@ -206,10 +238,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class ChairItem extends StatelessWidget {
 
-  final MyChair chairItem;
+  final WooProduct products;
   final VoidCallback onTap;
 
-  const ChairItem({Key key, this.chairItem, this.onTap}) : super(key: key);
+  const ChairItem({Key key, this.products, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -236,35 +268,32 @@ class ChairItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      chairItem.images.first,
+                    Image.network(
+                      products.images==null?"https://ronakfabricatorworks.com/wp-content/uploads/2021/02/download.jpg":products.images[0].src,
                       height: MediaQuery.of(context).size.height*.15,
                     ),
                   ],
                 ),
                Spacer(),
-                Text(chairItem.chairName.toString(),style: TextStyle(
+                Text(products.name,style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: MediaQuery.of(context).size.height*.025
                 ),),
                 SizedBox(
                   height: MediaQuery.of(context).size.height*.01,
                 ),
-                Text(chairItem.by.toString(),style: TextStyle(
-                  color: Colors.grey,
-                    fontSize: MediaQuery.of(context).size.height*.02
-                ),),
+
                 SizedBox(
                   height: MediaQuery.of(context).size.height*.01,
                 ),
                 Row(
                   children: [
                     Icon(Icons.star,color: Colors.orangeAccent,),
-                    Text(chairItem.rating.toString(),style: TextStyle(
+                    Text(products.averageRating,style: TextStyle(
                         fontSize: MediaQuery.of(context).size.height*.02
                     ),),
                     Spacer(),
-                    Text('\$${chairItem.price.toInt().toString()}',style: TextStyle(
+                    Text('\$${products.price.toString()}',style: TextStyle(
                         fontSize: MediaQuery.of(context).size.height*.03,
                       fontWeight: FontWeight.bold
                     ),),
