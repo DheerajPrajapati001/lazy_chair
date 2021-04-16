@@ -17,7 +17,7 @@ class MyChair {
 
 final chair = <MyChair>[
   MyChair(
-    bgColor: 0xFFF6F6F6,
+    bgColor: 0xFFDBF3FA,
     by: 'By Regal',
     chairName: 'Bean Bag Chair',
     price: 120,
@@ -25,7 +25,7 @@ final chair = <MyChair>[
     images: [MyImage.chair1]
   ),
   MyChair(
-      bgColor: 0xFFF6F6F6,
+      bgColor: 0xFFFFE6EE,
       by: 'By Daud',
       chairName: 'Lazy Bean Chair',
       price: 150,
