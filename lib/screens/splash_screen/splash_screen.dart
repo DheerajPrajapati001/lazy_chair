@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lazy_chair/screens/home_screen/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../global.dart';
@@ -19,15 +20,20 @@ class _SplashScreenState extends State<SplashScreen> {
     {
 
 
-      GlobalData.userId=prefs.get("Id");
-      GlobalData.niceName=prefs.get("name");
+      GlobalData.userId = prefs.getInt("Id");
+      GlobalData.niceName = prefs.get("NiceName");
+      GlobalData.tokenId = prefs.get("TokenId");
+      GlobalData.emailId = prefs.get("Email");
+      GlobalData.firstName = prefs.get("FirstName");
+      GlobalData.lastName = prefs.get("LastName");
 
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
 
     }
     else
     {
       print("Apple");
-      //Navigator.of(context).pushReplacementNamed('loging_selection');
+      Navigator.of(context).pushReplacementNamed('LoginPage');
     }
   }
 
@@ -53,16 +59,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            Color(0xFF2C33FF),
-            Color(0xFFF62658),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+      body: Center(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+
+          child: Center(child: Text("E-Commerce App",style: TextStyle(fontSize: 20),)),
         ),
-        child: Text("E-Commerce App",style: TextStyle(fontSize: 20),),
       ),
     );
   }

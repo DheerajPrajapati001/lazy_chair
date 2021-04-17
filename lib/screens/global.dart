@@ -6,7 +6,7 @@ class GlobalData{
   static String categoryId;
   static String productId;
   static String tokenId;
-  static String userId;
+  static int userId;
   static String emailId;
   static String firstName;
   static String lastName;

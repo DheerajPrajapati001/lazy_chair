@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lazy_chair/screens/home_screen/home_screen.dart';
 import 'package:lazy_chair/screens/signup_screen/signup_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../global.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
   bool _obscureText = true;
+  SharedPreferences prefs;
 
 
   void _submit() {
@@ -33,7 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   login() async {
 
-    http.post("https://beta.saurabhenterprise.com/wp-json/jwt-auth/v1/token", body: {
+    prefs = await SharedPreferences.getInstance();
+
+    await http.post("https://beta.saurabhenterprise.com/wp-json/jwt-auth/v1/token", body: {
       "username": email.text.toString().trim(),
       "password": password.text.toString(),
 
@@ -50,22 +54,31 @@ class _LoginScreenState extends State<LoginScreen> {
       else
         {
         Show_toast_Now("Login Successfully", Colors.green);
+        GlobalData.userId= status['data']['id'];
+        print(status['data']['id']);
+        print(GlobalData.userId);
+        prefs.setInt("Id", GlobalData.userId);
+        prefs.setString("TokenId", status['data']['token']);
+        prefs.setString("Email", status['data']['email']);
+        prefs.setString("NiceName", status['data']['nicename']);
+        prefs.setString("FirstName", status['data']['firstName']);
+        prefs.setString("LastName", status['data']['lastName']);
 
 
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
         GlobalData.tokenId=status['data']['token'];
-        GlobalData.userId= status['data']['id'].toString();
+        GlobalData.userId= status['data']['id'];
         GlobalData.emailId= status['data']['email'];
         GlobalData.firstName = status['data']['firstName'];
         GlobalData.lastName = status['data']['lastName'];
         GlobalData.niceName = status['data']['nicename'];
-        print("Id: "+GlobalData.userId);
+        print("Id: "+GlobalData.userId.toString());
         print("Token Id: "+GlobalData.tokenId);
         print("Email Id: "+GlobalData.emailId);
         print("First Name: "+GlobalData.firstName);
         print("Last Name: "+GlobalData.lastName);
         print("Nice Name: "+GlobalData.niceName);
         print("Allowed");
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
       }
     });
     /*.catchError( (error){

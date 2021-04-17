@@ -29,7 +29,7 @@ class _ChairDetailsState extends State<ChairDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: Stack(
@@ -44,7 +44,7 @@ class _ChairDetailsState extends State<ChairDetails> {
                           color: Colors.grey,
                         ),
                         onPressed: () {
-                          //Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                       ),
                       Text(
@@ -210,7 +210,7 @@ class _ChairDetailsState extends State<ChairDetails> {
                           height: MediaQuery.of(context).size.height * .015,
                         ),
                         Text(
-                          'Lazy Chair Solid Lorem ipsum dolor sit amet, consetur adipiscing elit. Nunc nunc',
+                          'Lazy Chair Solid Lorem ipsum dolor sit amet, consetur adipiscing elit. Nunc nunc Lazy Chair Solid Lorem ipsum dolor sit amet, consetur adipiscing elit. Nunc nunc',
                           style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.height * .025),

@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:lazy_chair/chairs.dart';
 import 'package:lazy_chair/screens/chair_details/chair_details.dart';
+import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/screens/global.dart';
+import 'package:woocommerce/models/products.dart';
+import 'package:woocommerce/woocommerce.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -20,6 +24,29 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
+  }
+
+  List<WooProduct> products = [];
+  List<WooProduct> featuredProducts = [];
+  WooCommerce wooCommerce = WooCommerce(
+    baseUrl: Config.baseUrl,
+    consumerKey: Config.key,
+    consumerSecret: Config.secret,
+    isDebug: true,
+  );
+  getProducts() async{
+    products = await wooCommerce.getProducts(featured: true);
+    setState(() {
+    });
+    print(products.toString());
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProducts();
+    setState(() {
+    });
   }
 
   @override
@@ -71,28 +98,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'Hey, Masrafi!',
+                        "Welcome, "+ GlobalData.niceName,
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize: MediaQuery.of(context).size.width * .04),
                       ),
-                      Text(
+                     /* Text(
                         'You Choice Cute Chair',
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: MediaQuery.of(context).size.width * .045,
                             fontWeight: FontWeight.w500),
-                      )
+                      )*/
                     ],
                   ),
                   Spacer(),
                   Icon(Icons.notifications_none)
                 ],
               ),
-              SizedBox(
+             /* SizedBox(
                 height: MediaQuery.of(context).size.height * .04,
-              ),
-              Container(
+              ),*/
+              /*Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * .08,
                 decoration: BoxDecoration(
@@ -109,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-              ),
+              ),*/
               SizedBox(
                 height: MediaQuery.of(context).size.height * .03,
               ),
@@ -227,9 +254,9 @@ class ChairItem extends StatelessWidget {
       padding: const EdgeInsets.only(right: 15),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(40),
         child: Container(
-          height: MediaQuery.of(context).size.height * .05,
+          //height: MediaQuery.of(context).size.height * .45,
           width: MediaQuery.of(context).size.width * .55,
           decoration: BoxDecoration(
               color: Color(chairItem.bgColor),
@@ -240,9 +267,9 @@ class ChairItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                /*SizedBox(
                   height: MediaQuery.of(context).size.height * .02,
-                ),
+                ),*/
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,

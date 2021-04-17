@@ -46,7 +46,7 @@ class _MyCartState extends State<MyCart> {
                       color: Colors.grey,
                     ),
                     onPressed: () {
-                      //Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                   ),
                   Text(
