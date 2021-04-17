@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:lazy_chair/chairs.dart';
 import 'package:lazy_chair/screens/chair_details/chair_details.dart';
-import 'package:lazy_chair/config/config.dart';
-import 'package:lazy_chair/screens/global.dart';
-import 'package:woocommerce/models/products.dart';
-import 'package:woocommerce/woocommerce.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -26,32 +22,105 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  List<WooProduct> products = [];
-  List<WooProduct> featuredProducts = [];
-  WooCommerce wooCommerce = WooCommerce(
-    baseUrl: Config.baseUrl,
-    consumerKey: Config.key,
-    consumerSecret: Config.secret,
-    isDebug: true,
-  );
-  getProducts() async{
-    products = await wooCommerce.getProducts(featured: true);
-    setState(() {
-    });
-    print(products.toString());
-  }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getProducts();
-    setState(() {
-    });
-  }
+  String disp = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: Text(
+          'You Choice Cute Chair',
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: MediaQuery.of(context).size.width * .045,
+              fontWeight: FontWeight.w500),
+        ),
+        actions: [
+          Row(
+            children: [
+              Icon(Icons.notifications_none),
+              SizedBox(
+                width: 10,
+              )
+            ],
+          ),
+        ],
+        elevation: 0,
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height*.25,
+              color: Colors.orangeAccent,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.height*.1,
+                        height: MediaQuery.of(context).size.height*.1,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            icon: Icon(Icons.add_a_photo_outlined,),onPressed: (){},
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height*.01,
+                      ),
+                      Text('Ana Skulj',style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: MediaQuery.of(context).size.height*.045
+                      ),)
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*.1),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height*.04,
+                  ),
+                  DrawerItem(
+                    icon: Icons.person_outline_outlined,
+                    title: 'Profile',
+                  ),
+                  DrawerItem(
+                    icon: Icons.message_outlined,
+                    title: 'Messages',
+                  ),
+                  DrawerItem(
+                    icon: Icons.local_activity_outlined,
+                    title: 'Activity',
+                  ),
+                  DrawerItem(
+                    icon: Icons.report_gmailerrorred_outlined,
+                    title: 'Report',
+                  ),
+                  DrawerItem(
+                    icon: Icons.exit_to_app_sharp,
+                    title: 'Sign Out',
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
@@ -65,17 +134,29 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.white,
           backgroundColor: Colors.transparent,
           buttonBackgroundColor: Colors.orangeAccent,
-          animationCurve: Curves.easeInCubic,
-          index: 2,
+          index: 0,
           items: <Widget>[
             Icon(Icons.home),
-            Icon(Icons.shopping_bag_outlined),
-            Icon(Icons.fingerprint),
-            Icon(Icons.favorite_border),
-            Icon(Icons.person_sharp),
+            Icon(Icons.category),
+            Icon(Icons.shopping_cart_sharp),
+            Icon(Icons.settings),
           ],
           onTap: (index) {
-            debugPrint("Current Index is $index");
+            setState(() {
+              if(index==0){
+                disp = 'home';
+                HomeScreen();
+              }else if(index==1){
+                disp = 'categories';
+                var color = Colors.red;
+              }else if(index==2){
+                disp = 'Cart';
+                var color = Colors.yellow;
+              }else{
+                disp = 'Settings';
+                var color = Colors.green;
+              }
+            });
           },
         ),
       ),
@@ -87,39 +168,39 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * .01,
               ),
-              Row(
-                children: [
-                  Icon(Icons.menu_open),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Welcome, "+ GlobalData.niceName,
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: MediaQuery.of(context).size.width * .04),
-                      ),
-                     /* Text(
-                        'You Choice Cute Chair',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: MediaQuery.of(context).size.width * .045,
-                            fontWeight: FontWeight.w500),
-                      )*/
-                    ],
-                  ),
-                  Spacer(),
-                  Icon(Icons.notifications_none)
-                ],
+              // Row(
+              //   children: [
+              //     Icon(Icons.menu_open),
+              //     SizedBox(
+              //       width: 10,
+              //     ),
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           'Hey, Masrafi!',
+              //           style: TextStyle(
+              //               color: Colors.grey,
+              //               fontSize: MediaQuery.of(context).size.width * .04),
+              //         ),
+              //         Text(
+              //           'You Choice Cute Chair',
+              //           style: TextStyle(
+              //               color: Colors.black,
+              //               fontSize: MediaQuery.of(context).size.width * .045,
+              //               fontWeight: FontWeight.w500),
+              //         )
+              //       ],
+              //     ),
+              //     Spacer(),
+              //     Icon(Icons.notifications_none)
+              //   ],
+              // ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .02,
               ),
-             /* SizedBox(
-                height: MediaQuery.of(context).size.height * .04,
-              ),*/
-              /*Container(
+              Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * .08,
                 decoration: BoxDecoration(
@@ -136,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-              ),*/
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * .03,
               ),
@@ -254,9 +335,9 @@ class ChairItem extends StatelessWidget {
       padding: const EdgeInsets.only(right: 15),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(50),
         child: Container(
-          //height: MediaQuery.of(context).size.height * .45,
+          height: MediaQuery.of(context).size.height * .05,
           width: MediaQuery.of(context).size.width * .55,
           decoration: BoxDecoration(
               color: Color(chairItem.bgColor),
@@ -267,9 +348,9 @@ class ChairItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /*SizedBox(
+                SizedBox(
                   height: MediaQuery.of(context).size.height * .02,
-                ),*/
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -330,3 +411,39 @@ class ChairItem extends StatelessWidget {
     );
   }
 }
+
+
+
+class DrawerItem extends StatelessWidget {
+
+  final String title;
+  final IconData icon;
+
+  const DrawerItem({Key key, this.title, this.icon}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          child: Row(
+            children: [
+              Icon(icon,color: Colors.grey,size: MediaQuery.of(context).size.height*.035,),
+              SizedBox(
+                width: MediaQuery.of(context).size.width*.07,
+              ),
+              Text(title,style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: MediaQuery.of(context).size.height*.025
+              ),)
+            ],
+          ),
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height*.015,
+        )
+      ],
+    );
+  }
+}
+

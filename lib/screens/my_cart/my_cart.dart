@@ -50,7 +50,7 @@ class _MyCartState extends State<MyCart> {
                     },
                   ),
                   Text(
-                    'Details',
+                    'My Cart',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: MediaQuery.of(context).size.width * .05),
@@ -272,7 +272,9 @@ class _MyCartState extends State<MyCart> {
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(context, 'Shipping');
+                          },
                           splashColor: Colors.black.withOpacity(0.1),
                           child: Center(
                             child: Text(

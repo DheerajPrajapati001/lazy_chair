@@ -255,7 +255,9 @@ class _ChairDetailsState extends State<ChairDetails> {
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pushNamed(context, 'Shipping');
+                                  },
                                   splashColor: Colors.black.withOpacity(0.1),
                                   child: Center(
                                     child: Text(
