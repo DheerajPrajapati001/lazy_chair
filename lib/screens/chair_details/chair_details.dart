@@ -1,17 +1,77 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:lazy_chair/chairs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:woocommerce/models/products.dart';
+import 'package:http/http.dart' as http;
+import 'package:woocommerce/woocommerce_error.dart';
+import '../global.dart';
 
-class ChairDetails extends StatefulWidget {
-  final MyChair chair;
-
-  const ChairDetails({Key key, @required this.chair}) : super(key: key);
+class ProductDetails extends StatefulWidget {
+  final WooProduct productDetails;
+  const ProductDetails({Key key, @required this.productDetails}) : super(key: key);
 
   @override
-  _ChairDetailsState createState() => _ChairDetailsState();
+  _ProductDetailsState createState() => _ProductDetailsState();
 }
 
-class _ChairDetailsState extends State<ChairDetails> {
+class _ProductDetailsState extends State<ProductDetails> {
   int _counter = 1;
+
+  Future addToMyCartfix({@required String itemId, @required String quantity, List variations})
+  async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var jwt = await prefs.getString('jwt');
+    var nonc = await prefs.getString('nonce');
+    Map<String, dynamic> data = {
+      'id': itemId,
+      'quantity': quantity,
+    };
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer '+GlobalData.tokenId,
+      'X-WC-Store-API-Nonce': GlobalData.nonceKey
+    };
+   /* if (variations != null)
+    {data['variations'] = variations;}
+    else{
+      data['variations'] = "";
+    }*/
+
+   http.post(
+        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/add-item',
+        body: data,
+        headers: requestHeaders).then((response) async{
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final jsonStr = json.decode(response.body);
+        print('added to my cart : ' + jsonStr.toString());
+        Show_toast_Now("Product Added Successfully", Colors.green);
+        GlobalData.isAdded=true;
+
+        setState(() {
+
+        });
+        // return WooCartItem.fromJson(jsonStr);
+      } else {
+        Show_toast_Now("Something went wrong", Colors.red);
+        WooCommerceError err =
+        WooCommerceError.fromJson(json.decode(response.body));
+        throw err;
+      }
+    });
+
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    GlobalData.isAdded=false;
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -29,6 +89,31 @@ class _ChairDetailsState extends State<ChairDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.orange,
+        title: Text(
+          "Product Details",
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: MediaQuery.of(context).size.width * .045,
+              fontWeight: FontWeight.w500),
+        ),
+        actions: [
+          Row(
+            children: [
+              IconButton(
+                  icon: Icon(Icons.shopping_bag_outlined),
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'MyCart');
+                  }),
+              SizedBox(
+                width: 10,
+              )
+            ],
+          ),
+        ],
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -36,7 +121,7 @@ class _ChairDetailsState extends State<ChairDetails> {
             children: [
               Column(
                 children: [
-                  Row(
+                  /*Row(
                     children: [
                       IconButton(
                         icon: Icon(
@@ -58,9 +143,9 @@ class _ChairDetailsState extends State<ChairDetails> {
                           icon: Icon(Icons.shopping_bag_outlined),
                           onPressed: () {})
                     ],
-                  ),
+                  ),*/
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * .08,
+                    height: MediaQuery.of(context).size.height * .03,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -75,7 +160,7 @@ class _ChairDetailsState extends State<ChairDetails> {
                               height: MediaQuery.of(context).size.height * .35,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(50),
-                                  color: Color(widget.chair.bgColor)),
+                                  color: Colors.greenAccent),
                             ),
                           ],
                         ),
@@ -85,7 +170,7 @@ class _ChairDetailsState extends State<ChairDetails> {
                         Row(
                           children: [
                             Text(
-                              widget.chair.chairName.toString(),
+                              widget.productDetails.name.toString(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: MediaQuery.of(context).size.height *
@@ -93,7 +178,7 @@ class _ChairDetailsState extends State<ChairDetails> {
                             ),
                             Spacer(),
                             Text(
-                              '\$${widget.chair.price.toInt().toString()}',
+                              '\$${widget.productDetails.price}',
                               style: TextStyle(
                                   fontSize:
                                       MediaQuery.of(context).size.height * .03,
@@ -101,16 +186,16 @@ class _ChairDetailsState extends State<ChairDetails> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                       /* SizedBox(
                           height: MediaQuery.of(context).size.height * .01,
                         ),
                         Text(
-                          widget.chair.by.toString(),
+                          widget.productDetails.by.toString(),
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize:
                                   MediaQuery.of(context).size.height * .02),
-                        ),
+                        ),*/
                         SizedBox(
                           height: MediaQuery.of(context).size.height * .01,
                         ),
@@ -124,7 +209,7 @@ class _ChairDetailsState extends State<ChairDetails> {
                               width: 10,
                             ),
                             Text(
-                              widget.chair.rating.toString(),
+                              widget.productDetails.averageRating,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize:
@@ -133,19 +218,19 @@ class _ChairDetailsState extends State<ChairDetails> {
                             SizedBox(
                               width: 10,
                             ),
-                            Text(
+                            /*Text(
                               '(500+ Review)',
                               style: TextStyle(
                                   color: Colors.grey,
                                   fontSize:
                                       MediaQuery.of(context).size.height * .02),
-                            ),
+                            ),*/
                           ],
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * .02,
                         ),
-                        Row(
+                       /* Row(
                           children: [
                             Text(
                               'Color:',
@@ -195,7 +280,7 @@ class _ChairDetailsState extends State<ChairDetails> {
                               ),
                             )
                           ],
-                        ),
+                        ),*/
                         SizedBox(
                           height: MediaQuery.of(context).size.height * .02,
                         ),
@@ -209,12 +294,20 @@ class _ChairDetailsState extends State<ChairDetails> {
                         SizedBox(
                           height: MediaQuery.of(context).size.height * .015,
                         ),
-                        Text(
-                          'Lazy Chair Solid Lorem ipsum dolor sit amet, consetur adipiscing elit. Nunc nunc Lazy Chair Solid Lorem ipsum dolor sit amet, consetur adipiscing elit. Nunc nunc',
+                        Html(
+                          data: widget.productDetails.description,
+                          style: {
+                            "p":Style(
+                              textAlign: TextAlign.justify,fontSize: FontSize.large,
+                            )
+                          },
+                        ),
+                       /* Text(
+                          widget.productDetails.description,
                           style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.height * .025),
-                        ),
+                        ),*/
                         SizedBox(
                           height: MediaQuery.of(context).size.height * .02,
                         ),
@@ -231,11 +324,22 @@ class _ChairDetailsState extends State<ChairDetails> {
                                 color: Colors.transparent,
                                 child: InkWell(
                                   onTap: () {
-                                    Navigator.pushNamed(context, 'MyCart');
+                                    print(GlobalData.nonceKey);
+                                    print(GlobalData.tokenId);
+                                    print(GlobalData.productId);
+                                    GlobalData.isAdded==true?
+                                    Navigator.pushNamed(context, 'MyCart'):
+                                    addToMyCartfix(itemId: GlobalData.productId, quantity: "1",);
+                                    setState(() {
+
+                                    });
+
+
+                                    /*Navigator.pushNamed(context, 'MyCart');*/
                                   },
                                   child: Center(
                                     child: Text(
-                                      'Add To Cart',
+                                      GlobalData.isAdded==true?"View Cart":'Add To Cart',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -278,43 +382,24 @@ class _ChairDetailsState extends State<ChairDetails> {
                 ],
               ),
               Positioned(
-                left: MediaQuery.of(context).size.width * .1,
-                top: MediaQuery.of(context).size.height * .07,
-                child: Image.asset(
-                  widget.chair.images.first,
-                  height: MediaQuery.of(context).size.height * .3,
+                left: MediaQuery.of(context).size.width * .2,
+                right: MediaQuery.of(context).size.width * .2,
+                top: MediaQuery.of(context).size.height * .1,
+                child:  Image.network(
+                  widget.productDetails.images==null?"https://ronakfabricatorworks.com/wp-content/uploads/2021/02/download.jpg":widget.productDetails.images[0].src,
+                  height: MediaQuery.of(context).size.height*.20,
                 ),
               ),
               Positioned(
                 left: MediaQuery.of(context).size.width * .08,
-                top: MediaQuery.of(context).size.height * .17,
+                top: MediaQuery.of(context).size.height * .1,
                 child: Icon(
                   Icons.favorite_border,
                   color: Colors.grey,
                   size: MediaQuery.of(context).size.width * .06,
                 ),
               ),
-              Positioned(
-                right: MediaQuery.of(context).size.width * .18,
-                top: MediaQuery.of(context).size.height * .41,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * .14,
-                  height: MediaQuery.of(context).size.height * .12,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        offset: Offset(0,0),
-                        blurRadius: 5,
-                        spreadRadius: 5
-                      )
-                    ]
-                  ),
-                  child: IconButton(icon: Icon(Icons.play_arrow),onPressed: (){},),
-                ),
-              )
+
             ],
           ),
         ),

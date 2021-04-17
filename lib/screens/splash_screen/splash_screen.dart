@@ -26,6 +26,11 @@ class _SplashScreenState extends State<SplashScreen> {
       GlobalData.emailId = prefs.get("Email");
       GlobalData.firstName = prefs.get("FirstName");
       GlobalData.lastName = prefs.get("LastName");
+      GlobalData.nonceKey = prefs.get("NonceKey");
+      print("token: "+GlobalData.tokenId);
+      print("nonceKey: "+GlobalData.nonceKey);
+      print("userid: "+GlobalData.userId.toString());
+
 
       Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
 

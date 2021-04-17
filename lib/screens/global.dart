@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class GlobalData{
@@ -19,6 +20,26 @@ class GlobalData{
 
 
 }
+
+LogoutFunction(context)async {
+
+  SharedPreferences pre= await SharedPreferences.getInstance();
+  pre.clear();
+
+  GlobalData.nonceKey="";
+  GlobalData.userId=null;
+  GlobalData.firstName="";
+  GlobalData.niceName="";
+  GlobalData.lastName="";
+  GlobalData.tokenId="";
+  GlobalData.emailId="";
+
+
+
+  Navigator.of(context)
+      .pushNamedAndRemoveUntil('LoginPage', (Route<dynamic> route) => false);
+}
+
 Show_toast_Now(String msg,Color color){
   Fluttertoast.showToast(
       msg: msg,

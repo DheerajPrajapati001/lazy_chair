@@ -1,8 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:lazy_chair/chairs.dart';
 import 'package:lazy_chair/screens/chair_details/chair_details.dart';
+import 'package:lazy_chair/screens/global.dart';
+import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/screens/my_cart/my_cart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:woocommerce/models/products.dart';
+import 'package:woocommerce/woocommerce.dart';
+import 'package:http/http.dart' as http;
+
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,16 +20,59 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<void> _onChairPressed(MyChair chair, BuildContext context) async {
+  Future<void> _onChairPressed(WooProduct products, BuildContext context) async {
     await Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) {
-          return ChairDetails(
-            chair: chair,
+          return ProductDetails(
+            productDetails: products,
           );
         },
       ),
     );
+  }
+  SharedPreferences prefs;
+
+  Future Getnonse(String token) async {
+    prefs = await SharedPreferences.getInstance();
+
+    Map<String, String> requestHeaders = {'Authorization': "Bearer "+GlobalData.tokenId};
+    final response = await http.get(Config.baseUrl+'wp-json/nonceapi/v1/get',
+        headers: requestHeaders);
+
+    var j = json.decode(response.body);
+    print(j);
+    print(j['nonce']);
+    prefs.setString("NonceKey", j['nonce']);
+    GlobalData.nonceKey=j['nonce'];
+    print(GlobalData.nonceKey);
+
+    return j['nonce']; //later u can save this nonce vai sharedpreference or etc i am using shared preference
+  }
+
+  List<WooProduct> products = [];
+  List<WooProduct> featuredProducts = [];
+  WooCommerce wooCommerce = WooCommerce(
+    baseUrl: Config.baseUrl,
+    consumerKey: Config.key,
+    consumerSecret: Config.secret,
+    isDebug: true,
+  );
+  getProducts() async{
+    products = await wooCommerce.getProducts(featured: true);
+    setState(() {
+    });
+    print(products.toString());
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProducts();
+    Getnonse(GlobalData.tokenId);
+
+    setState(() {
+    });
   }
 
   String disp = '';
@@ -28,9 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.orange,
         title: Text(
-          'You Choice Cute Chair',
+         "Welcome "+GlobalData.niceName,
           style: TextStyle(
               color: Colors.black,
               fontSize: MediaQuery.of(context).size.width * .045,
@@ -78,10 +131,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height*.01,
                       ),
-                      Text('Ana Skulj',style: TextStyle(
+                      Text(GlobalData.firstName+" "+GlobalData.lastName,style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.of(context).size.height*.045
+                        fontSize: 22
                       ),)
                     ],
                   ),
@@ -95,25 +148,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height*.04,
                   ),
-                  DrawerItem(
-                    icon: Icons.person_outline_outlined,
-                    title: 'Profile',
-                  ),
-                  DrawerItem(
-                    icon: Icons.message_outlined,
-                    title: 'Messages',
-                  ),
+
                   DrawerItem(
                     icon: Icons.local_activity_outlined,
-                    title: 'Activity',
+                    title: 'View Orders',
                   ),
                   DrawerItem(
                     icon: Icons.report_gmailerrorred_outlined,
-                    title: 'Report',
+                    title: 'View Cart',
+                    click: (){
+                      Navigator.pushNamed(context, 'MyCart');
+                    },
                   ),
                   DrawerItem(
                     icon: Icons.exit_to_app_sharp,
                     title: 'Sign Out',
+                    click: (){
+                      LogoutFunction(context);
+                    },
                   ),
                 ],
               ),
@@ -152,6 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }else if(index==2){
                 disp = 'Cart';
                 var color = Colors.yellow;
+                MyCart();
               }else{
                 disp = 'Settings';
                 var color = Colors.green;
@@ -278,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 children: [
                   Text(
-                    'Popular Chair',
+                    'Featured Products',
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -299,14 +352,16 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: chair.length,
+                  itemCount: products.length,
                   padding: EdgeInsets.only(right: 10),
                   itemBuilder: (context, index) {
-                    final chairItem = chair[index];
+                    final product = products[index];
                     return ChairItem(
-                      chairItem: chairItem,
+                      products: product,
                       onTap: () {
-                        _onChairPressed(chairItem, context);
+                        GlobalData.productId=products[index].id.toString();
+                        print(GlobalData.productId);
+                        _onChairPressed(product, context);
                       },
                     );
                   },
@@ -324,10 +379,10 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class ChairItem extends StatelessWidget {
-  final MyChair chairItem;
+  final WooProduct products;
   final VoidCallback onTap;
 
-  const ChairItem({Key key, this.chairItem, this.onTap}) : super(key: key);
+  const ChairItem({Key key, this.products, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +395,7 @@ class ChairItem extends StatelessWidget {
           height: MediaQuery.of(context).size.height * .05,
           width: MediaQuery.of(context).size.width * .55,
           decoration: BoxDecoration(
-              color: Color(chairItem.bgColor),
+              color:  Colors.blue.withOpacity(0.1),
               borderRadius: BorderRadius.circular(50)),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -348,22 +403,22 @@ class ChairItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                /*SizedBox(
                   height: MediaQuery.of(context).size.height * .02,
-                ),
+                ),*/
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      chairItem.images.first,
-                      height: MediaQuery.of(context).size.height * .15,
+                    Image.network(
+                      products.images==null?"https://ronakfabricatorworks.com/wp-content/uploads/2021/02/download.jpg":products.images[0].src,
+                      height: MediaQuery.of(context).size.height*.15,
                     ),
                   ],
                 ),
                 Spacer(),
                 Text(
-                  chairItem.chairName.toString(),
+                  products.name,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: MediaQuery.of(context).size.height * .025),
@@ -371,12 +426,12 @@ class ChairItem extends StatelessWidget {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .01,
                 ),
-                Text(
-                  chairItem.by.toString(),
+                /*Text(
+                  products.by.toString(),
                   style: TextStyle(
                       color: Colors.grey,
                       fontSize: MediaQuery.of(context).size.height * .02),
-                ),
+                ),*/
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .01,
                 ),
@@ -387,13 +442,13 @@ class ChairItem extends StatelessWidget {
                       color: Colors.orangeAccent,
                     ),
                     Text(
-                      chairItem.rating.toString(),
+                      products.averageRating,
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.height * .02),
                     ),
                     Spacer(),
                     Text(
-                      '\$${chairItem.price.toInt().toString()}',
+                      "\$"+products.price,
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.height * .03,
                           fontWeight: FontWeight.bold),
@@ -418,25 +473,29 @@ class DrawerItem extends StatelessWidget {
 
   final String title;
   final IconData icon;
+  final VoidCallback click;
 
-  const DrawerItem({Key key, this.title, this.icon}) : super(key: key);
+  const DrawerItem({Key key, this.title, this.icon,this.click}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Row(
-            children: [
-              Icon(icon,color: Colors.grey,size: MediaQuery.of(context).size.height*.035,),
-              SizedBox(
-                width: MediaQuery.of(context).size.width*.07,
-              ),
-              Text(title,style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: MediaQuery.of(context).size.height*.025
-              ),)
-            ],
+        GestureDetector(
+          onTap: click,
+          child: Container(
+            child: Row(
+              children: [
+                Icon(icon,color: Colors.grey,size: MediaQuery.of(context).size.height*.035,),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width*.07,
+                ),
+                Text(title,style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.height*.025
+                ),)
+              ],
+            ),
           ),
         ),
         SizedBox(
