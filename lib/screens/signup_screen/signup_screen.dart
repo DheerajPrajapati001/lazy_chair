@@ -86,6 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.orange.shade50,
         body: Center(
           child: SingleChildScrollView(
             child: Form(
@@ -98,10 +99,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Center(child: Image.asset("assets/logo.png",height: 100,)),
 
 
-                        Text("Username"),
+                        //Text("Username"),
                         CustomTextField(
+                          title: "Username",
                           controller: userName,
                           hintText: "Enter Username",
                           validator: (value){
@@ -113,9 +116,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
 
-
-                        Text("First Name"),
+                        SizedBox(height: 10,),
+                        //Text("First Name"),
                         CustomTextField(
+                          title: "First Name",
+
                           controller: firstName,
                           hintText: "Enter First Name",
                           validator: (value){
@@ -127,8 +132,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                         SizedBox(height: 10,),
-                        Text("Last Name"),
+                        //Text("Last Name"),
                         CustomTextField(
+                          title: "Last Name",
+
                           controller: lastName,
                           hintText: "Enter First Name",
                           validator: (value){
@@ -139,8 +146,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                         SizedBox(height: 10,),
-                        Text("Email"),
+                        //Text("Email"),
                         CustomTextField(
+                          title: "Email",
+
                           controller: email,
                           hintText: "Enter Email",
                           validator: (value){

@@ -17,6 +17,8 @@ class GlobalData{
   static String itemKey;
   static Color white = Colors.white;
   static Color black = Colors.black;
+  static Color orange = Colors.orange;
+  static int totalPrice;
 
 
 }
@@ -56,6 +58,7 @@ Show_toast_Now(String msg,Color color){
 
 class CustomTextField extends StatelessWidget {
   final Color hintColor;
+  final String title;
   final String hintText;
   final TextEditingController controller;
   final TextStyle hintStyle;
@@ -67,6 +70,7 @@ class CustomTextField extends StatelessWidget {
 
   CustomTextField(
       {this.controller,
+        this.title,
         this.validator,
         this.hintColor,
         this.hintText,
@@ -78,31 +82,45 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title,style: TextStyle(
+            fontSize: 14
 
-      child: Padding(
-        padding: const EdgeInsets.only(left: 0, right: 0, top: 5,bottom: 5),
-        child: Theme(
-          data: ThemeData(hintColor: hintColor),
-          child: TextFormField(keyboardType: keyboardType,
-            obscureText: password == null?false:true,
+        ),),
+       /* SizedBox(
+          height: MediaQuery.of(context).size.height*.01,
+        ),*/
 
-            validator: validator,
-            controller: controller,style: TextStyle(fontSize: 14),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(10),
-              border: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(10.0),
+        Container(
+
+          child: Padding(
+            padding: const EdgeInsets.only(left: 0, right: 0, top: 5,bottom: 5),
+            child: Theme(
+              data: ThemeData(hintColor: hintColor),
+              child: TextFormField(keyboardType: keyboardType,
+                obscureText: password == null?false:true,
+
+                validator: validator,
+                controller: controller,style: TextStyle(fontSize: 14),
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(10),
+                  border: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(10.0),
+                  ),
+                  hintText: hintText,
+                  suffixIcon: suffixIcon,
+                  hintStyle: TextStyle(fontSize: 14),
+                ),
+
+
               ),
-              hintText: hintText,
-              suffixIcon: suffixIcon,
-              hintStyle: TextStyle(fontSize: 14),
             ),
-
-
           ),
         ),
-      ),
+      ],
     );
   }
 }

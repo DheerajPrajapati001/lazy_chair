@@ -90,7 +90,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: GlobalData.orange,
+        centerTitle: true,
         title: Text(
           "Product Details",
           style: TextStyle(
@@ -203,7 +204,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           children: [
                             Icon(
                               Icons.star,
-                              color: Colors.orangeAccent,
+                              color: GlobalData.orange,
                             ),
                             SizedBox(
                               width: 10,
@@ -353,7 +354,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               height: MediaQuery.of(context).size.height * .08,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.orange,
+                                  color: GlobalData.orange,
                                   border: Border.all(
                                       color: Colors.grey.withOpacity(0.5))),
                               child: Material(

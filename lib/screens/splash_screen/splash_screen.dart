@@ -65,11 +65,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
 
-          child: Center(child: Text("E-Commerce App",style: TextStyle(fontSize: 20),)),
+            Image.asset("assets/logo.png",height: 100,),
+
+            Text("E-Commerce App",style: TextStyle(fontSize: 20),),
+          ],
         ),
       ),
     );

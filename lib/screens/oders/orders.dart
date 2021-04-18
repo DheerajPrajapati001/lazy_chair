@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../global.dart';
+
 class Orders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class CustomOrders extends StatelessWidget {
               height: MediaQuery.of(context).size.height*.07,
               width: MediaQuery.of(context).size.height*.07,
               decoration: BoxDecoration(
-                color: Colors.orangeAccent.withOpacity(0.8),
+                color: GlobalData.orange.withOpacity(0.8),
                 shape: BoxShape.circle,
               ),
               child: Center(

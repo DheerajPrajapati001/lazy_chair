@@ -53,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       else
         {
+          saving(context);
         Show_toast_Now("Login Successfully", Colors.green);
         GlobalData.userId= status['data']['id'];
         print(status['data']['id']);
@@ -94,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.orange.shade50,
         body: Center(
           child: SingleChildScrollView(
             child: Form(
@@ -102,12 +104,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      Text("Email"),
+                      Center(child: Image.asset("assets/logo.png",height: 100,)),
                       CustomTextField(
+                        title: "Email",
                         controller: email,
                         hintText: "Enter Email",
                         validator: (value){
@@ -202,8 +205,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             _submit();},
                           child: Container(
                             decoration: BoxDecoration(
+                              color: Colors.orange,
                                 borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.black)
+                                border: Border.all(color: GlobalData.white)
                             ),
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),

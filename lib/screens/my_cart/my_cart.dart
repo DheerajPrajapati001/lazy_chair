@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lazy_chair/chairs.dart';
 import 'package:lazy_chair/images.dart';
 import 'package:woocommerce/models/cart_item.dart';
@@ -63,10 +64,9 @@ class _MyCartState extends State<MyCart> {
         }
 
 
+        await calculateTotalPrice();
 
-        for (var i = 0; i < cartItems.length; i++) {
-          totalPrice += int.parse(cartItems[i].prices.price);
-        }
+
 
         print("Sum : ${totalPrice}");
 
@@ -85,6 +85,16 @@ class _MyCartState extends State<MyCart> {
 
 
   }
+
+  calculateTotalPrice(){
+
+    totalPrice=0;
+
+    for (var i = 0; i < cartItems.length; i++) {
+      totalPrice += (int.parse(cartItems[i].prices.price)*cartItems[i].quantity);
+    }
+  }
+
 
 
   Future DeleteCartItems(
@@ -112,6 +122,7 @@ class _MyCartState extends State<MyCart> {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final jsonStr = json.decode(response.body);
         print('Item Deleted: ' + jsonStr.toString());
+        Show_toast_Now("Product Removed Successfully", Colors.green);
 
         setState(() {
 
@@ -201,40 +212,25 @@ class _MyCartState extends State<MyCart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: GlobalData.orange,
+        centerTitle: true,
+        title: Text(
+          "My Cart",
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: MediaQuery.of(context).size.width * .045,
+              fontWeight: FontWeight.w500),
+        ),
+
+        elevation: 0,
+      ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 5,right: 10,top: 10),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Text(
-                    'My Cart',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.of(context).size.width * .05),
-                  ),
-                  Spacer(),
-                 /* Text(
-                    'Edit',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.of(context).size.width * .05),
-                  ),*/
-                ],
-              ),
-            ),
+
             SizedBox(
               height: MediaQuery.of(context).size.height * .02,
             ),
@@ -246,7 +242,7 @@ class _MyCartState extends State<MyCart> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cartItems.length.toString()+" "+'Items',
+                      "Total Items: "+cartItems.length.toString(),
                       style: TextStyle(
                           color: Colors.grey,
                           fontSize:
@@ -287,9 +283,9 @@ class _MyCartState extends State<MyCart> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),
                                       ),
-                                      SizedBox(
+                                     /* SizedBox(
                                         height: MediaQuery.of(context).size.height*.005,
-                                      ),
+                                      ),*/
                                      /* Text(
                                         'By Daud',
                                         style: TextStyle(
@@ -297,9 +293,9 @@ class _MyCartState extends State<MyCart> {
                                             fontSize:
                                             MediaQuery.of(context).size.height * .02),
                                       ),*/
-                                      SizedBox(
+                                     /* SizedBox(
                                         height: MediaQuery.of(context).size.height*.02,
-                                      ),
+                                      ),*/
                                       Row(
                                         children: [
                                           Text(
@@ -315,29 +311,74 @@ class _MyCartState extends State<MyCart> {
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
                                               GestureDetector(
-                                                onTap: (){
-                                                  cartItems[index].quantity--;
-
-                                                  setState(() {
-
-                                                  });
-                                                },
-                                                child: Text('-',style: TextStyle(fontSize: MediaQuery.of(context).size.height*.07,color: Colors.red),),),
-                                              SizedBox(
-                                                width: MediaQuery.of(context).size.width*.04,
-                                              ),
-                                              Text(cartItems[index].quantity.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: MediaQuery.of(context).size.width*.05),),
-                                              SizedBox(
-                                                width: MediaQuery.of(context).size.width*.04,
-                                              ),
-                                              GestureDetector(
-                                                  onTap: (){
-                                                    cartItems[index].quantity++;
+                                                onTap: () async {
+                                                  if(cartItems[index].quantity<=cartItems[index].quantity_limit){
+                                                    cartItems[index].quantity--;
 
 
                                                     setState(() {
 
                                                     });
+                                                    UpdateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
+                                                    Show_toast_Now("Cart Updated Successfully ", Colors.green);
+                                                    print(GlobalData.itemKey);
+                                                    print(GlobalData.nonceKey);
+                                                    print(GlobalData.tokenId);
+                                                    print(GlobalData.productId);
+                                                   await calculateTotalPrice();
+                                                    setState(() {
+
+                                                    });
+                                                  }
+
+                                                  else{
+                                                    Show_toast_Now("Please select quantity less then "+cartItems[index].quantity_limit.toString(), Colors.red);
+                                                  }
+
+
+                                                  if(cartItems[index].quantity==0){
+
+                                                    Fluttertoast.showToast(msg: "Removing from Cart");
+
+                                                    cartItems.removeAt(index);
+                                                    DeleteCartItems(key: cartItems[index].key);
+                                                  }
+
+                                                },
+                                                child: Text('-',style: TextStyle(fontSize: MediaQuery.of(context).size.height*.07,
+                                                    color: Colors.red),),),
+                                              SizedBox(
+                                                width: MediaQuery.of(context).size.width*.04,
+                                              ),
+                                              Text(cartItems[index].quantity.toString(),style: TextStyle(fontWeight: FontWeight.bold,
+                                                  fontSize: MediaQuery.of(context).size.width*.05),),
+                                              SizedBox(
+                                                width: MediaQuery.of(context).size.width*.04,
+                                              ),
+                                              GestureDetector(
+                                                  onTap: () async {
+                                                    if(cartItems[index].quantity<=cartItems[index].quantity_limit){
+                                                      cartItems[index].quantity++;
+
+
+                                                      setState(() {
+
+                                                      });
+                                                      UpdateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
+                                                      Show_toast_Now("Cart Updated Successfully ", Colors.green);
+                                                      print(GlobalData.itemKey);
+                                                      print(GlobalData.nonceKey);
+                                                      print(GlobalData.tokenId);
+                                                      print(GlobalData.productId);
+                                                      await calculateTotalPrice();
+                                                      setState(() {
+
+                                                      });
+                                                    }
+                                                    else{
+                                                      Show_toast_Now("Please select quantity less then "+cartItems[index].quantity_limit.toString(), Colors.red);
+                                                    }
+
                                                   },
                                                   child: Icon(Icons.add,color: Colors.red,))
                                             ],
@@ -345,6 +386,18 @@ class _MyCartState extends State<MyCart> {
 
                                         ],
                                       ),
+                                      GestureDetector(
+                                        onTap:(){
+                                          Fluttertoast.showToast(msg: "Removing from Cart");
+
+                                          DeleteCartItems(key: cartItems[index].key);
+                                          cartItems.removeAt(index);
+
+
+
+                                          },
+                                          child: Text("Remove",style: TextStyle(color: Colors.red),))
+
                                     ],
                                   ),
                                   Spacer(),
@@ -385,6 +438,32 @@ class _MyCartState extends State<MyCart> {
                 padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 30),
                 child: Column(
                   children: [
+/*
+                    Row(
+                      children: [
+                        ElevatedButton(onPressed: (){
+                         *//* if(cartItems[index].quantity<=cartItems[index].quantityLimit){
+                            UpdateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
+                            Show_toast_Now("Cart Updated Successfully ", Colors.green);
+                            print(GlobalData.itemKey);
+                            print(GlobalData.nonceKey);
+                            print(GlobalData.tokenId);
+                            print(GlobalData.productId);
+                            setState(() {
+
+                            });
+                          }
+                          else{
+                            Show_toast_Now("Please select quantity less then "+cartItems[index].quantityLimit.toString(), Colors.red);
+                          }*//*
+                        },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green, // background
+                             // foreground
+                          ),
+                        child: Text("Update Cart"),),
+                      ],
+                    ),*/
                     SizedBox(
                       height: MediaQuery.of(context).size.height*.02,
                     ),
@@ -463,13 +542,15 @@ class _MyCartState extends State<MyCart> {
                       height: MediaQuery.of(context).size.height * .08,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.orange,
+                          color: GlobalData.orange,
                           border: Border.all(
                               color: Colors.grey.withOpacity(0.5))),
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
+                            GlobalData.totalPrice= int.parse(totalPrice.toString());
+                            print(GlobalData.totalPrice);
                             Navigator.pushNamed(context, 'Shipping');
                           },
                           splashColor: Colors.black.withOpacity(0.1),

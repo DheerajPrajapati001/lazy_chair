@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../global.dart';
+
 class Confirmation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -85,7 +87,7 @@ class Confirmation extends StatelessWidget {
                       Text(
                         '\$149.00',
                         style: TextStyle(
-                            color: Colors.orange,
+                            color: GlobalData.orange,
                             fontSize:
                             MediaQuery.of(context).size.height * .025,
                             fontWeight: FontWeight.bold),
@@ -141,7 +143,7 @@ class Confirmation extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * .08,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.orange,
+                    color: GlobalData.orange,
                     border: Border.all(
                         color: Colors.grey.withOpacity(0.5))),
                 child: Material(

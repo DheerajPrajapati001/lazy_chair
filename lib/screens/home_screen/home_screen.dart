@@ -79,298 +79,301 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.orange,
-        title: Text(
-         "Welcome "+GlobalData.niceName,
-          style: TextStyle(
-              color: Colors.black,
-              fontSize: MediaQuery.of(context).size.width * .045,
-              fontWeight: FontWeight.w500),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: GlobalData.orange,
+          title: Text(
+           "Welcome "+GlobalData.niceName,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: MediaQuery.of(context).size.width * .045,
+                fontWeight: FontWeight.w500),
+          ),
+          actions: [
+            Row(
+              children: [
+                Icon(Icons.notifications_none),
+                SizedBox(
+                  width: 10,
+                )
+              ],
+            ),
+          ],
+          elevation: 0,
         ),
-        actions: [
-          Row(
+        drawer: Drawer(
+          child: Column(
             children: [
-              Icon(Icons.notifications_none),
-              SizedBox(
-                width: 10,
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height*.25,
+                color: GlobalData.orange,
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.height*.1,
+                          height: MediaQuery.of(context).size.height*.1,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white
+                          ),
+                          child: Center(
+                            child: IconButton(
+                              icon: Icon(Icons.add_a_photo_outlined,),onPressed: (){},
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*.01,
+                        ),
+                        Text(GlobalData.firstName+" "+GlobalData.lastName,style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22
+                        ),)
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*.1),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*.04,
+                    ),
+
+                    DrawerItem(
+                      icon: Icons.local_activity_outlined,
+                      title: 'View Orders',
+                    ),
+                    DrawerItem(
+                      icon: Icons.report_gmailerrorred_outlined,
+                      title: 'View Cart',
+                      click: (){
+                        Navigator.pushNamed(context, 'MyCart');
+                      },
+                    ),
+                    DrawerItem(
+                      icon: Icons.exit_to_app_sharp,
+                      title: 'Sign Out',
+                      click: (){
+                        LogoutFunction(context);
+                      },
+                    ),
+                  ],
+                ),
               )
             ],
           ),
-        ],
-        elevation: 0,
-      ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*.25,
-              color: Colors.orangeAccent,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        ),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(boxShadow: [
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                offset: Offset(0, 0),
+                spreadRadius: 10,
+                blurRadius: 10)
+          ]),
+          child: CurvedNavigationBar(
+            animationDuration: Duration(milliseconds: 300),
+            color: Colors.white,
+            backgroundColor: Colors.transparent,
+            buttonBackgroundColor: GlobalData.orange,
+            index: 0,
+            items: <Widget>[
+              Icon(Icons.home),
+              Icon(Icons.category),
+              Icon(Icons.shopping_cart_sharp),
+              Icon(Icons.settings),
+            ],
+            onTap: (index) {
+              setState(() {
+                if(index==0){
+                  disp = 'home';
+                  HomeScreen();
+                }else if(index==1){
+                  disp = 'categories';
+                  var color = Colors.red;
+                }else if(index==2){
+                  disp = 'Cart';
+                  var color = Colors.yellow;
+                  MyCart();
+                }else{
+                  disp = 'Settings';
+                  var color = Colors.green;
+                }
+              });
+            },
+          ),
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .01,
+                ),
+                // Row(
+                //   children: [
+                //     Icon(Icons.menu_open),
+                //     SizedBox(
+                //       width: 10,
+                //     ),
+                //     Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       mainAxisAlignment: MainAxisAlignment.start,
+                //       children: [
+                //         Text(
+                //           'Hey, Masrafi!',
+                //           style: TextStyle(
+                //               color: Colors.grey,
+                //               fontSize: MediaQuery.of(context).size.width * .04),
+                //         ),
+                //         Text(
+                //           'You Choice Cute Chair',
+                //           style: TextStyle(
+                //               color: Colors.black,
+                //               fontSize: MediaQuery.of(context).size.width * .045,
+                //               fontWeight: FontWeight.w500),
+                //         )
+                //       ],
+                //     ),
+                //     Spacer(),
+                //     Icon(Icons.notifications_none)
+                //   ],
+                // ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .02,
+                ),
+                /*Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * .08,
+                  decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Search',
+                            suffixIcon: Icon(Icons.search)),
+                      ),
+                    ),
+                  ),
+                ),*/
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .03,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * .2,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        GlobalData.orange.withOpacity(0.8),
+                        GlobalData.orange
+                      ], end: Alignment.centerRight, begin: Alignment.centerLeft),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.height*.1,
-                        height: MediaQuery.of(context).size.height*.1,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white
-                        ),
-                        child: Center(
-                          child: IconButton(
-                            icon: Icon(Icons.add_a_photo_outlined,),onPressed: (){},
+                      Spacer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Hot Offer',
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.5),
+                                fontSize:
+                                    MediaQuery.of(context).size.width * .05),
                           ),
-                        ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .01,
+                          ),
+                          Text(
+                            '30%',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: MediaQuery.of(context).size.width * .1),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .01,
+                          ),
+                          Text(
+                            'Discount',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * .07),
+                          ),
+                        ],
                       ),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height*.01,
-                      ),
-                      Text(GlobalData.firstName+" "+GlobalData.lastName,style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22
-                      ),)
+                        width: MediaQuery.of(context).size.width * .1,
+                      )
                     ],
                   ),
                 ),
-              ),
-            ),
-            Padding(
-              padding:  EdgeInsets.only(left: MediaQuery.of(context).size.width*.1),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height*.04,
-                  ),
-
-                  DrawerItem(
-                    icon: Icons.local_activity_outlined,
-                    title: 'View Orders',
-                  ),
-                  DrawerItem(
-                    icon: Icons.report_gmailerrorred_outlined,
-                    title: 'View Cart',
-                    click: (){
-                      Navigator.pushNamed(context, 'MyCart');
-                    },
-                  ),
-                  DrawerItem(
-                    icon: Icons.exit_to_app_sharp,
-                    title: 'Sign Out',
-                    click: (){
-                      LogoutFunction(context);
-                    },
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              offset: Offset(0, 0),
-              spreadRadius: 10,
-              blurRadius: 10)
-        ]),
-        child: CurvedNavigationBar(
-          animationDuration: Duration(milliseconds: 300),
-          color: Colors.white,
-          backgroundColor: Colors.transparent,
-          buttonBackgroundColor: Colors.orangeAccent,
-          index: 0,
-          items: <Widget>[
-            Icon(Icons.home),
-            Icon(Icons.category),
-            Icon(Icons.shopping_cart_sharp),
-            Icon(Icons.settings),
-          ],
-          onTap: (index) {
-            setState(() {
-              if(index==0){
-                disp = 'home';
-                HomeScreen();
-              }else if(index==1){
-                disp = 'categories';
-                var color = Colors.red;
-              }else if(index==2){
-                disp = 'Cart';
-                var color = Colors.yellow;
-                MyCart();
-              }else{
-                disp = 'Settings';
-                var color = Colors.green;
-              }
-            });
-          },
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Column(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * .01,
-              ),
-              // Row(
-              //   children: [
-              //     Icon(Icons.menu_open),
-              //     SizedBox(
-              //       width: 10,
-              //     ),
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       mainAxisAlignment: MainAxisAlignment.start,
-              //       children: [
-              //         Text(
-              //           'Hey, Masrafi!',
-              //           style: TextStyle(
-              //               color: Colors.grey,
-              //               fontSize: MediaQuery.of(context).size.width * .04),
-              //         ),
-              //         Text(
-              //           'You Choice Cute Chair',
-              //           style: TextStyle(
-              //               color: Colors.black,
-              //               fontSize: MediaQuery.of(context).size.width * .045,
-              //               fontWeight: FontWeight.w500),
-              //         )
-              //       ],
-              //     ),
-              //     Spacer(),
-              //     Icon(Icons.notifications_none)
-              //   ],
-              // ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * .02,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * .08,
-                decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Search',
-                          suffixIcon: Icon(Icons.search)),
-                    ),
-                  ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .03,
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * .03,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * .2,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Colors.orangeAccent.withOpacity(0.8),
-                      Colors.orange
-                    ], end: Alignment.centerRight, begin: Alignment.centerLeft),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Row(
+                Row(
                   children: [
-                    Spacer(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Hot Offer',
-                          style: TextStyle(
-                              color: Colors.white.withOpacity(0.5),
-                              fontSize:
-                                  MediaQuery.of(context).size.width * .05),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * .01,
-                        ),
-                        Text(
-                          '30%',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: MediaQuery.of(context).size.width * .1),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * .01,
-                        ),
-                        Text(
-                          'Discount',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * .07),
-                        ),
-                      ],
+                    Text(
+                      'Featured Products',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.width * .05),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * .1,
-                    )
+                    Spacer(),
+                    Text(
+                      'See All',
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: MediaQuery.of(context).size.width * .04),
+                    ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * .03,
-              ),
-              Row(
-                children: [
-                  Text(
-                    'Featured Products',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.of(context).size.width * .05),
-                  ),
-                  Spacer(),
-                  Text(
-                    'See All',
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: MediaQuery.of(context).size.width * .04),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * .04,
-              ),
-              Expanded(
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: products.length,
-                  padding: EdgeInsets.only(right: 10),
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return ChairItem(
-                      products: product,
-                      onTap: () {
-                        GlobalData.productId=products[index].id.toString();
-                        print(GlobalData.productId);
-                        _onChairPressed(product, context);
-                      },
-                    );
-                  },
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .04,
                 ),
-              ),
-              SizedBox(
-                height: 15,
-              )
-            ],
+                Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: products.length,
+                    padding: EdgeInsets.only(right: 10),
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      return ChairItem(
+                        products: product,
+                        onTap: () {
+                          GlobalData.productId=products[index].id.toString();
+                          print(GlobalData.productId);
+                          _onChairPressed(product, context);
+                        },
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -439,7 +442,7 @@ class ChairItem extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.star,
-                      color: Colors.orangeAccent,
+                      color: GlobalData.orange,
                     ),
                     Text(
                       products.averageRating,
