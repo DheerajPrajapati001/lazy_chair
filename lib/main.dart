@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
         'MyCart':(context)=> MyCart(),
         'Shipping':(context)=> Shipping(),
         'Confirmation':(context)=> Confirmation(),
-        'LoginPage':(context)=> LoginScreen()
+        'LoginPage':(context)=> LoginScreen(),
+        'ViewOrders':(context)=> Orders()
       },
       home: SplashScreen(),
     );

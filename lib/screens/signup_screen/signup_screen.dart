@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:lazy_chair/screens/home_screen/home_screen.dart';
 import 'package:lazy_chair/screens/login_screen/login_screen.dart';
 
@@ -40,7 +43,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   createCustomer()async{
-
+    BuildContext loadContext;
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) {
+          loadContext = ctx;
+          return AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              content: Container(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            //Center(child: CircularProgressIndicator())
+          );
+        });
     isLoading = true;
     setState(() {
 
@@ -58,17 +75,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
       print(response.body.toString());
 
 
+
       print(response.statusCode);
       if (response.statusCode == 201)
       {
-        saving(context);
+        Navigator.pop(loadContext);
+
+        //saving(context);
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
         Show_toast_Now("Registered Successfully", Colors.green);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
 
 
       } else {
-        Show_toast_Now(status['message'].toString().split("<").toString(), Colors.red);
-        print(status['message'].toString().replaceAll("<a href='#' class='showlogin'>","").toString());
+        Navigator.pop(loadContext);
+        var document =parse(status['message']);
+        final String parsedString = parse(document.body.text).documentElement.text;
+        print(parsedString);
+
+        Show_toast_Now(parsedString, Colors.red);
       }
 
     });

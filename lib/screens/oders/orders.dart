@@ -1,15 +1,75 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lazy_chair/config/config.dart';
+import 'package:woocommerce/woocommerce.dart';
 
 import '../global.dart';
 
-class Orders extends StatelessWidget {
+
+class Orders extends StatefulWidget {
+  @override
+  _OrdersState createState() => _OrdersState();
+}
+
+class _OrdersState extends State<Orders> {
+
+  WooCommerce wooCommerce = WooCommerce(
+    baseUrl: Config.baseUrl,
+    consumerKey: Config.key,
+    consumerSecret: Config.secret,
+    isDebug: true,
+  );
+  List<WooOrder> orders = new List();
+  ViewOrder()async{
+
+    orders = await wooCommerce.getOrders(customer: GlobalData.userId);
+
+    setState(() {
+
+    });
+    print(orders.toString());
+
+    /*await http.get(Config.url+"orders"+"?"+"consumer_key="+Config.key+"&"+"consumer_secret="+Config.secret,
+
+      headers: {"Content-Type": "application/json"},
+
+    ).then((response) {
+      var ParsedJson = jsonDecode(response.body);
+
+      print("breakkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+      print(response.body.toString());
+      print(orders.length);
+      print(GlobalData.nonceKey);
+    });*/
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ViewOrder();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: GlobalData.orange,
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+        title: Text(
+          "Orders",
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: MediaQuery.of(context).size.width * .045,
+              fontWeight: FontWeight.w500),
+        ),
+
+        elevation: 0,
+      ),
       body: Column(
         children: [
-          Container(
+          /*Container(
             width: MediaQuery.of(context).size.width,
             height: 92,
             color: Colors.black.withOpacity(0.7),
@@ -25,22 +85,36 @@ class Orders extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+          ),*/
           SizedBox(
             height: MediaQuery.of(context).size.height*.02,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              children: [
-                CustomOrders(),
-                CustomOrders(),
-                CustomOrders(),
-                CustomOrders(),
-                CustomOrders(),
-              ],
+
+          Expanded(
+            child: ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (c,i){
+                return  Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CustomOrders(
+                        totalItems: orders[i].lineItems.length.toString()+" Items",
+                        date: "Ordered Date: "+orders[i].dateCreated.substring(0,10),
+                        description: "Order Id: "+"#"+orders[i].id.toString(),
+                        price: orders[i].total,
+
+                      ),
+
+                    ],
+                  ),
+                );
+              },
             ),
           )
+
         ],
       ),
     );
@@ -50,12 +124,27 @@ class Orders extends StatelessWidget {
 
 
 
+
+
 class CustomOrders extends StatelessWidget {
+
+  final String totalItems;
+  final String description;
+  final String date;
+  final String price;
+
+  CustomOrders({
+    this.price,this.description,this.date,this.totalItems
+});
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
               height: MediaQuery.of(context).size.height*.07,
@@ -65,7 +154,7 @@ class CustomOrders extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Icon(Icons.home_work_outlined,color: Colors.white,),
+                child: Icon(Icons.inventory,color: Colors.white,),
               ),
             ),
             SizedBox(
@@ -75,33 +164,35 @@ class CustomOrders extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('15 Items',style: TextStyle(
+                Text(totalItems,style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: MediaQuery.of(context).size.width*.04
                 ),),
                 SizedBox(
                   height: MediaQuery.of(context).size.height*.01,
                 ),
-                Text('5143 Vinings Estates Way\nMABLETON,GA 30126',style: TextStyle(
+                Text(description,style: TextStyle(
                     fontSize: MediaQuery.of(context).size.width*.03,
-                  color: Colors.grey.withOpacity(0.5)
+                  color: GlobalData.black
                 ),)
               ],
             ),
             Spacer(),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
               children: [
-                Text('Feb 25,2016',style: TextStyle(
+                Text(date,style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: MediaQuery.of(context).size.width*.04
                 ),),
                 SizedBox(
                   height: MediaQuery.of(context).size.height*.01,
                 ),
-                Text('\$ 45',style: TextStyle(
+                Text('\$'+price,style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
-                    fontSize: MediaQuery.of(context).size.width*.08
+                    fontSize: MediaQuery.of(context).size.width*.05
                 ),),
               ],
             )

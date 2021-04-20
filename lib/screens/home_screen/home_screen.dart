@@ -59,8 +59,17 @@ class _HomeScreenState extends State<HomeScreen> {
     isDebug: true,
   );
   getProducts() async{
+
+    GlobalData.isLoading=true;
+    setState(() {
+
+    });
     products = await wooCommerce.getProducts(featured: true);
     setState(() {
+    });
+    GlobalData.isLoading=false;
+    setState(() {
+
     });
     print(products.toString());
   }
@@ -150,13 +159,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height*.04,
                     ),
-
                     DrawerItem(
-                      icon: Icons.local_activity_outlined,
-                      title: 'View Orders',
+                      icon: Icons.info_outline,
+                      title: 'About Us',
                     ),
                     DrawerItem(
-                      icon: Icons.report_gmailerrorred_outlined,
+                      icon: Icons.policy,
+                      title: 'Terms & Conditions',
+                    ),
+                    DrawerItem(
+                      icon: Icons.inventory,
+                      title: 'View Orders',
+                      click: (){
+                        Navigator.pushNamed(context, 'ViewOrders');
+
+                      }
+
+                    ),
+                    DrawerItem(
+                      icon: Icons.shopping_cart,
                       title: 'View Cart',
                       click: (){
                         Navigator.pushNamed(context, 'MyCart');
@@ -175,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: Container(
+        /*bottomNavigationBar: Container(
           decoration: BoxDecoration(boxShadow: [
             BoxShadow(
                 color: Colors.grey.withOpacity(0.1),
@@ -214,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
               });
             },
           ),
-        ),
+        ),*/
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -255,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .02,
                 ),
-                /*Container(
+                Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * .08,
                   decoration: BoxDecoration(
@@ -272,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                ),*/
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .03,
                 ),
@@ -340,19 +361,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: MediaQuery.of(context).size.width * .05),
                     ),
                     Spacer(),
-                    Text(
+                   /* Text(
                       'See All',
                       style: TextStyle(
                           color: Colors.grey,
                           fontSize: MediaQuery.of(context).size.width * .04),
-                    ),
+                    ),*/
                   ],
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .04,
                 ),
+                GlobalData.isLoading==true?Center(child: Text("Loading...")):
                 Expanded(
-                  child: ListView.builder(
+                  child: products.isEmpty?Text("No Featured Products"):ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: products.length,
                     padding: EdgeInsets.only(right: 10),
@@ -489,13 +511,13 @@ class DrawerItem extends StatelessWidget {
           child: Container(
             child: Row(
               children: [
-                Icon(icon,color: Colors.grey,size: MediaQuery.of(context).size.height*.035,),
+                Icon(icon,color: Colors.grey,size: 20),
                 SizedBox(
                   width: MediaQuery.of(context).size.width*.07,
                 ),
                 Text(title,style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: MediaQuery.of(context).size.height*.025
+                  fontSize: 16
                 ),)
               ],
             ),

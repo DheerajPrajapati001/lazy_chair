@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:lazy_chair/screens/home_screen/home_screen.dart';
 import 'package:lazy_chair/screens/signup_screen/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,7 +35,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   login() async {
-
+    BuildContext loadContext;
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) {
+          loadContext = ctx;
+          return AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              content: Container(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            //Center(child: CircularProgressIndicator())
+          );
+        });
     prefs = await SharedPreferences.getInstance();
 
     await http.post("https://beta.saurabhenterprise.com/wp-json/jwt-auth/v1/token", body: {
@@ -48,13 +63,16 @@ class _LoginScreenState extends State<LoginScreen> {
       if (status['success']==false) {
         print("Not Allowed");
         print("Not Allowed");
+        Navigator.pop(loadContext);
+
         Show_toast_Now("Invalid Username or Password", Colors.red);
 
       }
       else
         {
-          saving(context);
-        Show_toast_Now("Login Successfully", Colors.green);
+          Navigator.pop(loadContext);
+          //saving(context);
+
         GlobalData.userId= status['data']['id'];
         print(status['data']['id']);
         print(GlobalData.userId);
@@ -79,7 +97,8 @@ class _LoginScreenState extends State<LoginScreen> {
         print("Last Name: "+GlobalData.lastName);
         print("Nice Name: "+GlobalData.niceName);
         print("Allowed");
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
+          Show_toast_Now("Login Successfully", Colors.green);
       }
     });
     /*.catchError( (error){

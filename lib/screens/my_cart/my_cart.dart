@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lazy_chair/chairs.dart';
 import 'package:lazy_chair/images.dart';
+import 'package:lazy_chair/model/cart_products.dart';
 import 'package:woocommerce/models/cart_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:woocommerce/woocommerce_error.dart';
@@ -23,11 +24,31 @@ class MyCart extends StatefulWidget {
 class _MyCartState extends State<MyCart> {
   int _counter = 1;
 
-  List<WooCartItem> cartItems =new List();
+  List<WooCartItem> cartItems = [];
+
+  /*var cartProducts = <CartProducts>[
+    CartProducts(
+        productId: "168",
+      quantity: "2"
+    ),
+    CartProducts(
+        productId: "169",
+        quantity: "2"
+    ),
+    CartProducts(
+        productId: "170",
+        quantity: "2"
+    ),
+  ];*/
+
+  List<CartProducts> cartList= [];
 
   var totalPrice=0;
   viewCartItems() async {
+    GlobalData.isLoading=true;
+    setState(() {
 
+    });
     Map<String, String> requestHeaders = {
       'Authorization': 'Bearer '+GlobalData.tokenId,
       'X-WC-Store-API-Nonce': GlobalData.nonceKey
@@ -40,22 +61,43 @@ class _MyCartState extends State<MyCart> {
 
     http.get(
         'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/items',
-
         headers: requestHeaders).then((response) async{
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final jsonStr = json.decode(response.body);
+        print('response gotten : '+response.statusCode.toString());
 
-        print('response gotten : '+response.toString());
 
+
+        cartList = (jsonStr as List).map((data) =>
+            CartProducts.fromJson(data)).toList();
+        //print(cartList[0].productId);
+        //print(cartList[0].quantity);
+        //List<Map<String,dynamic>> cartProductList=[];
+        for(int  i =0;i<cartList.length;i++)
+          {
+            GlobalData.cartProductList.add({
+              "product_id":cartList[i].productId,
+              "quantity":cartList[i].quantity
+            });
+
+            print(cartList[i].productId);
+            print(cartList[i].quantity);
+          }
+        print("cartlist");
+       // GlobalData.cartItemsList=jsonEncode(cartList);
+        print(jsonEncode(cartList));
+        print("List");
+        print(GlobalData.cartItemsList);
+
+
+
+        //print(jsonStr["id"]);
         for(var p in jsonStr){
           var prod = WooCartItem.fromJson(p);
           print('prod gotten here : '+prod.name.toString());
           cartItems.add(prod);
           GlobalData.itemKey=prod.key;
           GlobalData.productId=prod.id.toString();
-
-
           print("price");
           print(GlobalData.itemKey);
           setState(() {
@@ -63,16 +105,12 @@ class _MyCartState extends State<MyCart> {
           });
         }
 
+        GlobalData.isLoading=false;
+        setState(() {
 
+        });
         await calculateTotalPrice();
-
-
-
-        print("Sum : ${totalPrice}");
-
         print('account user fetch : '+jsonStr.toString());
-
-
         return cartItems;
 
         // return WooCartItem.fromJson(jsonStr);
@@ -82,7 +120,13 @@ class _MyCartState extends State<MyCart> {
         throw err;
       }
     });
+    /*setState(() {
 
+    });
+    GlobalData.isLoading=false;
+    setState(() {
+
+    });*/
 
   }
 
@@ -183,18 +227,6 @@ class _MyCartState extends State<MyCart> {
 
   }
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-      print('$_counter');
-    });
-  }
-  void __incrementCounter() {
-    setState(() {
-      _counter--;
-      print('$_counter');
-    });
-  }
 
 
   @override
@@ -215,6 +247,11 @@ class _MyCartState extends State<MyCart> {
       appBar: AppBar(
         backgroundColor: GlobalData.orange,
         centerTitle: true,
+        leading: GestureDetector(
+          onTap: (){
+            Navigator.of(context).pop();
+          },
+            child: Icon(Icons.arrow_back)),
         title: Text(
           "My Cart",
           style: TextStyle(
@@ -223,10 +260,11 @@ class _MyCartState extends State<MyCart> {
               fontWeight: FontWeight.w500),
         ),
 
+
         elevation: 0,
       ),
       body: SafeArea(
-        child: Column(
+        child: GlobalData.isLoading==true?Center(child: Text("Loading...")):cartItems.isEmpty?Center(child: Text("No Items in Cart")):Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -438,8 +476,7 @@ class _MyCartState extends State<MyCart> {
                 padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 30),
                 child: Column(
                   children: [
-/*
-                    Row(
+                    /*Row(
                       children: [
                         ElevatedButton(onPressed: (){
                          *//* if(cartItems[index].quantity<=cartItems[index].quantityLimit){
@@ -456,6 +493,8 @@ class _MyCartState extends State<MyCart> {
                           else{
                             Show_toast_Now("Please select quantity less then "+cartItems[index].quantityLimit.toString(), Colors.red);
                           }*//*
+
+                          print(jsonEncode(cartProducts));
                         },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.green, // background
@@ -549,6 +588,8 @@ class _MyCartState extends State<MyCart> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
+                            GlobalData.cartItemsList=jsonEncode(cartList);
+                            print(GlobalData.cartItemsList);
                             GlobalData.totalPrice= int.parse(totalPrice.toString());
                             print(GlobalData.totalPrice);
                             Navigator.pushNamed(context, 'Shipping');

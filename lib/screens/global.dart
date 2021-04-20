@@ -19,6 +19,10 @@ class GlobalData{
   static Color black = Colors.black;
   static Color orange = Colors.orange;
   static int totalPrice;
+  static bool isLoading = false;
+  static String cartItemsList;
+
+  static List<Map<String,dynamic>> cartProductList=[];
 
 
 }
@@ -151,3 +155,7 @@ void saving(BuildContext context)  {
         ),
       ));
 }
+
+
+
+

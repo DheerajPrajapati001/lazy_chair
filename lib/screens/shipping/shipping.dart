@@ -30,11 +30,11 @@ class _ShippingState extends State<Shipping> {
     if (!isValid) {
       return;
     }
-    placeOrder();
+    placeOrder(productList: GlobalData.cartProductList);
     _formKey.currentState.save();
   }
 
-  placeOrder()async{
+  placeOrder({List productList})async{
 
     Map data = {
 
@@ -69,7 +69,7 @@ class _ShippingState extends State<Shipping> {
 
 
 
-      "line_items": [
+      "line_items": productList/*[
         {
           "product_id": "10",
           "quantity":"5"
@@ -78,7 +78,7 @@ class _ShippingState extends State<Shipping> {
           "product_id": "18",
           "quantity":"4"
         }
-      ],
+      ]*/,
       "shipping_lines": [
         {
           "method_id": "flat_rate",
@@ -100,6 +100,7 @@ class _ShippingState extends State<Shipping> {
       print("breakkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
       print(response.body.toString());
       print(GlobalData.userId);
+      GlobalData.cartProductList.clear();
       Navigator.pushNamed(context, 'Confirmation');
 
     });
@@ -419,6 +420,7 @@ class _ShippingState extends State<Shipping> {
                             child: InkWell(
                               onTap: () {
                                 _submit();
+                                print(GlobalData.cartProductList);
                                 //Navigator.pushNamed(context, 'Confirmation');
                               },
                               splashColor: Colors.black.withOpacity(0.1),
