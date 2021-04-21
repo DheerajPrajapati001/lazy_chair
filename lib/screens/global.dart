@@ -21,6 +21,10 @@ class GlobalData{
   static int totalPrice;
   static bool isLoading = false;
   static String cartItemsList;
+  static int orderId;
+  static String orderTotal;
+  static String cartTotal;
+  static String orderShippingTotal;
 
   static List<Map<String,dynamic>> cartProductList=[];
 
@@ -59,6 +63,50 @@ Show_toast_Now(String msg,Color color){
 }
 
 
+class CustomTextInRow extends StatelessWidget {
+  final String mainText;
+  final String price;
+
+  CustomTextInRow({
+    this.price,this.mainText
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: new Text(
+                mainText,
+                style: TextStyle(
+                  color: GlobalData.black,
+
+                  fontSize: 14,
+                ),
+              ),
+            ),
+
+
+            Expanded(
+              child: new Text(
+                price,
+                style: TextStyle(
+                  color: GlobalData.black,
+
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 15,)
+      ],
+    );
+  }
+}
 
 class CustomTextField extends StatelessWidget {
   final Color hintColor;

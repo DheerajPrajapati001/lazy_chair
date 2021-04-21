@@ -105,6 +105,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               IconButton(
                   icon: Icon(Icons.shopping_bag_outlined),
                   onPressed: () {
+                    GlobalData.isAdded=true;
                     Navigator.pushNamed(context, 'MyCart');
                   }),
               SizedBox(
@@ -361,7 +362,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 color: Colors.transparent,
                                 child: InkWell(
                                   onTap: () {
-                                    Navigator.pushNamed(context, 'Shipping');
+
+                                    addToMyCartfix(itemId: GlobalData.productId, quantity: "1",);
+                                    setState(() {
+
+                                    });
+                                    Navigator.pushNamed(context, 'MyCart');
                                   },
                                   splashColor: Colors.black.withOpacity(0.1),
                                   child: Center(

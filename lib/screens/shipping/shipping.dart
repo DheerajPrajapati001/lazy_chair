@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/model/cart_products.dart';
+import 'package:woocommerce/models/cart_item.dart';
+import 'package:woocommerce/woocommerce_error.dart';
 import '../global.dart';
 
 class Shipping extends StatefulWidget {
@@ -35,12 +38,27 @@ class _ShippingState extends State<Shipping> {
   }
 
   placeOrder({List productList})async{
-
+    BuildContext loadContext;
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) {
+          loadContext = ctx;
+          return AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              content: Container(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            //Center(child: CircularProgressIndicator())
+          );
+        });
     Map data = {
 
       "payment_method": "cod",
       "payment_method_title": "Cash on delivery",
       "set_paid": "false",
+      "customer_note":notes.text,
       "customer_id":GlobalData.userId,
       "billing": {
         "first_name": firstName.text,
@@ -83,7 +101,7 @@ class _ShippingState extends State<Shipping> {
         {
           "method_id": "flat_rate",
           "method_title":"Flat Rate",
-          "total":"200"
+          "total":"15"
         }
       ]
 
@@ -99,11 +117,112 @@ class _ShippingState extends State<Shipping> {
       print(body);
       print("breakkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
       print(response.body.toString());
+      print("111111111111111222222222222222222222");
+
+      print(status['id']);
+      print(status['shipping_total']);
+      print(status['total']);
+      GlobalData.orderId=status['id'];
+      GlobalData.orderShippingTotal=status['shipping_total'];
+      GlobalData.orderTotal= status['total'];
+      print("111111111111111222222222222222222222");
       print(GlobalData.userId);
       GlobalData.cartProductList.clear();
+      Navigator.pop(loadContext);
+
       Navigator.pushNamed(context, 'Confirmation');
 
     });
+  }
+
+
+  List<CartProducts> cartList= [];
+  List<WooCartItem> cartItems = [];
+  var totalPrice=0;
+  viewCartItems() async {
+    GlobalData.isLoading=true;
+    setState(() {
+
+    });
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer '+GlobalData.tokenId,
+      'X-WC-Store-API-Nonce': GlobalData.nonceKey
+    };
+    /* if (variations != null)
+      {data['variations'] = variations;}
+    else{
+      data['variations'] ="";
+    }*/
+
+    http.get(
+        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/items',
+        headers: requestHeaders).then((response) async{
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final jsonStr = json.decode(response.body);
+        print('response gotten : '+response.statusCode.toString());
+
+
+
+        cartList = (jsonStr as List).map((data) =>
+            CartProducts.fromJson(data)).toList();
+        //print(cartList[0].productId);
+        //print(cartList[0].quantity);
+        //List<Map<String,dynamic>> cartProductList=[];
+        for(int  i =0;i<cartList.length;i++)
+        {
+          GlobalData.cartProductList.add({
+            "product_id":cartList[i].productId,
+            "quantity":cartList[i].quantity
+          });
+
+          print(cartList[i].productId);
+          print(cartList[i].quantity);
+        }
+        print("cartlist");
+        // GlobalData.cartItemsList=jsonEncode(cartList);
+        print(jsonEncode(cartList));
+        print("List");
+        print(GlobalData.cartItemsList);
+
+
+
+        //print(jsonStr["id"]);
+        for(var p in jsonStr){
+          var prod = WooCartItem.fromJson(p);
+          print('prod gotten here : '+prod.name.toString());
+          cartItems.add(prod);
+          GlobalData.itemKey=prod.key;
+          GlobalData.productId=prod.id.toString();
+          print("price");
+          print(GlobalData.itemKey);
+          setState(() {
+
+          });
+        }
+
+        GlobalData.isLoading=false;
+        setState(() {
+
+        });
+       // await calculateTotalPrice();
+        print('account user fetch : '+jsonStr.toString());
+        return cartItems;
+
+        // return WooCartItem.fromJson(jsonStr);
+      } else {
+        WooCommerceError err =
+        WooCommerceError.fromJson(json.decode(response.body));
+        throw err;
+      }
+    });
+    /*setState(() {
+
+    });
+    GlobalData.isLoading=false;
+    setState(() {
+
+    });*/
+
   }
 
   bool check = false;
@@ -419,6 +538,12 @@ class _ShippingState extends State<Shipping> {
                             color: Colors.transparent,
                             child: InkWell(
                               onTap: () {
+                                cartList.clear();
+                                cartItems.clear();
+                                print("cartItems: "+cartItems.length.toString());
+                                print(cartList.length);
+                                GlobalData.cartTotal=((GlobalData.totalPrice/100)).toStringAsFixed(2);
+                                print("cart total "+GlobalData.cartTotal);
                                 _submit();
                                 print(GlobalData.cartProductList);
                                 //Navigator.pushNamed(context, 'Confirmation');

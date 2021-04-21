@@ -180,6 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       icon: Icons.shopping_cart,
                       title: 'View Cart',
                       click: (){
+                        GlobalData.isAdded=true;
                         Navigator.pushNamed(context, 'MyCart');
                       },
                     ),
@@ -286,6 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: TextField(
+                        enabled: false,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Search',
