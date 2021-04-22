@@ -23,9 +23,16 @@ class _OrdersState extends State<Orders> {
   );
   List<WooOrder> orders = [];
   ViewOrder()async{
+    GlobalData.isLoading=true;
+    setState(() {
 
+    });
     orders = await wooCommerce.getOrders(customer: GlobalData.userId,);
 
+    setState(() {
+
+    });
+    GlobalData.isLoading=false;
     setState(() {
 
     });
@@ -69,7 +76,8 @@ class _OrdersState extends State<Orders> {
 
         elevation: 0,
       ),
-      body: Column(
+      body: GlobalData.isLoading==true?Center(child: Text("Loading...")):orders.isEmpty?
+      Center(child: Text("No Orders")):Column(
         children: [
           /*Container(
             width: MediaQuery.of(context).size.width,

@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lazy_chair/chairs.dart';
+import 'package:lazy_chair/config/config.dart';
 import 'package:lazy_chair/images.dart';
 import 'package:lazy_chair/model/cart_products.dart';
 import 'package:woocommerce/models/cart_item.dart';
 import 'package:http/http.dart' as http;
+import 'package:woocommerce/models/products.dart';
+import 'package:woocommerce/woocommerce.dart';
 import 'package:woocommerce/woocommerce_error.dart';
 
 import '../global.dart';
@@ -25,7 +28,6 @@ class _MyCartState extends State<MyCart> {
   int _counter = 1;
 
   List<WooCartItem> cartItems = [];
-
   /*var cartProducts = <CartProducts>[
     CartProducts(
         productId: "168",
@@ -236,6 +238,7 @@ class _MyCartState extends State<MyCart> {
     // TODO: implement initState
     super.initState();
     viewCartItems();
+
     setState(() {
 
     });
@@ -270,7 +273,8 @@ class _MyCartState extends State<MyCart> {
           elevation: 0,
         ),
         body: SafeArea(
-          child: GlobalData.isLoading==true?Center(child: Text("Loading...")):cartItems.isEmpty?Center(child: Text("No Items in Cart")):Column(
+          child: GlobalData.isLoading==true?Center(child: Text("Loading...")):cartItems.isEmpty?
+          Center(child: Text("No Items in Cart")):Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

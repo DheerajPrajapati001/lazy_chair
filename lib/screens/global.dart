@@ -25,6 +25,11 @@ class GlobalData{
   static String orderTotal;
   static String cartTotal;
   static String orderShippingTotal;
+  static String shippingZoneId;
+  static String shippingZoneName;
+  static String shippingMethodId;
+  static String shippingMethodTitle;
+  static String shippingMethodTotalPrice;
 
   static List<Map<String,dynamic>> cartProductList=[];
 

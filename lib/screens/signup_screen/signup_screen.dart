@@ -8,6 +8,7 @@ import 'package:lazy_chair/config/config.dart';
 import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:lazy_chair/screens/home_screen/home_screen.dart';
 import 'package:lazy_chair/screens/login_screen/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../global.dart';
 
@@ -41,6 +42,83 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     _formKey.currentState.save();
   }
+  SharedPreferences prefs;
+  login() async {
+    BuildContext loadContext;
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) {
+          loadContext = ctx;
+          return AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              content: Container(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            //Center(child: CircularProgressIndicator())
+          );
+        });
+    prefs = await SharedPreferences.getInstance();
+
+    await http.post("https://beta.saurabhenterprise.com/wp-json/jwt-auth/v1/token", body: {
+      "username": email.text.toString().trim(),
+      "password": password.text.toString(),
+
+    }).then((response) async {
+      var status = jsonDecode(response.body);
+      print(response.body.toString());
+
+      if (status['success']==false) {
+        print("Not Allowed");
+        print("Not Allowed");
+        Navigator.pop(loadContext);
+
+        Show_toast_Now("Invalid Username or Password", Colors.red);
+
+      }
+      else
+      {
+        //Navigator.pop(loadContext);
+        //saving(context);
+
+        GlobalData.userId= status['data']['id'];
+        print(status['data']['id']);
+        print(GlobalData.userId);
+        prefs.setInt("Id", GlobalData.userId);
+        prefs.setString("TokenId", status['data']['token']);
+        prefs.setString("Email", status['data']['email']);
+        prefs.setString("NiceName", status['data']['nicename']);
+        prefs.setString("FirstName", status['data']['firstName']);
+        prefs.setString("LastName", status['data']['lastName']);
+
+
+        GlobalData.tokenId=status['data']['token'];
+        GlobalData.userId= status['data']['id'];
+        GlobalData.emailId= status['data']['email'];
+        GlobalData.firstName = status['data']['firstName'];
+        GlobalData.lastName = status['data']['lastName'];
+        GlobalData.niceName = status['data']['nicename'];
+        print("Id: "+GlobalData.userId.toString());
+        print("Token Id: "+GlobalData.tokenId);
+        print("Email Id: "+GlobalData.emailId);
+        print("First Name: "+GlobalData.firstName);
+        print("Last Name: "+GlobalData.lastName);
+        print("Nice Name: "+GlobalData.niceName);
+        print("Allowed");
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
+        Show_toast_Now("Login Successfully", Colors.green);
+      }
+    });
+    /*.catchError( (error){
+        print(error);
+        print("Not Allowed");
+
+      });*/
+
+
+  }
+
 
   createCustomer()async{
     BuildContext loadContext;
@@ -79,6 +157,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       print(response.statusCode);
       if (response.statusCode == 201)
       {
+        login();
+        print("LOGIN DONEEEEEEEEEEEEEEEE");
         Navigator.pop(loadContext);
 
         //saving(context);

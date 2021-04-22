@@ -361,13 +361,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  onTap: () {
+                                  onTap: () async{
 
-                                    addToMyCartfix(itemId: GlobalData.productId, quantity: "1",);
+                                  await  addToMyCartfix(itemId: GlobalData.productId, quantity: "1",);
                                     setState(() {
 
                                     });
-                                    Navigator.pushNamed(context, 'MyCart');
+                                    await Navigator.pushNamed(context, 'MyCart');
                                   },
                                   splashColor: Colors.black.withOpacity(0.1),
                                   child: Center(
