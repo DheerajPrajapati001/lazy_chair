@@ -232,6 +232,94 @@ class _MyCartState extends State<MyCart> {
   }
 
 
+  updateCart() async {
+    GlobalData.isLoading=true;
+    setState(() {
+
+    });
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer '+GlobalData.tokenId,
+      'X-WC-Store-API-Nonce': GlobalData.nonceKey
+    };
+    /* if (variations != null)
+      {data['variations'] = variations;}
+    else{
+      data['variations'] ="";
+    }*/
+
+    http.get(
+        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/items',
+        headers: requestHeaders).then((response) async{
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final jsonStr = json.decode(response.body);
+        print('response gotten : '+response.statusCode.toString());
+
+
+
+        cartList = (jsonStr as List).map((data) =>
+            CartProducts.fromJson(data)).toList();
+        //print(cartList[0].productId);
+        //print(cartList[0].quantity);
+        //List<Map<String,dynamic>> cartProductList=[];
+        for(int  i =0;i<cartList.length;i++)
+        {
+          GlobalData.cartProductList.add({
+            "product_id":cartList[i].productId,
+            "quantity":cartList[i].quantity,
+            "name":cartList[i].name,
+
+          });
+
+          print(cartList[i].productId);
+          print(cartList[i].quantity);
+        }
+        print("cartlist");
+        // GlobalData.cartItemsList=jsonEncode(cartList);
+        print(jsonEncode(cartList));
+        print("List");
+        //print(GlobalData.cartItemsList);
+
+
+
+        //print(jsonStr["id"]);
+      /*  for(var p in jsonStr){
+          var prod = WooCartItem.fromJson(p);
+          print('prod gotten here : '+prod.name.toString());
+          cartItems.add(prod);
+          GlobalData.itemKey=prod.key;
+          GlobalData.productId=prod.id.toString();
+          print("price");
+          print(GlobalData.itemKey);
+          setState(() {
+
+          });
+        }*/
+
+        GlobalData.isLoading=false;
+        setState(() {
+
+        });
+        await calculateTotalPrice();
+        print('account user fetch : '+jsonStr.toString());
+        return cartItems;
+
+        // return WooCartItem.fromJson(jsonStr);
+      } else {
+        WooCommerceError err =
+        WooCommerceError.fromJson(json.decode(response.body));
+        throw err;
+      }
+    });
+    /*setState(() {
+
+    });
+    GlobalData.isLoading=false;
+    setState(() {
+
+    });*/
+
+  }
+
 
   @override
   void initState() {
@@ -361,13 +449,33 @@ class _MyCartState extends State<MyCart> {
                                                 GestureDetector(
                                                   onTap: () async {
                                                     if(cartItems[index].quantity<=cartItems[index].quantity_limit){
+                                                      BuildContext loadContext;
+                                                      showDialog(
+                                                          barrierDismissible: false,
+                                                          context: context,
+                                                          builder: (ctx) {
+                                                            loadContext = ctx;
+                                                            return AlertDialog(
+                                                                backgroundColor: Colors.transparent,
+                                                                elevation: 0,
+                                                                content: Container(
+                                                                  child: Center(child: CircularProgressIndicator()),
+                                                                )
+                                                              //Center(child: CircularProgressIndicator())
+                                                            );
+                                                          });
                                                       cartItems[index].quantity--;
 
 
                                                       setState(() {
 
                                                       });
-                                                      UpdateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
+
+                                                      await UpdateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
+                                                      Navigator.pop(loadContext);
+
+                                                      updateCart();
+                                                      GlobalData.cartProductList.clear();
                                                       Show_toast_Now("Cart Updated Successfully ", Colors.green);
                                                       print(GlobalData.itemKey);
                                                       print(GlobalData.nonceKey);
@@ -407,13 +515,33 @@ class _MyCartState extends State<MyCart> {
                                                 GestureDetector(
                                                     onTap: () async {
                                                       if(cartItems[index].quantity<=cartItems[index].quantity_limit){
+                                                        BuildContext loadContext;
+                                                        showDialog(
+                                                            barrierDismissible: false,
+                                                            context: context,
+                                                            builder: (ctx) {
+                                                              loadContext = ctx;
+                                                              return AlertDialog(
+                                                                  backgroundColor: Colors.transparent,
+                                                                  elevation: 0,
+                                                                  content: Container(
+                                                                    child: Center(child: CircularProgressIndicator()),
+                                                                  )
+                                                                //Center(child: CircularProgressIndicator())
+                                                              );
+                                                            });
                                                         cartItems[index].quantity++;
 
 
                                                         setState(() {
 
                                                         });
-                                                        UpdateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
+
+
+                                                        await UpdateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
+                                                        Navigator.pop(loadContext);
+                                                        updateCart();
+                                                        GlobalData.cartProductList.clear();
                                                         Show_toast_Now("Cart Updated Successfully ", Colors.green);
                                                         print(GlobalData.itemKey);
                                                         print(GlobalData.nonceKey);
@@ -490,7 +618,11 @@ class _MyCartState extends State<MyCart> {
                      /* Row(
                         children: [
                           ElevatedButton(onPressed: (){
-                            viewCartItems();
+                            //viewCartItems();
+                            //updateCart()
+                            setState(() {
+
+                            });
                           },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.green, // background
@@ -524,7 +656,7 @@ class _MyCartState extends State<MyCart> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height*.01,
                       ),
-                      Row(
+                     /* Row(
                         children: [
                           Text(
                             'Shipping Fee',
@@ -535,17 +667,17 @@ class _MyCartState extends State<MyCart> {
                           ),
                           Spacer(),
                           Text(
-                            '\$0',
+                            '\$15.00',
                             style: TextStyle(
                                 fontSize:
                                 MediaQuery.of(context).size.height * .025,
                                 fontWeight: FontWeight.bold),
                           ),
                         ],
-                      ),
-                      SizedBox(
+                      ),*/
+                    /*  SizedBox(
                         height: MediaQuery.of(context).size.height*.03,
-                      ),
+                      ),*/
                       Divider(
                         color: Colors.black,
                       ),
@@ -585,7 +717,8 @@ class _MyCartState extends State<MyCart> {
                           child: InkWell(
                             onTap: () {
                               GlobalData.cartItemsList=jsonEncode(cartList);
-                              print(GlobalData.cartItemsList);
+                              print("cartItemList: "+GlobalData.cartItemsList);
+                              print("cartProductList: "+GlobalData.cartProductList.toString());
                               GlobalData.totalPrice= int.parse(totalPrice.toString());
                               print(GlobalData.totalPrice);
                               Navigator.pushNamed(context, 'Shipping');

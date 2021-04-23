@@ -157,10 +157,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       print(response.statusCode);
       if (response.statusCode == 201)
       {
-        login();
+
         print("LOGIN DONEEEEEEEEEEEEEEEE");
         Navigator.pop(loadContext);
-
+        login();
         //saving(context);
         Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
         Show_toast_Now("Registered Successfully", Colors.green);

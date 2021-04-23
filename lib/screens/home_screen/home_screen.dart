@@ -297,167 +297,184 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),*/
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .01,
-                ),
-                // Row(
-                //   children: [
-                //     Icon(Icons.menu_open),
-                //     SizedBox(
-                //       width: 10,
-                //     ),
-                //     Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       mainAxisAlignment: MainAxisAlignment.start,
-                //       children: [
-                //         Text(
-                //           'Hey, Masrafi!',
-                //           style: TextStyle(
-                //               color: Colors.grey,
-                //               fontSize: MediaQuery.of(context).size.width * .04),
-                //         ),
-                //         Text(
-                //           'You Choice Cute Chair',
-                //           style: TextStyle(
-                //               color: Colors.black,
-                //               fontSize: MediaQuery.of(context).size.width * .045,
-                //               fontWeight: FontWeight.w500),
-                //         )
-                //       ],
-                //     ),
-                //     Spacer(),
-                //     Icon(Icons.notifications_none)
-                //   ],
-                // ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * .08,
-                  decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: TextField(
-                        enabled: false,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Search',
-                            suffixIcon: Icon(Icons.search)),
-                      ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .01,
+              ),
+              // Row(
+              //   children: [
+              //     Icon(Icons.menu_open),
+              //     SizedBox(
+              //       width: 10,
+              //     ),
+              //     Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           'Hey, Masrafi!',
+              //           style: TextStyle(
+              //               color: Colors.grey,
+              //               fontSize: MediaQuery.of(context).size.width * .04),
+              //         ),
+              //         Text(
+              //           'You Choice Cute Chair',
+              //           style: TextStyle(
+              //               color: Colors.black,
+              //               fontSize: MediaQuery.of(context).size.width * .045,
+              //               fontWeight: FontWeight.w500),
+              //         )
+              //       ],
+              //     ),
+              //     Spacer(),
+              //     Icon(Icons.notifications_none)
+              //   ],
+              // ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .02,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * .08,
+                decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: TextField(
+                      //enabled: false,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Search',
+                          suffixIcon: Icon(Icons.search)),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .03,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * .2,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        GlobalData.orange.withOpacity(0.8),
-                        GlobalData.orange
-                      ], end: Alignment.centerRight, begin: Alignment.centerLeft),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Row(
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .03,
+              ),
+
+
+
+
+
+
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
-                      Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * .2,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                              GlobalData.orange.withOpacity(0.8),
+                              GlobalData.orange
+                            ], end: Alignment.centerRight, begin: Alignment.centerLeft),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Row(
+                          children: [
+                            Spacer(),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Hot Offer',
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.5),
+                                      fontSize:
+                                      MediaQuery.of(context).size.width * .05),
+                                ),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height * .01,
+                                ),
+                                Text(
+                                  '30%',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: MediaQuery.of(context).size.width * .1),
+                                ),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height * .01,
+                                ),
+                                Text(
+                                  'Discount',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize:
+                                      MediaQuery.of(context).size.width * .07),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * .1,
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .03,
+                      ),
+                      Row(
                         children: [
                           Text(
-                            'Hot Offer',
+                            'Featured Products',
                             style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                                fontSize:
-                                    MediaQuery.of(context).size.width * .05),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Text(
-                            '30%',
-                            style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontSize: MediaQuery.of(context).size.width * .1),
+                                fontSize: MediaQuery.of(context).size.width * .05),
                           ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * .01,
-                          ),
-                          Text(
-                            'Discount',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * .07),
-                          ),
+                          Spacer(),
+                          /* Text(
+                        'See All',
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: MediaQuery.of(context).size.width * .04),
+                      ),*/
                         ],
                       ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * .1,
-                      )
+                        height: MediaQuery.of(context).size.height * .04,
+                      ),
+                      GlobalData.isLoading==true?Center(child: Text("Loading...")):
+                      products.isEmpty?Text("No Featured Products"):
+                      Container(
+                        height: 250,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          //physics: NeverScrollableScrollPhysics(),
+                          itemCount: products.length,
+                          padding: EdgeInsets.only(right: 10),
+                          itemBuilder: (context, index) {
+                            final product = products[index];
+                            return ChairItem(
+                                products: product,
+                                onTap: () {
+                                  GlobalData.productId=products[index].id.toString();
+                                  print(GlobalData.productId);
+                                  _onChairPressed(product, context);
+                                },
+                              );
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .03,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Featured Products',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: MediaQuery.of(context).size.width * .05),
-                    ),
-                    Spacer(),
-                   /* Text(
-                      'See All',
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: MediaQuery.of(context).size.width * .04),
-                    ),*/
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .04,
-                ),
-                GlobalData.isLoading==true?Center(child: Text("Loading...")):
-                Expanded(
-                  child: products.isEmpty?Text("No Featured Products"):ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: products.length,
-                    padding: EdgeInsets.only(right: 10),
-                    itemBuilder: (context, index) {
-                      final product = products[index];
-                      return ChairItem(
-                        products: product,
-                        onTap: () {
-                          GlobalData.productId=products[index].id.toString();
-                          print(GlobalData.productId);
-                          _onChairPressed(product, context);
-                        },
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                )
-              ],
-            ),
+              )
+
+            ],
           ),
         ),
       ),
@@ -473,79 +490,82 @@ class ChairItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 15),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(50),
-        child: Container(
-          height: MediaQuery.of(context).size.height * .05,
-          width: MediaQuery.of(context).size.width * .55,
-          decoration: BoxDecoration(
-              color:  Colors.blue.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(50)),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /*SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),*/
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      products.images==null?"https://ronakfabricatorworks.com/wp-content/uploads/2021/02/download.jpg":products.images[0].src,
-                      height: MediaQuery.of(context).size.height*.15,
-                    ),
-                  ],
-                ),
-                Spacer(),
-                Text(
-                  products.name,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: MediaQuery.of(context).size.height * .025),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .01,
-                ),
-                /*Text(
-                  products.by.toString(),
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: MediaQuery.of(context).size.height * .02),
-                ),*/
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .01,
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.star,
-                      color: GlobalData.orange,
-                    ),
-                    Text(
-                      products.averageRating,
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * .02),
-                    ),
-                    Spacer(),
-                    Text(
-                      "\$"+products.price,
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * .03,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-              ],
+    return Container(
+      height: 250,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 15),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(50),
+          child: Container(
+            height: MediaQuery.of(context).size.height * .05,
+            width: MediaQuery.of(context).size.width * .55,
+            decoration: BoxDecoration(
+                color:  Colors.blue.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(50)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /*SizedBox(
+                    height: MediaQuery.of(context).size.height * .02,
+                  ),*/
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.network(
+                        products.images==null?"https://ronakfabricatorworks.com/wp-content/uploads/2021/02/download.jpg":products.images[0].src,
+                        height: MediaQuery.of(context).size.height*.15,
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  Text(
+                    products.name,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: MediaQuery.of(context).size.height * .025),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .01,
+                  ),
+                  /*Text(
+                    products.by.toString(),
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: MediaQuery.of(context).size.height * .02),
+                  ),*/
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .01,
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: GlobalData.orange,
+                      ),
+                      Text(
+                        products.averageRating,
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.height * .02),
+                      ),
+                      Spacer(),
+                      Text(
+                        "\$"+products.price,
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.height * .03,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .02,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

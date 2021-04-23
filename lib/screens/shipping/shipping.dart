@@ -101,7 +101,7 @@ class _ShippingState extends State<Shipping> {
         {
           "method_id": "flat_rate",
           "method_title":"Flat Rate",
-          "total":"15"
+          "total":"0"
         }
       ]
 
@@ -139,7 +139,7 @@ class _ShippingState extends State<Shipping> {
   List<CartProducts> cartList= [];
   List<WooCartItem> cartItems = [];
   var totalPrice=0;
-  viewCartItems() async {
+  /*viewCartItems() async {
     GlobalData.isLoading=true;
     setState(() {
 
@@ -148,11 +148,11 @@ class _ShippingState extends State<Shipping> {
       'Authorization': 'Bearer '+GlobalData.tokenId,
       'X-WC-Store-API-Nonce': GlobalData.nonceKey
     };
-    /* if (variations != null)
+    *//* if (variations != null)
       {data['variations'] = variations;}
     else{
       data['variations'] ="";
-    }*/
+    }*//*
 
     http.get(
         'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/items',
@@ -215,15 +215,15 @@ class _ShippingState extends State<Shipping> {
         throw err;
       }
     });
-    /*setState(() {
+    *//*setState(() {
 
     });
     GlobalData.isLoading=false;
     setState(() {
 
-    });*/
+    });*//*
 
-  }
+  }*/
 
   bool check = false;
   @override
@@ -500,6 +500,7 @@ class _ShippingState extends State<Shipping> {
                        /* Divider(
                           color: Colors.black,
                         ),*/
+
                         Row(
                           children: [
                             Text(
@@ -538,8 +539,9 @@ class _ShippingState extends State<Shipping> {
                             color: Colors.transparent,
                             child: InkWell(
                               onTap: () {
-                                cartList.clear();
-                                cartItems.clear();
+                                //cartList.clear();
+                                //cartItems.clear();
+                                //GlobalData.cartProductList.clear();
                                 print("cartItems: "+cartItems.length.toString());
                                 print(cartList.length);
                                 GlobalData.cartTotal=((GlobalData.totalPrice/100)).toStringAsFixed(2);

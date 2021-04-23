@@ -125,7 +125,8 @@ class Confirmation extends StatelessWidget {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
-                            GlobalData.orderId;
+
+                            print(GlobalData.cartProductList);
                             Navigator.pushNamed(context, 'OrderDetails');
 
                           },
