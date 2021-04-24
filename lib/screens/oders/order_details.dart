@@ -52,6 +52,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("........................$orders");
     getOrderDetails();
   }
 
@@ -69,7 +70,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
        ),
 
-      body: SingleChildScrollView(
+      body: orders==null?Center(child: Text("Loading...")):SingleChildScrollView(
         physics: ScrollPhysics(),
 
         child: Container(
