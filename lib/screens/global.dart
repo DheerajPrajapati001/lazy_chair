@@ -209,6 +209,40 @@ void saving(BuildContext context)  {
       ));
 }
 
+void customDialogBox(context,{String title,String msg,String buttonText,VoidCallback onPressed, VoidCallback onpressed1}) {
+  // flutter defined function
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        title: new Text(title),
+        content: new Text(msg),
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
+          new TextButton(
+            child: new Text(buttonText??"Back",style: TextStyle(color: Colors.black),textAlign: TextAlign.center,),
+            onPressed: () {
+              onpressed1==null?
+              Navigator.of(context).pop():
+              onpressed1();
+            },
+          ),
 
+          TextButton(
+            child: new Text(buttonText??"Yes",style: TextStyle(color: Colors.black),textAlign: TextAlign.center,),
+            onPressed: () {
+              onPressed==null?
+              Navigator.of(context).pop():
+              onPressed();
+            },
+          ),
+
+
+        ],
+      );
+    },
+  );
+}
 
 

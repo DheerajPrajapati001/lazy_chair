@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<void> _onChairPressed(WooProduct products, BuildContext context) async {
+  Future<void> _onProductPressed(WooProduct products, BuildContext context) async {
     await Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) {
@@ -460,7 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onTap: () {
                                   GlobalData.productId=products[index].id.toString();
                                   print(GlobalData.productId);
-                                  _onChairPressed(product, context);
+                                  _onProductPressed(product, context);
                                 },
                               );
                           },

@@ -22,7 +22,7 @@ class _OrdersState extends State<Orders> {
     isDebug: true,
   );
   List<WooOrder> orders = [];
-  ViewOrder()async{
+  viewOrder()async{
     GlobalData.isLoading=true;
     setState(() {
 
@@ -56,7 +56,7 @@ class _OrdersState extends State<Orders> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    ViewOrder();
+    viewOrder();
   }
 
   @override

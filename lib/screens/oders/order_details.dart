@@ -30,6 +30,24 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   }
 
+  deleteOrder()async{
+    GlobalData.isLoading=true;
+    setState(() {
+
+    });
+    orders = await wooCommerce.deleteOrder(orderId: GlobalData.orderId);
+
+    setState(() {
+
+    });
+    GlobalData.isLoading=false;
+    setState(() {
+
+    });
+    print(orders.toString());
+
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -187,14 +205,31 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                   )),
                                 ],
                               ),
-                              SizedBox(height: 10,)
+                              SizedBox(height: 10,),
+
+
                             ],
                           );
 
                         },
                       ),
 
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: GlobalData.orange, // background
+                            // foreground
+                          ),
+                          onPressed: (){
+                            customDialogBox(context,title: "Cancel Order",msg:
+                            "Do you want to cancel Order",
+                                onPressed:(){
+                                  deleteOrder();
+                                  Navigator.pushNamed(context, "HomePage");
+                                  Show_toast_Now("Order Cancelled", Colors.red);
 
+                            });
+
+                          }, child: Text("Cancel Order",style: TextStyle(color: GlobalData.black),))
                     ],
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:lazy_chair/config/config.dart';
 import 'package:lazy_chair/model/cart_products.dart';
 import 'package:woocommerce/models/cart_item.dart';
+import 'package:woocommerce/woocommerce.dart';
 import 'package:woocommerce/woocommerce_error.dart';
 import '../global.dart';
 
@@ -25,15 +26,96 @@ class _ShippingState extends State<Shipping> {
   TextEditingController phoneNo = new TextEditingController();
   TextEditingController emailId = new TextEditingController();
   TextEditingController notes = new TextEditingController();
+  TextEditingController coupon = new TextEditingController();
+
 
   var _formKey = GlobalKey<FormState>();
 
-  void _submit() {
+
+  Future applyCoupon(
+      {@required String code,}) async {
+
+    Map<String, dynamic> data = {
+      'code':code,
+
+    };
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer '+GlobalData.tokenId,
+      'X-WC-Store-API-Nonce': GlobalData.nonceKey
+    };
+    /*if (variations != null)
+    {data['variations'] = variations;}
+    else{
+      data['variations'] = "";
+    }*/
+
+    await http.post(
+        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/apply-coupon',
+        body: data,
+        headers: requestHeaders).then((response) async{
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final jsonStr = json.decode(response.body);
+        print('Coupon Applied ' + jsonStr.toString());
+        Show_toast_Now("Coupon Applied Successfully", Colors.green);
+
+        setState(() {
+
+        });
+        // return WooCartItem.fromJson(jsonStr);
+      } else {
+        WooCommerceError err =
+        WooCommerceError.fromJson(json.decode(response.body));
+        Show_toast_Now(err.message, Colors.red);
+        throw err;
+
+      }
+    });
+
+
+  }
+  /*Future deleteAllCartItems() async {
+
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer '+GlobalData.tokenId,
+      'X-WC-Store-API-Nonce': GlobalData.nonceKey
+    };
+
+
+    await http.post(
+        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/remove-item/',
+
+        headers: requestHeaders).then((response) async{
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final jsonStr = json.decode(response.body);
+        print('Item Deleted: ' + jsonStr.toString());
+        //Show_toast_Now("Product Removed Successfully", Colors.green);
+        print(response.statusCode);
+
+        setState(() {
+
+        });
+        // return WooCartItem.fromJson(jsonStr);
+      } else {
+        print(response.statusCode);
+        WooCommerceError err =
+        WooCommerceError.fromJson(json.decode(response.body));
+        throw err;
+      }
+    });
+
+
+  }*/
+
+
+  void _submit() async{
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
-    placeOrder(productList: GlobalData.cartProductList);
+   await placeOrder(productList: GlobalData.cartProductList);
+    //deleteAllCartItems();
     _formKey.currentState.save();
   }
 
@@ -500,7 +582,36 @@ class _ShippingState extends State<Shipping> {
                        /* Divider(
                           color: Colors.black,
                         ),*/
+                        Row(
+                           children: [
+                             Text("Coupon: "),
+                             Expanded(
+                               flex: 10,
+                               child: TextField(
+                                 controller: coupon,
+                                 decoration: InputDecoration(
+                                   contentPadding: EdgeInsets.all(10),
+                                   border: new OutlineInputBorder(
+                                     borderRadius: new BorderRadius.circular(10.0),
+                                 ),
+                               ),
+                             ),),
+                             SizedBox(width: 10,),
+                             Expanded(
+                               flex: 5,
+                               child: ElevatedButton(
+                                   style: ElevatedButton.styleFrom(
+                                     primary: GlobalData.orange, // background
+                                     // foreground
+                                   ),
+                                   onPressed: (){
+                                     applyCoupon(code: coupon.text);
 
+                               }, child: Text("Apply")),
+                             )
+                           ],
+                        ),
+                        SizedBox(height: 10,),
                         Row(
                           children: [
                             Text(
@@ -539,8 +650,9 @@ class _ShippingState extends State<Shipping> {
                             color: Colors.transparent,
                             child: InkWell(
                               onTap: () {
-                                //cartList.clear();
-                                //cartItems.clear();
+                               /* cartList.clear();
+                                cartItems.clear();*/
+                                //clear list//
                                 //GlobalData.cartProductList.clear();
                                 print("cartItems: "+cartItems.length.toString());
                                 print(cartList.length);

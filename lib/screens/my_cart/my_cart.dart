@@ -145,7 +145,7 @@ class _MyCartState extends State<MyCart> {
 
 
 
-  Future DeleteCartItems(
+  Future deleteCartItems(
       {@required String key,}) async {
 
     Map<String, dynamic> data = {
@@ -188,7 +188,7 @@ class _MyCartState extends State<MyCart> {
 
 
 
-  Future UpdateCartItems(
+  Future updateCartItems(
       {@required String key, @required String itemId,
         @required String quantity,
         List variations}) async {
@@ -471,7 +471,7 @@ class _MyCartState extends State<MyCart> {
 
                                                       });
 
-                                                      await UpdateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
+                                                      await updateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
                                                       Navigator.pop(loadContext);
 
                                                       updateCart();
@@ -498,7 +498,7 @@ class _MyCartState extends State<MyCart> {
                                                       Fluttertoast.showToast(msg: "Removing from Cart");
 
                                                       cartItems.removeAt(index);
-                                                      DeleteCartItems(key: cartItems[index].key);
+                                                      deleteCartItems(key: cartItems[index].key);
                                                     }
 
                                                   },
@@ -538,7 +538,7 @@ class _MyCartState extends State<MyCart> {
                                                         });
 
 
-                                                        await UpdateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
+                                                        await updateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
                                                         Navigator.pop(loadContext);
                                                         updateCart();
                                                         GlobalData.cartProductList.clear();
@@ -567,7 +567,7 @@ class _MyCartState extends State<MyCart> {
                                           onTap:(){
                                             Fluttertoast.showToast(msg: "Removing from Cart");
 
-                                            DeleteCartItems(key: cartItems[index].key);
+                                            deleteCartItems(key: cartItems[index].key);
                                             cartItems.removeAt(index);
 
 

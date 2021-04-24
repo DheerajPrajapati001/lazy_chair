@@ -160,7 +160,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
         print("LOGIN DONEEEEEEEEEEEEEEEE");
         Navigator.pop(loadContext);
-        login();
+        await login();
+        Navigator.pop(loadContext);
         //saving(context);
         Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
         Show_toast_Now("Registered Successfully", Colors.green);
