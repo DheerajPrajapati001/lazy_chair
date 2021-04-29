@@ -3,8 +3,8 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lazy_chair/config/config.dart';
-import 'package:woocommerce/woocommerce.dart';
 
+import '../../woocommerce.dart';
 import '../global.dart';
 
 

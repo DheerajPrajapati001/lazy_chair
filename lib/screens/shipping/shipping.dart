@@ -2,10 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lazy_chair/config/config.dart';
-import 'package:lazy_chair/model/cart_products.dart';
-import 'package:woocommerce/models/cart_item.dart';
-import 'package:woocommerce/woocommerce.dart';
-import 'package:woocommerce/woocommerce_error.dart';
+import 'package:lazy_chair/models/cart_products.dart';
+
+import '../../woocommerce.dart';
 import '../global.dart';
 
 class Shipping extends StatefulWidget {

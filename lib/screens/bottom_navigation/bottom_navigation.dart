@@ -3,6 +3,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:lazy_chair/screens/category_screen/category_screen.dart';
 import 'package:lazy_chair/screens/home_screen/home_screen.dart';
 import 'package:lazy_chair/screens/my_cart/my_cart.dart';
+import 'package:lazy_chair/screens/settings_screen/setting_screen.dart';
 
 import '../global.dart';
 
@@ -32,7 +33,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     ),
     MyRoute(
       iconData: Icons.settings,
-      page: MyCart(),
+      page: Setting(),
     ),
   ];
 

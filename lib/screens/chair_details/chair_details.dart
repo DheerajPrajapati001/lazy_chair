@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:lazy_chair/chairs.dart';
+import 'package:lazy_chair/models/products.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:woocommerce/models/products.dart';
 import 'package:http/http.dart' as http;
-import 'package:woocommerce/woocommerce_error.dart';
+import '../../woocommerce_error.dart';
 import '../global.dart';
 
 class ProductDetails extends StatefulWidget {

@@ -4,14 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:lazy_chair/chairs.dart';
+import 'package:lazy_chair/models/products.dart';
+import 'package:lazy_chair/models/shipping_zone.dart';
+import 'package:lazy_chair/models/shipping_zone_method.dart';
 import 'package:lazy_chair/screens/chair_details/chair_details.dart';
 import 'package:lazy_chair/screens/global.dart';
 import 'package:lazy_chair/config/config.dart';
 import 'package:lazy_chair/screens/my_cart/my_cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:woocommerce/models/products.dart';
-import 'package:woocommerce/woocommerce.dart';
 import 'package:http/http.dart' as http;
+
+import '../../woocommerce.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -152,6 +155,8 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
           backgroundColor: GlobalData.orange,
           title: Text(
            "Welcome "+GlobalData.niceName,
@@ -172,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           elevation: 0,
         ),
-        drawer: Drawer(
+        /*drawer: Drawer(
           child: Column(
             children: [
               Container(
@@ -256,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ),
-        ),
+        ),*/
         /*bottomNavigationBar: Container(
           decoration: BoxDecoration(boxShadow: [
             BoxShadow(
@@ -595,7 +600,7 @@ class DrawerItem extends StatelessWidget {
               children: [
                 Icon(icon,color: Colors.grey,size: 20),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width*.07,
+                  width: MediaQuery.of(context).size.width*.04,
                 ),
                 Text(title,style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -606,7 +611,7 @@ class DrawerItem extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height*.015,
+          height: MediaQuery.of(context).size.height*.03,
         )
       ],
     );

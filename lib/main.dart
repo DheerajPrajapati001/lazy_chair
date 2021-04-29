@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lazy_chair/screens/chair_details/chair_details.dart';
 import 'package:lazy_chair/screens/confirmation/confirmation.dart';
+import 'package:lazy_chair/screens/coupon_screen/coupons_screen.dart';
 import 'package:lazy_chair/screens/home_screen/home_screen.dart';
 import 'package:lazy_chair/screens/login_screen/login_screen.dart';
 import 'package:lazy_chair/screens/my_cart/my_cart.dart';
 import 'package:lazy_chair/screens/oders/order_details.dart';
 import 'package:lazy_chair/screens/oders/orders.dart';
+import 'package:lazy_chair/screens/settings_screen/setting_screen.dart';
 import 'package:lazy_chair/screens/shipping/shipping.dart';
 import 'package:lazy_chair/screens/splash_screen/splash_screen.dart';
 
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
         'LoginPage':(context)=> LoginScreen(),
         'ViewOrders':(context)=> Orders(),
         'OrderDetails':(context)=> OrderDetailsScreen(),
+        'Settings':(context)=> Setting(),
+        'Coupons':(context)=> Coupon()
       },
       home: SplashScreen(),
     );

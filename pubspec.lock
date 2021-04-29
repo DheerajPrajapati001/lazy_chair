@@ -65,7 +65,7 @@ packages:
     source: hosted
     version: "2.1.1"
   crypto:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: crypto
       url: "https://pub.dartlang.org"
@@ -140,7 +140,7 @@ packages:
     source: hosted
     version: "0.10.5"
   flutter_secure_storage:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_secure_storage
       url: "https://pub.dartlang.org"
@@ -462,13 +462,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
-  woocommerce:
-    dependency: "direct main"
-    description:
-      name: woocommerce
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.7"
   xdg_directories:
     dependency: transitive
     description:

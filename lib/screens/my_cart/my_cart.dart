@@ -5,13 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lazy_chair/chairs.dart';
 import 'package:lazy_chair/config/config.dart';
 import 'package:lazy_chair/images.dart';
-import 'package:lazy_chair/model/cart_products.dart';
-import 'package:woocommerce/models/cart_item.dart';
+import 'package:lazy_chair/models/cart_item.dart';
+import 'package:lazy_chair/models/cart_products.dart';
 import 'package:http/http.dart' as http;
-import 'package:woocommerce/models/products.dart';
-import 'package:woocommerce/woocommerce.dart';
-import 'package:woocommerce/woocommerce_error.dart';
 
+import '../../woocommerce_error.dart';
 import '../global.dart';
 
 class MyCart extends StatefulWidget {

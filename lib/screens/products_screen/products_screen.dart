@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lazy_chair/config/config.dart';
 import 'package:lazy_chair/screens/chair_details/chair_details.dart';
-import 'package:woocommerce/models/product_category.dart';
-import 'package:woocommerce/woocommerce.dart';
 
+
+import '../../woocommerce.dart';
 import '../global.dart';
 
 class ProductsScreen extends StatefulWidget {
