@@ -1223,7 +1223,7 @@ class WooCommerce{
     ).forEach((k, v) {
       if(v != null) payload[k] = v.toString();
     });
-    List<WooCoupon>coupons;
+    List<WooCoupon>coupons=[];
     _printToLog('Getting Coupons With Payload : ' + payload.toString());
     _setApiResourceUrl(path: 'coupons', queryParameters: payload);
     final response = await get(queryUri.toString());
@@ -1234,7 +1234,6 @@ class WooCommerce{
     }
     return coupons;
   }
-
   /// Returns a [WooCoupon] object with the specified [id].
   Future<WooCoupon> getCouponById(int id) async {
     _setApiResourceUrl(path: 'coupons/'+id.toString());

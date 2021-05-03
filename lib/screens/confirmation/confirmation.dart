@@ -70,7 +70,7 @@ class Confirmation extends StatelessWidget {
                     ),
                     CustomRow(
                       text: 'Sub Total',
-                      price: GlobalData.cartTotal,
+                      price: GlobalData.totalPrice,
                     ),
                     /*CustomRow(
                       text: 'VAT(15%)',
@@ -78,7 +78,7 @@ class Confirmation extends StatelessWidget {
                     ),*/
                     CustomRow(
                       text: 'Shipping Charge',
-                      price: GlobalData.orderShippingTotal,
+                      price: GlobalData.shippingMethodTotalPrice,
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height*.01,
@@ -101,7 +101,7 @@ class Confirmation extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          '\$'+GlobalData.orderTotal,
+                          '\$'+GlobalData.cartTotal,
                           style: TextStyle(
                               color: GlobalData.orange,
                               fontSize:

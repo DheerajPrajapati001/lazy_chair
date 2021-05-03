@@ -18,7 +18,7 @@ class GlobalData{
   static Color white = Colors.white;
   static Color black = Colors.black;
   static Color orange = Colors.orange;
-  static int totalPrice;
+  static String totalPrice;
   static bool isLoading = false;
   static String cartItemsList;
   static int orderId;

@@ -65,7 +65,7 @@ class _ShippingState extends State<Shipping> {
       } else {
         WooCommerceError err =
         WooCommerceError.fromJson(json.decode(response.body));
-        Show_toast_Now(err.message, Colors.red);
+        Show_toast_Now(err.message.replaceAll("&#36;", ""), Colors.red);
         throw err;
 
       }
@@ -180,9 +180,9 @@ class _ShippingState extends State<Shipping> {
       ]*/,
       "shipping_lines": [
         {
-          "method_id": "flat_rate",
-          "method_title":"Flat Rate",
-          "total":"0"
+          "method_id": GlobalData.shippingMethodId,
+          "method_title":GlobalData.shippingMethodTitle,
+          "total":GlobalData.shippingMethodTotalPrice
         }
       ]
 
@@ -624,7 +624,8 @@ class _ShippingState extends State<Shipping> {
                             Spacer(),
                             Text(
                               "\$"+
-                              ((GlobalData.totalPrice/100)).toStringAsFixed(2),
+                                (GlobalData.cartTotal.toString()),
+
 
                               style: TextStyle(
                                 color: GlobalData.orange,
@@ -655,7 +656,7 @@ class _ShippingState extends State<Shipping> {
                                 //GlobalData.cartProductList.clear();
                                 print("cartItems: "+cartItems.length.toString());
                                 print(cartList.length);
-                                GlobalData.cartTotal=((GlobalData.totalPrice/100)).toStringAsFixed(2);
+                                //GlobalData.cartTotal=((GlobalData.totalPrice.toString()));
                                 print("cart total "+GlobalData.cartTotal);
                                 _submit();
                                 print(GlobalData.cartProductList);

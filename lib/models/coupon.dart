@@ -30,7 +30,7 @@
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
-
+import 'package:flutter/material.dart';
 class WooCoupon {
   int id;
   String code;
@@ -119,7 +119,9 @@ class WooCoupon {
     emailRestrictions = json['email_restrictions'].cast<String>();
     usedBy = json['used_by'].cast<String>();
     metaData = json['meta_data'].cast<String>();
-    lLinks = json['_links'] != null ? new WooCouponLinks.fromJson(json['_links']) : null;
+    lLinks = json['_links'] != null
+        ? new WooCouponLinks.fromJson(json['_links'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -156,6 +158,7 @@ class WooCoupon {
     }
     return data;
   }
+  
   @override toString() => this.toJson().toString();
 }
 

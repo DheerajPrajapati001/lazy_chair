@@ -654,7 +654,7 @@ class _MyCartState extends State<MyCart> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height*.01,
                       ),
-                     /* Row(
+                      Row(
                         children: [
                           Text(
                             'Shipping Fee',
@@ -665,14 +665,14 @@ class _MyCartState extends State<MyCart> {
                           ),
                           Spacer(),
                           Text(
-                            '\$15.00',
+                            '\$'+GlobalData.shippingMethodTotalPrice,
                             style: TextStyle(
                                 fontSize:
                                 MediaQuery.of(context).size.height * .025,
                                 fontWeight: FontWeight.bold),
                           ),
                         ],
-                      ),*/
+                      ),
                     /*  SizedBox(
                         height: MediaQuery.of(context).size.height*.03,
                       ),*/
@@ -691,7 +691,7 @@ class _MyCartState extends State<MyCart> {
                           ),
                           Spacer(),
                           Text("\$"+
-                            ((int.parse(totalPrice.toString())/100)).toStringAsFixed(2),
+                            ((int.parse(totalPrice.toString())/100)+int.parse(GlobalData.shippingMethodTotalPrice)).toStringAsFixed(2),
                             style: TextStyle(
                                 fontSize:
                                 MediaQuery.of(context).size.height * .025,
@@ -717,8 +717,12 @@ class _MyCartState extends State<MyCart> {
                               GlobalData.cartItemsList=jsonEncode(cartList);
                               print("cartItemList: "+GlobalData.cartItemsList);
                               print("cartProductList: "+GlobalData.cartProductList.toString());
-                              GlobalData.totalPrice= int.parse(totalPrice.toString());
+                              GlobalData.totalPrice= ((int.parse(totalPrice.toString())/100)).toStringAsFixed(2);
+
+                              GlobalData.cartTotal= ((int.parse(totalPrice.toString())/100)+int.parse(GlobalData.shippingMethodTotalPrice)).toStringAsFixed(2);
                               print(GlobalData.totalPrice);
+                              print(GlobalData.shippingMethodTotalPrice);
+                              print(((int.parse(totalPrice.toString())/100)+int.parse(GlobalData.shippingMethodTotalPrice)).toStringAsFixed(2));
                               Navigator.pushNamed(context, 'Shipping');
                             },
                             splashColor: Colors.black.withOpacity(0.1),
