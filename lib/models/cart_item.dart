@@ -41,6 +41,7 @@ class WooCartItem {
   String permalink;
   List<WooCartItemImages> images;
   Prices prices;
+  Total total;
   String linePrice;
   List<String> variation;
 
@@ -55,7 +56,8 @@ class WooCartItem {
         this.images,
         this.prices,
         this.linePrice,
-        this.variation});
+        this.variation,
+      this.total});
 
   WooCartItem.fromJson(Map<String, dynamic> json) {
     key = json['key'];
@@ -72,6 +74,7 @@ class WooCartItem {
       });
     }
     prices = json['prices'] != null ? new Prices.fromJson(json['prices']) : null;
+    total = json['prices'] != null ? new Total.fromJson(json['totals']) : null;
 
     linePrice = json['line_price'];
     variation = json['variation'].cast<String>();
@@ -149,6 +152,56 @@ class Prices {
     return data;
   }
 }
+
+class Total {
+  String lineSubtotal;
+  String lineSubtotalTax;
+  String lineTotal;
+  String lineTotalTax;
+  String currencyCode;
+  String currencySymbol;
+  int currencyMinorUnit;
+  String currencyDecimalSeparator;
+  String currencyThousandSeparator;
+  String currencyPrefix;
+  String currencySuffix;
+
+  Total({this.lineSubtotal, this.lineSubtotalTax, this.lineTotal, this.lineTotalTax, this.currencyCode, this.currencySymbol,
+    this.currencyMinorUnit, this.currencyDecimalSeparator, this.currencyThousandSeparator, this.currencyPrefix,
+    this.currencySuffix});
+
+  Total.fromJson(Map<String, dynamic> json) {
+    lineSubtotal = json['line_subtotal'];
+    lineSubtotalTax = json['line_subtotal_tax'];
+    lineTotal = json['line_total'];
+    lineTotalTax = json['line_total_tax'];
+    currencyCode = json['currency_code'];
+    currencySymbol = json['currency_symbol'];
+    currencyMinorUnit = json['currency_minor_unit'];
+    currencyDecimalSeparator = json['currency_decimal_separator'];
+    currencyThousandSeparator = json['currency_thousand_separator'];
+    currencyPrefix = json['currency_prefix'];
+    currencySuffix = json['currency_suffix'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['line_subtotal'] = this.lineSubtotal;
+    data['line_subtotal_tax'] = this.lineSubtotalTax;
+    data['line_total'] = this.lineTotal;
+    data['line_total_tax'] = this.lineTotalTax;
+    data['currency_code'] = this.currencyCode;
+    data['currency_symbol'] = this.currencySymbol;
+    data['currency_minor_unit'] = this.currencyMinorUnit;
+    data['currency_decimal_separator'] = this.currencyDecimalSeparator;
+    data['currency_thousand_separator'] = this.currencyThousandSeparator;
+    data['currency_prefix'] = this.currencyPrefix;
+    data['currency_suffix'] = this.currencySuffix;
+
+    return data;
+  }
+}
+
 
 class RawPrices {
   int precision;

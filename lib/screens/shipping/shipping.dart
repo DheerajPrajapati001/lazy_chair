@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/models/apply_coupon.dart';
 import 'package:lazy_chair/models/cart_products.dart';
+import 'package:lazy_chair/models/new_apply_coupon.dart';
 
 import '../../woocommerce.dart';
 import '../global.dart';
@@ -14,7 +16,33 @@ class Shipping extends StatefulWidget {
 }
 
 class _ShippingState extends State<Shipping> {
+/*
+  CouponTotals.fromJson(Map<String, dynamic> json) {
+    totalDiscount= json["total_discount"];
+    totalDiscountTax= json["total_discount_tax"];
+    currencyCode= json["currency_code"];
+    currencySymbol= json["currency_symbol"];
+    currencyMinorUnit= json["currency_minor_unit"];
+    currencyDecimalSeparator= json["currency_decimal_separator"];
+    currencyThousandSeparator= json["currency_thousand_separator"];
+    currencyPrefix= json["currency_prefix"];
+    currencySuffix= json["currency_suffix"];
 
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['total_discount']= this.totalDiscount;
+    data['total_discount_tax']= this.totalDiscountTax;
+    data['currency_code']= this.currencyCode;
+    data['currency_symbol']= this.currencySymbol;
+    data['currency_minor_unit']= this.currencyMinorUnit;
+    data['currency_decimal_separator']= this.currencyDecimalSeparator;
+    data['currency_thousand_separator']= this.currencyThousandSeparator;
+    data['currency_prefix']= this.currencyPrefix;
+    data['currency_suffix']= this.currencySuffix;
+    return data;
+  }*/
   TextEditingController firstName = new TextEditingController();
   TextEditingController lastName = new TextEditingController();
   TextEditingController country = new TextEditingController();
@@ -29,11 +57,18 @@ class _ShippingState extends State<Shipping> {
 
 
   var _formKey = GlobalKey<FormState>();
-
+  bool isApplied = false;
+  double cartTotal;
+  double discount;
+  double totalAmount;
 
   Future applyCoupon(
       {@required String code,}) async {
 
+    GlobalData.isLoading=true;
+    setState(() {
+
+    });
     Map<String, dynamic> data = {
       'code':code,
 
@@ -56,12 +91,32 @@ class _ShippingState extends State<Shipping> {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final jsonStr = json.decode(response.body);
         print('Coupon Applied ' + jsonStr.toString());
-        Show_toast_Now("Coupon Applied Successfully", Colors.green);
+        isApplied=true;
 
+        print("applyCouponList");
+        CouponsData couponData = CouponsData.fromJson(jsonDecode(response.body));
+
+            print(couponData.coupons[0].totals.totalDiscount);
+            GlobalData.couponCode=couponData.coupons[0].code;
+            GlobalData.discountTotal=((int.parse(couponData.coupons[0].totals.totalDiscount.toString())/100)).toStringAsFixed(2);
+
+            //GlobalData.discountTotal=couponData.coupons[0].totals.totalDiscount;
+            GlobalData.currencySymbol = couponData.coupons[0].totals.currencySymbol;
+      cartTotal = double.parse(GlobalData.cartTotal.toString());
+       discount = double.parse(GlobalData.discountTotal.toString());
+
+        //totalAmount=(double.parse(cartTotal.toString())-double.parse(discount.toString())).toString();
+        totalAmount=cartTotal-discount;
+        print(cartTotal-discount);
+        Show_toast_Now("Coupon Applied Successfully", Colors.green);
         setState(() {
 
         });
-        // return WooCartItem.fromJson(jsonStr);
+        GlobalData.isLoading=false;
+        setState(() {
+
+        });
+
       } else {
         WooCommerceError err =
         WooCommerceError.fromJson(json.decode(response.body));
@@ -73,6 +128,49 @@ class _ShippingState extends State<Shipping> {
 
 
   }
+
+
+  Future removeCoupon(
+      {@required String key,}) async {
+
+    Map<String, dynamic> data = {
+      'code':key,
+
+    };
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer '+GlobalData.tokenId,
+      'X-WC-Store-API-Nonce': GlobalData.nonceKey
+    };
+    /*if (variations != null)
+    {data['variations'] = variations;}
+    else{
+      data['variations'] = "";
+    }*/
+
+    await http.post(
+        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/remove-coupon',
+        body: data,
+        headers: requestHeaders).then((response) async{
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final jsonStr = json.decode(response.body);
+        print('Coupon Removed: ' + jsonStr.toString());
+        Show_toast_Now("Coupon Removed Successfully", Colors.green);
+
+        setState(() {
+
+        });
+        // return WooCartItem.fromJson(jsonStr);
+      } else {
+        WooCommerceError err =
+        WooCommerceError.fromJson(json.decode(response.body));
+        throw err;
+      }
+    });
+
+
+  }
+
   /*Future deleteAllCartItems() async {
 
     Map<String, String> requestHeaders = {
@@ -559,10 +657,58 @@ class _ShippingState extends State<Shipping> {
                         SizedBox(
                           height: MediaQuery.of(context).size.height*.01,
                         ),
-                       /* Row(
+                        isApplied==true?
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap:(){
+                                print(GlobalData.couponCode);
+                                removeCoupon(key: GlobalData.couponCode);
+                        },
+                                child: Text("Remove Coupon",style: TextStyle(color: Colors.red),)),
+                          ],
+                        ):SizedBox(),
+                        SizedBox(height: 5,),
+                        Row(
+                          children: [
+                            Text("Coupon: "),
+                            Expanded(
+                              flex: 10,
+                              child: TextField(
+                                controller: coupon,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(10),
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                              ),),
+                            SizedBox(width: 10,),
+                            Expanded(
+                              flex: 5,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: GlobalData.orange, // background
+                                    // foreground
+                                  ),
+                                  onPressed: (){
+                                    applyCoupon(code: coupon.text);
+
+                                  }, child: Text("Apply")),
+                            )
+                          ],
+                        ),
+                        /*Divider(
+                          color: Colors.black,
+                        ),*/
+
+
+                        SizedBox(height: 10,),
+                        isApplied==true?
+                        Row(
                           children: [
                             Text(
-                              'Additional Shipping Charge',
+                              'Discount',
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.5),
                                   fontSize:
@@ -570,51 +716,22 @@ class _ShippingState extends State<Shipping> {
                             ),
                             Spacer(),
                             Text(
-                              '\$5.50',
+                              "-"+GlobalData.currencySymbol+GlobalData.discountTotal,
                               style: TextStyle(
                                   fontSize:
                                   MediaQuery.of(context).size.height * .025,
                                   fontWeight: FontWeight.bold),
                             ),
                           ],
-                        ),*/
-                       /* Divider(
-                          color: Colors.black,
-                        ),*/
-                        Row(
-                           children: [
-                             Text("Coupon: "),
-                             Expanded(
-                               flex: 10,
-                               child: TextField(
-                                 controller: coupon,
-                                 decoration: InputDecoration(
-                                   contentPadding: EdgeInsets.all(10),
-                                   border: new OutlineInputBorder(
-                                     borderRadius: new BorderRadius.circular(10.0),
-                                 ),
-                               ),
-                             ),),
-                             SizedBox(width: 10,),
-                             Expanded(
-                               flex: 5,
-                               child: ElevatedButton(
-                                   style: ElevatedButton.styleFrom(
-                                     primary: GlobalData.orange, // background
-                                     // foreground
-                                   ),
-                                   onPressed: (){
-                                     applyCoupon(code: coupon.text);
+                        ):SizedBox(),
 
-                               }, child: Text("Apply")),
-                             )
-                           ],
-                        ),
+
                         SizedBox(height: 10,),
+                        isApplied==true?
                         Row(
                           children: [
                             Text(
-                              'Total',
+                              'Sub Total',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -629,6 +746,41 @@ class _ShippingState extends State<Shipping> {
 
                               style: TextStyle(
                                 color: GlobalData.orange,
+                                  fontSize:
+                                  MediaQuery.of(context).size.height * .025,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ):SizedBox(),
+                        SizedBox(height: 10,),
+
+                        Row(
+                          children: [
+                            Text(
+                              'Total',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                  MediaQuery.of(context).size.height * .02),
+                            ),
+                            Spacer(),
+                            isApplied==true?
+                            Text(
+                              "\$"+totalAmount.toString()==null?("\$"+GlobalData.cartTotal.toString()):("\$"+totalAmount.toString()),
+
+
+                              style: TextStyle(
+                                  color: GlobalData.orange,
+                                  fontSize:
+                                  MediaQuery.of(context).size.height * .025,
+                                  fontWeight: FontWeight.bold),
+                            ):Text(
+                              "\$"+(GlobalData.cartTotal.toString()),
+
+
+                              style: TextStyle(
+                                  color: GlobalData.orange,
                                   fontSize:
                                   MediaQuery.of(context).size.height * .025,
                                   fontWeight: FontWeight.bold),
@@ -660,6 +812,18 @@ class _ShippingState extends State<Shipping> {
                                 print("cart total "+GlobalData.cartTotal);
                                 _submit();
                                 print(GlobalData.cartProductList);
+                                print(int.parse("5")-int.parse("2"));
+                                print("++++++++++++++++++++++++++++++");
+
+                                /*double cartTotal = double.parse(GlobalData.cartTotal.toString());
+                                double disount = double.parse(GlobalData.discountTotal.toString());
+*/
+                                //print(cartTotal-disount);
+                                //totalAmount=(double.parse(cartTotal.toString())-double.parse(discount.toString())).toString();
+                               //double totalAmount=cartTotal-disount;
+
+
+                                print(totalAmount);
                                 //Navigator.pushNamed(context, 'Confirmation');
                               },
                               splashColor: Colors.black.withOpacity(0.1),

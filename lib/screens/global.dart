@@ -32,6 +32,9 @@ class GlobalData{
   static String shippingMethodTotalPrice;
 
   static List<Map<String,dynamic>> cartProductList=[];
+  static String discountTotal;
+  static String currencySymbol;
+  static String couponCode;
 
 
 }

@@ -137,7 +137,7 @@ class _MyCartState extends State<MyCart> {
     totalPrice=0;
 
     for (var i = 0; i < cartItems.length; i++) {
-      totalPrice += (int.parse(cartItems[i].prices.price)*cartItems[i].quantity);
+      totalPrice += (int.parse(cartItems[i].total.lineTotal)*cartItems[i].quantity);
     }
   }
 

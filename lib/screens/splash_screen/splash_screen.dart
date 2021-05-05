@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/models/shipping_zone.dart';
+import 'package:lazy_chair/models/shipping_zone_method.dart';
 import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:lazy_chair/screens/home_screen/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../woocommerce.dart';
 import '../global.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -56,9 +60,75 @@ class _SplashScreenState extends State<SplashScreen> {
     getUserDetails();
   }
 
+
+  List<WooShippingZone> shippingZone = [];
+  List<WooShippingZoneMethod> shippingZoneMethodId = [];
+
+  WooCommerce wooCommerce = WooCommerce(
+    baseUrl: Config.baseUrl,
+    consumerKey: Config.key,
+    consumerSecret: Config.secret,
+    isDebug: true,
+  );
+
+  getShippingZone() async{
+
+    GlobalData.isLoading=true;
+    setState(() {
+
+    });
+    shippingZone = await wooCommerce.getShippingZones();
+    setState(() {
+    });
+    GlobalData.isLoading=false;
+    for(int i=0; i<shippingZone.length; i++)
+    {
+      GlobalData.shippingZoneId=shippingZone[i].id.toString();
+      GlobalData.shippingZoneName = shippingZone[i].name;
+      print("Shipping Zone Id: "+GlobalData.shippingZoneId);
+      print("Shipping Zone Name: "+GlobalData.shippingZoneName);
+    }
+    setState(() {
+
+    });
+    getShippingZoneMethodId();
+    //print(shippingZone.toString());
+  }
+
+  getShippingZoneMethodId() async{
+
+    GlobalData.isLoading=true;
+    setState(() {
+
+    });
+    shippingZoneMethodId = await wooCommerce.getAllShippingZoneMethods(
+        shippingZoneId: int.parse(GlobalData.shippingZoneId)
+    );
+    setState(() {
+    });
+    GlobalData.isLoading=false;
+    for(int i=0; i<shippingZoneMethodId.length; i++)
+    {
+      GlobalData.shippingMethodId=shippingZoneMethodId[i].methodId;
+      GlobalData.shippingMethodTitle=shippingZoneMethodId[i].methodTitle;
+      GlobalData.shippingMethodTotalPrice=shippingZoneMethodId[i].settings.cost.value.toString();
+
+
+      print("Shipping Method Id: "+GlobalData.shippingMethodId);
+      print("Shipping Method Title: "+GlobalData.shippingMethodTitle);
+      print("Shipping Method Total Price: "+GlobalData.shippingMethodTotalPrice);
+      //print("Shipping Zone Id: "+GlobalData.shippingZoneId);
+    }
+    setState(() {
+
+    });
+    //print(shippingZone.toString());
+  }
   @override
   void initState() {
     super.initState();
+    getShippingZone();
+
     startTimeout();
   }
 
