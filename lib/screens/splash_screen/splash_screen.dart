@@ -32,6 +32,9 @@ class _SplashScreenState extends State<SplashScreen> {
       GlobalData.firstName = prefs.get("FirstName");
       GlobalData.lastName = prefs.get("LastName");
       GlobalData.nonceKey = prefs.get("NonceKey");
+      GlobalData.couponCode = prefs.get("couponCode");
+      GlobalData.discountTotal = prefs.get("discountPrice");
+      GlobalData.currencySymbol = prefs.get("currencySymbol");
       print("token: "+GlobalData.tokenId);
       print("nonceKey: "+GlobalData.nonceKey);
       print("userid: "+GlobalData.userId.toString());

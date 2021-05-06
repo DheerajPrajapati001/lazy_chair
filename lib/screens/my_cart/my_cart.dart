@@ -343,7 +343,7 @@ class _MyCartState extends State<MyCart> {
           centerTitle: true,
           leading: GlobalData.isAdded==true?GestureDetector(
             onTap: (){
-              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed("BottomNav");
 
             },
               child: Icon(Icons.arrow_back)):SizedBox(),
@@ -714,6 +714,8 @@ class _MyCartState extends State<MyCart> {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () {
+                              print(GlobalData.isRemoveCoupon);
+                              print(GlobalData.couponCode);
                               GlobalData.cartItemsList=jsonEncode(cartList);
                               print("cartItemList: "+GlobalData.cartItemsList);
                               print("cartProductList: "+GlobalData.cartProductList.toString());

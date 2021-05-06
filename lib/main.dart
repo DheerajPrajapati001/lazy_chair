@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:lazy_chair/screens/chair_details/chair_details.dart';
 import 'package:lazy_chair/screens/confirmation/confirmation.dart';
 import 'package:lazy_chair/screens/coupon_screen/coupons_screen.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         'ChairDetails':(context)=> ProductDetails(),
+        'BottomNav':(context)=> BottomNavBar(),
         'HomePage':(context)=> HomeScreen(),
         'MyCart':(context)=> MyCart(),
         'Shipping':(context)=> Shipping(),

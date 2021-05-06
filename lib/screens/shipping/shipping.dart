@@ -5,6 +5,7 @@ import 'package:lazy_chair/config/config.dart';
 import 'package:lazy_chair/models/apply_coupon.dart';
 import 'package:lazy_chair/models/cart_products.dart';
 import 'package:lazy_chair/models/new_apply_coupon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../woocommerce.dart';
 import '../global.dart';
@@ -61,10 +62,26 @@ class _ShippingState extends State<Shipping> {
   double cartTotal;
   double discount;
   double totalAmount;
+  List<CouponsData> couponDetails = [];
+  SharedPreferences prefs;
 
   Future applyCoupon(
       {@required String code,}) async {
-
+    BuildContext loadContext;
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) {
+          loadContext = ctx;
+          return AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              content: Container(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            //Center(child: CircularProgressIndicator())
+          );
+        });
     GlobalData.isLoading=true;
     setState(() {
 
@@ -82,6 +99,7 @@ class _ShippingState extends State<Shipping> {
     else{
       data['variations'] = "";
     }*/
+    prefs = await SharedPreferences.getInstance();
 
     await http.post(
         'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/apply-coupon',
@@ -89,21 +107,28 @@ class _ShippingState extends State<Shipping> {
         headers: requestHeaders).then((response) async{
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
+        Navigator.pop(loadContext);
         final jsonStr = json.decode(response.body);
         print('Coupon Applied ' + jsonStr.toString());
         isApplied=true;
-
+        GlobalData.isRemoveCoupon=false;
         print("applyCouponList");
         CouponsData couponData = CouponsData.fromJson(jsonDecode(response.body));
 
             print(couponData.coupons[0].totals.totalDiscount);
             GlobalData.couponCode=couponData.coupons[0].code;
             GlobalData.discountTotal=((int.parse(couponData.coupons[0].totals.totalDiscount.toString())/100)).toStringAsFixed(2);
-
             //GlobalData.discountTotal=couponData.coupons[0].totals.totalDiscount;
             GlobalData.currencySymbol = couponData.coupons[0].totals.currencySymbol;
-      cartTotal = double.parse(GlobalData.cartTotal.toString());
-       discount = double.parse(GlobalData.discountTotal.toString());
+
+            prefs.setString("couponCode", GlobalData.couponCode);
+            prefs.setString("discountPrice", GlobalData.discountTotal);
+            prefs.setString("currencySymbol", GlobalData.currencySymbol);
+            print("couponCode: "+GlobalData.couponCode.toString());
+        print("couponCode: "+couponData.coupons[0].code);
+        print("discountPrice"+GlobalData.discountTotal);
+            cartTotal = double.parse(GlobalData.cartTotal.toString());
+            discount = double.parse(GlobalData.discountTotal.toString());
 
         //totalAmount=(double.parse(cartTotal.toString())-double.parse(discount.toString())).toString();
         totalAmount=cartTotal-discount;
@@ -133,6 +158,26 @@ class _ShippingState extends State<Shipping> {
   Future removeCoupon(
       {@required String key,}) async {
 
+    BuildContext loadContext;
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) {
+          loadContext = ctx;
+          return AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              content: Container(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            //Center(child: CircularProgressIndicator())
+          );
+        });
+
+    GlobalData.isLoading=true;
+    setState(() {
+
+    });
     Map<String, dynamic> data = {
       'code':key,
 
@@ -153,10 +198,15 @@ class _ShippingState extends State<Shipping> {
         headers: requestHeaders).then((response) async{
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
+        Navigator.pop(loadContext);
         final jsonStr = json.decode(response.body);
         print('Coupon Removed: ' + jsonStr.toString());
         Show_toast_Now("Coupon Removed Successfully", Colors.green);
+        await _willPopCallback();
+        setState(() {
 
+        });
+        GlobalData.isLoading=false;
         setState(() {
 
         });
@@ -405,444 +455,475 @@ class _ShippingState extends State<Shipping> {
   }*/
 
   bool check = false;
+  Future<bool> _willPopCallback() async {
+
+    await Navigator.of(context).pushNamed("MyCart");
+    setState(() {
+
+    });
+    // await showDialog or Show add banners or whatever
+    // then
+    return true; // return true if the route to be popped
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: GlobalData.orange,
-        centerTitle: true,
-        title: Text(
-          "Shipping",
-          style: TextStyle(
-              color: Colors.black,
-              fontSize: MediaQuery.of(context).size.width * .045,
-              fontWeight: FontWeight.w500),
+    return WillPopScope(
+      onWillPop: _willPopCallback,
+
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: GlobalData.orange,
+          centerTitle: true,
+          title: Text(
+            "Shipping",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: MediaQuery.of(context).size.width * .045,
+                fontWeight: FontWeight.w500),
+          ),
+
+          elevation: 0,
         ),
+        body: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
 
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-
-                SizedBox(
-                  height: MediaQuery.of(context).size.height*.02,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              title: 'First Name',
-                              controller: firstName,
-                              hintText: "Enter First Name",
-                              validator: (value){
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter first name';
-                                }
-                                return null;
-
-                              },                          ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width*.05,
-                          ),
-                          Expanded(
-                            child: CustomTextField(
-                              title: 'Last Name',
-                              controller: lastName,
-                              hintText: "Enter Last Name",
-                              validator: (value){
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter last name';
-                                }
-                                return null;
-
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height*.02,
-                      ),
-                      CustomTextField(
-                        title: 'Address',
-                        controller: address,
-                        hintText: "Enter Address",
-                        validator: (value){
-                          if (value == null || value.isEmpty) {
-                            return 'Enter address';
-                          }
-                          return null;
-
-                        },
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height*.02,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              title: 'City',
-                              controller: city,
-                              hintText: "Enter City",
-                              validator: (value){
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter city';
-                                }
-                                return null;
-
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width*.05,
-                          ),
-                          Expanded(
-                            child: CustomTextField(
-                              title: 'ZIP Code',
-                              controller: pinCode,
-                              hintText: "Enter Zip Code",
-                              validator: (value){
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter zip code';
-                                }
-                                return null;
-
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height*.02,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              title: 'Country',
-                              controller: country,
-                              hintText: "Enter Country",
-                              validator: (value){
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter country';
-                                }
-                                return null;
-
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width*.05,
-                          ),
-                          Expanded(
-                            child: CustomTextField(
-                              title: 'State',
-                              controller: state,
-                              hintText: "Enter State",
-                              validator: (value){
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter state';
-                                }
-                                return null;
-
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height*.02,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              title: 'Email',
-                              controller: emailId,
-                              hintText: "Enter Email",
-                              validator: (value){
-                                if (value.isEmpty ||
-                                    !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                        .hasMatch(value)) {
-                                  return 'Enter email';
-                                }
-                                return null;
-
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width*.05,
-                          ),
-                          Expanded(
-                            child: CustomTextField(
-                              title: 'Phone',
-                              controller: phoneNo,
-                              hintText: "Enter Phone Number",
-                              validator: (value){
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter phone number';
-                                }
-                                return null;
-
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height*.02,
-                      ),
-                      CustomTextField(
-                        title: 'Notes',
-                        controller: notes,
-                        hintText: "Enter Notes",
-                        /*validator: (value){
-                          if (value == null || value.isEmpty) {
-                            return 'Enter phone number';
-                          }
-                          return null;
-
-                        }*/
-                      )
-                    ],
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height*.02,
                   ),
-                ),
-                /*Padding(
-                  padding: const EdgeInsets.only(left: 2),
-                  child: Row(
-                    children: [
-                      Checkbox(
-                          activeColor: Colors.black,
-                          value: check, onChanged: (a){
-                        setState(() {
-                          check=a;
-                        });
-                      }),
-                      Text('Save for faster checkout next time',style: TextStyle(color: Colors.black.withOpacity(0.5)),)
-                    ],
-                  ),
-                ),*/
-                SizedBox(
-                  height: MediaQuery.of(context).size.height*.06,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          offset: Offset(0,0),
-                          spreadRadius: 5,
-                          blurRadius: 5
-                        )
-                      ],
-                      borderRadius: BorderRadius.only(topRight: Radius.circular(0),topLeft: Radius.circular(0))
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height*.01,
-                        ),
-                        isApplied==true?
                         Row(
                           children: [
-                            GestureDetector(
-                              onTap:(){
-                                print(GlobalData.couponCode);
-                                removeCoupon(key: GlobalData.couponCode);
-                        },
-                                child: Text("Remove Coupon",style: TextStyle(color: Colors.red),)),
-                          ],
-                        ):SizedBox(),
-                        SizedBox(height: 5,),
-                        Row(
-                          children: [
-                            Text("Coupon: "),
                             Expanded(
-                              flex: 10,
-                              child: TextField(
-                                controller: coupon,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(10),
-                                  border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                              ),),
-                            SizedBox(width: 10,),
+                              child: CustomTextField(
+                                title: 'First Name',
+                                controller: firstName,
+                                hintText: "Enter First Name",
+                                validator: (value){
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter first name';
+                                  }
+                                  return null;
+
+                                },                          ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width*.05,
+                            ),
                             Expanded(
-                              flex: 5,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: GlobalData.orange, // background
-                                    // foreground
-                                  ),
-                                  onPressed: (){
-                                    applyCoupon(code: coupon.text);
+                              child: CustomTextField(
+                                title: 'Last Name',
+                                controller: lastName,
+                                hintText: "Enter Last Name",
+                                validator: (value){
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter last name';
+                                  }
+                                  return null;
 
-                                  }, child: Text("Apply")),
-                            )
-                          ],
-                        ),
-                        /*Divider(
-                          color: Colors.black,
-                        ),*/
-
-
-                        SizedBox(height: 10,),
-                        isApplied==true?
-                        Row(
-                          children: [
-                            Text(
-                              'Discount',
-                              style: TextStyle(
-                                  color: Colors.black.withOpacity(0.5),
-                                  fontSize:
-                                  MediaQuery.of(context).size.height * .02),
-                            ),
-                            Spacer(),
-                            Text(
-                              "-"+GlobalData.currencySymbol+GlobalData.discountTotal,
-                              style: TextStyle(
-                                  fontSize:
-                                  MediaQuery.of(context).size.height * .025,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ):SizedBox(),
-
-
-                        SizedBox(height: 10,),
-                        isApplied==true?
-                        Row(
-                          children: [
-                            Text(
-                              'Sub Total',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                  MediaQuery.of(context).size.height * .02),
-                            ),
-                            Spacer(),
-                            Text(
-                              "\$"+
-                                (GlobalData.cartTotal.toString()),
-
-
-                              style: TextStyle(
-                                color: GlobalData.orange,
-                                  fontSize:
-                                  MediaQuery.of(context).size.height * .025,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ):SizedBox(),
-                        SizedBox(height: 10,),
-
-                        Row(
-                          children: [
-                            Text(
-                              'Total',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                  MediaQuery.of(context).size.height * .02),
-                            ),
-                            Spacer(),
-                            isApplied==true?
-                            Text(
-                              "\$"+totalAmount.toString()==null?("\$"+GlobalData.cartTotal.toString()):("\$"+totalAmount.toString()),
-
-
-                              style: TextStyle(
-                                  color: GlobalData.orange,
-                                  fontSize:
-                                  MediaQuery.of(context).size.height * .025,
-                                  fontWeight: FontWeight.bold),
-                            ):Text(
-                              "\$"+(GlobalData.cartTotal.toString()),
-
-
-                              style: TextStyle(
-                                  color: GlobalData.orange,
-                                  fontSize:
-                                  MediaQuery.of(context).size.height * .025,
-                                  fontWeight: FontWeight.bold),
+                                },
+                              ),
                             ),
                           ],
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height*.02,
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * .08,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: GlobalData.orange,
-                              border: Border.all(
-                                  color: Colors.grey.withOpacity(0.5))),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                               /* cartList.clear();
-                                cartItems.clear();*/
-                                //clear list//
-                                //GlobalData.cartProductList.clear();
-                                print("cartItems: "+cartItems.length.toString());
-                                print(cartList.length);
-                                //GlobalData.cartTotal=((GlobalData.totalPrice.toString()));
-                                print("cart total "+GlobalData.cartTotal);
-                                _submit();
-                                print(GlobalData.cartProductList);
-                                print(int.parse("5")-int.parse("2"));
-                                print("++++++++++++++++++++++++++++++");
+                        CustomTextField(
+                          title: 'Address',
+                          controller: address,
+                          hintText: "Enter Address",
+                          validator: (value){
+                            if (value == null || value.isEmpty) {
+                              return 'Enter address';
+                            }
+                            return null;
 
-                                /*double cartTotal = double.parse(GlobalData.cartTotal.toString());
-                                double disount = double.parse(GlobalData.discountTotal.toString());
+                          },
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*.02,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                title: 'City',
+                                controller: city,
+                                hintText: "Enter City",
+                                validator: (value){
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter city';
+                                  }
+                                  return null;
+
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width*.05,
+                            ),
+                            Expanded(
+                              child: CustomTextField(
+                                title: 'ZIP Code',
+                                controller: pinCode,
+                                hintText: "Enter Zip Code",
+                                validator: (value){
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter zip code';
+                                  }
+                                  return null;
+
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*.02,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                title: 'Country',
+                                controller: country,
+                                hintText: "Enter Country",
+                                validator: (value){
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter country';
+                                  }
+                                  return null;
+
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width*.05,
+                            ),
+                            Expanded(
+                              child: CustomTextField(
+                                title: 'State',
+                                controller: state,
+                                hintText: "Enter State",
+                                validator: (value){
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter state';
+                                  }
+                                  return null;
+
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*.02,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                title: 'Email',
+                                controller: emailId,
+                                hintText: "Enter Email",
+                                validator: (value){
+                                  if (value.isEmpty ||
+                                      !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                          .hasMatch(value)) {
+                                    return 'Enter email';
+                                  }
+                                  return null;
+
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width*.05,
+                            ),
+                            Expanded(
+                              child: CustomTextField(
+                                title: 'Phone',
+                                controller: phoneNo,
+                                hintText: "Enter Phone Number",
+                                validator: (value){
+                                  if (value == null || value.isEmpty) {
+                                    return 'Enter phone number';
+                                  }
+                                  return null;
+
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height*.02,
+                        ),
+                        CustomTextField(
+                          title: 'Notes',
+                          controller: notes,
+                          hintText: "Enter Notes",
+                          /*validator: (value){
+                            if (value == null || value.isEmpty) {
+                              return 'Enter phone number';
+                            }
+                            return null;
+
+                          }*/
+                        )
+                      ],
+                    ),
+                  ),
+                  /*Padding(
+                    padding: const EdgeInsets.only(left: 2),
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            activeColor: Colors.black,
+                            value: check, onChanged: (a){
+                          setState(() {
+                            check=a;
+                          });
+                        }),
+                        Text('Save for faster checkout next time',style: TextStyle(color: Colors.black.withOpacity(0.5)),)
+                      ],
+                    ),
+                  ),*/
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height*.06,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            offset: Offset(0,0),
+                            spreadRadius: 5,
+                            blurRadius: 5
+                          )
+                        ],
+                        borderRadius: BorderRadius.only(topRight: Radius.circular(0),topLeft: Radius.circular(0))
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 30),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 5,
+                          ),
+                          //Text(GlobalData.couponCode),
+                          GlobalData.couponCode!=null&&GlobalData.isRemoveCoupon==false||isApplied==true?
+                          Row(
+                            children: [
+                              Expanded(child: Text("Coupon Applied: "+GlobalData.couponCode)),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap:()async{
+                                    prefs = await SharedPreferences.getInstance();
+                                    print(GlobalData.couponCode);
+                                    GlobalData.isRemoveCoupon=true;
+                                    removeCoupon(key: GlobalData.couponCode);
+
+                                    prefs.remove("couponCode");
+                                    prefs.remove("discountPrice",);
+                                    prefs.remove("currencySymbol");
+
+                                    setState(() {
+
+                                    });
+                          },
+                                    child: Text("Remove Coupon",style: TextStyle(color: Colors.red),)),
+                              ),
+                            ],
+                          ):SizedBox(),
+                          SizedBox(height: 10,),
+                          Row(
+                            children: [
+                              Text("Coupon: "),
+                              Expanded(
+                                flex: 10,
+                                child: TextField(
+                                  controller: coupon,
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    border: new OutlineInputBorder(
+                                      borderRadius: new BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                ),),
+                              SizedBox(width: 10,),
+                              Expanded(
+                                flex: 5,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: GlobalData.orange, // background
+                                      // foreground
+                                    ),
+                                    onPressed: (){
+                                      print(GlobalData.cartTotal.toString());
+                                      //prefs.setString("cartTotal", GlobalData.cartTotal);
+                                      applyCoupon(code: coupon.text);
+
+                                    }, child: Text("Apply")),
+                              )
+                            ],
+                          ),
+                          /*Divider(
+                            color: Colors.black,
+                          ),*/
+
+
+                          SizedBox(height: 10,),
+                          GlobalData.couponCode!=null&&GlobalData.isRemoveCoupon==false||isApplied==true?
+                          Row(
+                            children: [
+                              Text(
+                                'Discount',
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(0.5),
+                                    fontSize:
+                                    MediaQuery.of(context).size.height * .02),
+                              ),
+                              Spacer(),
+                              Text(
+                                "-"+GlobalData.currencySymbol+GlobalData.discountTotal,
+                                style: TextStyle(
+                                    fontSize:
+                                    MediaQuery.of(context).size.height * .025,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ):SizedBox(),
+
+
+                          SizedBox(height: 10,),
+                          GlobalData.couponCode!=null&&GlobalData.isRemoveCoupon==false||isApplied==true?
+                          Row(
+                            children: [
+                              Text(
+                                'Sub Total',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                    MediaQuery.of(context).size.height * .02),
+                              ),
+                              Spacer(),
+                              Text(
+                                "\$"+
+                                  (GlobalData.cartTotal.toString()),
+
+
+                                style: TextStyle(
+                                  color: GlobalData.orange,
+                                    fontSize:
+                                    MediaQuery.of(context).size.height * .025,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ):SizedBox(),
+                          SizedBox(height: 10,),
+
+                          Row(
+                            children: [
+                              Text(
+                                'Total',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                    MediaQuery.of(context).size.height * .02),
+                              ),
+                              Spacer(),
+                              isApplied==true?
+                              Text(
+                                "\$"+totalAmount.toString()==null?("\$"+GlobalData.cartTotal.toString()):("\$"+totalAmount.toString()),
+
+
+                                style: TextStyle(
+                                    color: GlobalData.orange,
+                                    fontSize:
+                                    MediaQuery.of(context).size.height * .025,
+                                    fontWeight: FontWeight.bold),
+                              ):Text(
+                                "\$"+(GlobalData.cartTotal.toString()),
+
+
+                                style: TextStyle(
+                                    color: GlobalData.orange,
+                                    fontSize:
+                                    MediaQuery.of(context).size.height * .025,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height*.02,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * .08,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: GlobalData.orange,
+                                border: Border.all(
+                                    color: Colors.grey.withOpacity(0.5))),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                 /* cartList.clear();
+                                  cartItems.clear();*/
+                                  //clear list//
+                                  //GlobalData.cartProductList.clear();
+                                  print("cartItems: "+cartItems.length.toString());
+                                  print(cartList.length);
+                                  //GlobalData.cartTotal=((GlobalData.totalPrice.toString()));
+                                  print("cart total "+GlobalData.cartTotal);
+                                  _submit();
+                                  print(GlobalData.cartProductList);
+                                  print(int.parse("5")-int.parse("2"));
+                                  print("++++++++++++++++++++++++++++++");
+
+                                  /*double cartTotal = double.parse(GlobalData.cartTotal.toString());
+                                  double disount = double.parse(GlobalData.discountTotal.toString());
 */
-                                //print(cartTotal-disount);
-                                //totalAmount=(double.parse(cartTotal.toString())-double.parse(discount.toString())).toString();
-                               //double totalAmount=cartTotal-disount;
+                                  //print(cartTotal-disount);
+                                  //totalAmount=(double.parse(cartTotal.toString())-double.parse(discount.toString())).toString();
+                                 //double totalAmount=cartTotal-disount;
 
 
-                                print(totalAmount);
-                                //Navigator.pushNamed(context, 'Confirmation');
-                              },
-                              splashColor: Colors.black.withOpacity(0.1),
-                              child: Center(
-                                child: Text(
-                                  'Place Order',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                  print(totalAmount);
+                                  //Navigator.pushNamed(context, 'Confirmation');
+                                },
+                                splashColor: Colors.black.withOpacity(0.1),
+                                child: Center(
+                                  child: Text(
+                                    'Place Order',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

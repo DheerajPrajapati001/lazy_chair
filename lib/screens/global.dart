@@ -35,6 +35,7 @@ class GlobalData{
   static String discountTotal;
   static String currencySymbol;
   static String couponCode;
+  static bool isRemoveCoupon=false;
 
 
 }
