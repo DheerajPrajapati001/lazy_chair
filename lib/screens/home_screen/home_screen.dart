@@ -53,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return j['nonce']; //later u can save this nonce vai sharedpreference or etc i am using shared preference
   }
 
-  List<WooProduct> products = [];
   List<WooProduct> featuredProducts = [];
+  List<WooProduct> searchProducts = [];
   List<WooShippingZone> shippingZone = [];
   List<WooShippingZoneMethod> shippingZoneMethodId = [];
 
@@ -125,15 +125,33 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
 
     });
-    products = await wooCommerce.getProducts(featured: true);
+    featuredProducts = await wooCommerce.getProducts(featured: true);
     setState(() {
     });
     GlobalData.isLoading=false;
     setState(() {
 
     });
-    print(products.toString());
+    print(featuredProducts.toString());
   }
+
+  TextEditingController searchItems = new TextEditingController();
+  getSearchProducts() async{
+
+    GlobalData.isLoading=true;
+    setState(() {
+
+    });
+    searchProducts = await wooCommerce.getProducts(search: searchItems.text);
+    setState(() {
+    });
+    GlobalData.isLoading=false;
+    setState(() {
+
+    });
+    print(featuredProducts.toString());
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -351,11 +369,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: TextField(
+                      controller: searchItems,
                       //enabled: false,
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Search',
-                          suffixIcon: Icon(Icons.search)),
+                          suffixIcon: GestureDetector(
+                              onTap:(){
+                                if(searchItems.text==""){
+                                  Show_toast_Now("Enter Search Item", Colors.red);
+                                }
+                                else{
+                                  getSearchProducts();
+                                }
+                              },child: Icon(Icons.search))),
                     ),
                   ),
                 ),
@@ -427,6 +454,59 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .03,
                       ),
+
+
+                      searchItems.text==""?SizedBox():Row(
+                        children: [
+                          Text(
+                            'Searched Products',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: MediaQuery.of(context).size.width * .05),
+                          ),
+                          Spacer(),
+                          /* Text(
+                        'See All',
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: MediaQuery.of(context).size.width * .04),
+                      ),*/
+                        ],
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * .04,
+                      ),
+                      GlobalData.isLoading==true&&searchItems.text!=""?Center(child: Text("Loading...")):
+                          searchItems.text==""?SizedBox():
+                      searchProducts.isEmpty?Text("Products not available"):
+                      Container(
+                        height: 250,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          //physics: NeverScrollableScrollPhysics(),
+                          itemCount: searchProducts.length,
+                          padding: EdgeInsets.only(right: 10),
+                          itemBuilder: (context, index) {
+                            final product = searchProducts[index];
+                            return ChairItem(
+                              products: product,
+                              onTap: () {
+                                GlobalData.productId=searchProducts[index].id.toString();
+                                print(GlobalData.productId);
+                                _onProductPressed(product, context);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      searchItems.text==""?SizedBox():SizedBox(
+                        height: 15,
+                      ),
+
+
+
                       Row(
                         children: [
                           Text(
@@ -448,22 +528,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .04,
                       ),
-                      GlobalData.isLoading==true?Center(child: Text("Loading...")):
-                      products.isEmpty?Text("No Featured Products"):
+                      GlobalData.isLoading==true && searchItems.text==""?Center(child: Text("Loading...")):
+                      featuredProducts.isEmpty?Text("No Featured Products"):
                       Container(
                         height: 250,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           //physics: NeverScrollableScrollPhysics(),
-                          itemCount: products.length,
+                          itemCount: featuredProducts.length,
                           padding: EdgeInsets.only(right: 10),
                           itemBuilder: (context, index) {
-                            final product = products[index];
+                            final product = featuredProducts[index];
                             return ChairItem(
                                 products: product,
                                 onTap: () {
-                                  GlobalData.productId=products[index].id.toString();
+                                  GlobalData.productId=featuredProducts[index].id.toString();
                                   print(GlobalData.productId);
                                   _onProductPressed(product, context);
                                 },

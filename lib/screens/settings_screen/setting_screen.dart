@@ -75,10 +75,20 @@ class _SettingState extends State<Setting> {
                   DrawerItem(
                     icon: Icons.info_outline,
                     title: 'About Us',
+                    click: (){
+                      GlobalData.activePage=GlobalData.aboutUsPage;
+                      Navigator.pushNamed(context, 'AboutUs');
+
+                    },
                   ),
                   DrawerItem(
                     icon: Icons.policy,
                     title: 'Terms & Conditions',
+                    click: (){
+                      GlobalData.activePage=GlobalData.termsConditions;
+                      Navigator.pushNamed(context, 'TermsConditions');
+
+                    },
                   ),
                   DrawerItem(
                       icon: Icons.inventory,

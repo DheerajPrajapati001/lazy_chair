@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_chair/screens/about_us/about_us_screen.dart';
 import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:lazy_chair/screens/chair_details/chair_details.dart';
 import 'package:lazy_chair/screens/confirmation/confirmation.dart';
@@ -11,6 +12,7 @@ import 'package:lazy_chair/screens/oders/orders.dart';
 import 'package:lazy_chair/screens/settings_screen/setting_screen.dart';
 import 'package:lazy_chair/screens/shipping/shipping.dart';
 import 'package:lazy_chair/screens/splash_screen/splash_screen.dart';
+import 'package:lazy_chair/screens/terms_conditions/terms_conditions_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,7 +36,9 @@ class MyApp extends StatelessWidget {
         'ViewOrders':(context)=> Orders(),
         'OrderDetails':(context)=> OrderDetailsScreen(),
         'Settings':(context)=> Setting(),
-        'Coupons':(context)=> Coupon()
+        'Coupons':(context)=> Coupon(),
+        'AboutUs':(context)=> AboutUsScreen(),
+        'TermsConditions':(context)=> TermsAndConditionScreen(),
       },
       home: SplashScreen(),
     );

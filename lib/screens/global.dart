@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lazy_chair/models/page_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -36,6 +37,9 @@ class GlobalData{
   static String currencySymbol;
   static String couponCode;
   static bool isRemoveCoupon=false;
+  static AllPageData aboutUsPage;
+  static AllPageData activePage;
+  static AllPageData termsConditions;
 
 
 }
