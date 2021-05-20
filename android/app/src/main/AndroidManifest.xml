@@ -2,7 +2,7 @@
     package="com.saurabhinfosys.lazy_chair">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="lazy_chair"
+        android:label="Niu Niu"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
