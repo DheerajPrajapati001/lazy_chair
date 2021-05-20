@@ -25,13 +25,15 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
     setState(() {
 
     });
-    http.get(
-        Config.aboutUsUrl,
+   await http.get(
+        Uri.parse(Config.aboutUsUrl),
         ).then((response) async{
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final jsonStr = json.decode(response.body);
         print('response gotten : '+response.body);
-        GlobalData.aboutUsPage =AllPageData.fromJson(jsonStr);
+        GlobalData.activePage = AllPageData.fromJson(jsonStr);
+        print("success");
+        print(GlobalData.activePage.content.rendered);
         GlobalData.isLoading=false;
         setState(() {
 

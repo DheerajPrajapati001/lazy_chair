@@ -182,7 +182,7 @@ class WooCommerce{
     };
 
     final response = await http.post(
-      this.baseUrl + URL_JWT_TOKEN,
+      Uri.parse(this.baseUrl + URL_JWT_TOKEN),
       body: body,
     );
 
@@ -236,7 +236,7 @@ class WooCommerce{
    _authToken = await _localDbService.getSecurityToken();
     _urlHeader['Authorization'] = 'Bearer '+_authToken;
     final response =
-    await http.get(this.baseUrl + URL_USER_ME, headers: _urlHeader);
+    await http.get(Uri.parse(this.baseUrl + URL_USER_ME), headers: _urlHeader);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
@@ -907,7 +907,7 @@ class WooCommerce{
     await getAuthTokenFromDb();
     _urlHeader['Authorization'] = 'Bearer '+_authToken;
     final response =
-    await http.post(this.baseUrl + URL_STORE_API_PATH+'cart/items', headers: _urlHeader, body: data);
+    await http.post(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart/items'), headers: _urlHeader, body: data);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
@@ -930,7 +930,7 @@ class WooCommerce{
     await getAuthTokenFromDb();
     _urlHeader['Authorization'] = 'Bearer '+_authToken;
     final response =
-    await http.get(this.baseUrl + URL_STORE_API_PATH+'cart/items', headers: _urlHeader);
+    await http.get(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart/items'), headers: _urlHeader);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
@@ -960,7 +960,7 @@ class WooCommerce{
     _urlHeader['Authorization'] = 'Bearer '+_authToken;
     WooCart cart;
     final response =
-    await http.get(this.baseUrl + URL_STORE_API_PATH+'cart', headers: _urlHeader);
+    await http.get(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart'), headers: _urlHeader);
     _printToLog('response gotten : '+response.toString());
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
@@ -984,7 +984,7 @@ class WooCommerce{
     _urlHeader['Authorization'] = 'Bearer '+_authToken;
 
     final http.Response response =
-    await http.delete(this.baseUrl + URL_STORE_API_PATH+'cart/items/'+key, headers: _urlHeader,);
+    await http.delete(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart/items/'+key), headers: _urlHeader,);
     _printToLog('response of delete cart  : '+response.body.toString());
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -1008,7 +1008,7 @@ class WooCommerce{
     _urlHeader['Authorization'] = 'Bearer '+_authToken;
 
     final http.Response response =
-    await http.delete(this.baseUrl + URL_STORE_API_PATH+'cart/items/', headers: _urlHeader,);
+    await http.delete(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart/items/'), headers: _urlHeader,);
     _printToLog('response of delete cart  : '+response.body.toString());
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -1029,7 +1029,7 @@ class WooCommerce{
     _urlHeader['Authorization'] = 'Bearer '+_authToken;
     WooCartItem cartItem;
     final response =
-    await http.get(this.baseUrl + URL_STORE_API_PATH+'cart/items/'+key, headers: _urlHeader);
+    await http.get(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart/items/'+key), headers: _urlHeader);
     _printToLog('response gotten : '+response.toString());
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
@@ -1055,7 +1055,7 @@ class WooCommerce{
     await getAuthTokenFromDb();
     _urlHeader['Authorization'] = 'Bearer '+_authToken;
     final response =
-    await http.put(this.baseUrl + URL_STORE_API_PATH+'cart/items/'+key, headers: _urlHeader, body: data);
+    await http.put(Uri.parse(this.baseUrl + URL_STORE_API_PATH+'cart/items/'+key), headers: _urlHeader, body: data);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final jsonStr = json.decode(response.body);
@@ -1636,7 +1636,7 @@ class WooCommerce{
     headers.putIfAbsent('Accept', () => 'application/json charset=utf-8');
     // 'Authorization': _bearerToken,
     try {
-      final http.Response response = await http.get(url);
+      final http.Response response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         return json.decode(response.body);
       }

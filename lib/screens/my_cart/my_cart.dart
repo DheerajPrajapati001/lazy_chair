@@ -60,7 +60,7 @@ class _MyCartState extends State<MyCart> {
     }*/
 
     http.get(
-        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/items',
+        Uri.parse('https://beta.saurabhenterprise.com/wp-json/wc/store/cart/items'),
         headers: requestHeaders).then((response) async{
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final jsonStr = json.decode(response.body);
@@ -161,7 +161,7 @@ class _MyCartState extends State<MyCart> {
     }*/
 
     await http.post(
-        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/remove-item/',
+        Uri.parse('https://beta.saurabhenterprise.com/wp-json/wc/store/cart/remove-item/'),
         body: data,
         headers: requestHeaders).then((response) async{
 
@@ -207,7 +207,7 @@ class _MyCartState extends State<MyCart> {
     }*/
 
     await http.post(
-        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/update-item/',
+        Uri.parse('https://beta.saurabhenterprise.com/wp-json/wc/store/cart/update-item/'),
         body: data,
         headers: requestHeaders).then((response) async{
 
@@ -246,7 +246,7 @@ class _MyCartState extends State<MyCart> {
     }*/
 
     http.get(
-        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/items',
+        Uri.parse('https://beta.saurabhenterprise.com/wp-json/wc/store/cart/items'),
         headers: requestHeaders).then((response) async{
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final jsonStr = json.decode(response.body);

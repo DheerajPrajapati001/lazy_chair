@@ -61,7 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         });
     prefs = await SharedPreferences.getInstance();
 
-    await http.post("https://beta.saurabhenterprise.com/wp-json/jwt-auth/v1/token", body: {
+    await http.post(Uri.parse("https://beta.saurabhenterprise.com/wp-json/jwt-auth/v1/token"), body: {
       "username": email.text.toString().trim(),
       "password": password.text.toString(),
 
@@ -141,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     });
     bool ret = false;
-    await http.post(Config.jsonUrl+Config.customerUrl+"?"+"consumer_key="+Config.key+"&"+"consumer_secret="+Config.secret, body: {
+    await http.post(Uri.parse(Config.jsonUrl+Config.customerUrl+"?"+"consumer_key="+Config.key+"&"+"consumer_secret="+Config.secret), body: {
       'email':email.text,
       'first_name':firstName.text,
       'last_name':lastName.text,

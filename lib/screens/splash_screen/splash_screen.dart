@@ -145,7 +145,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
             Image.asset("assets/logo.png",height: 100,),
 
-            Text("E-Commerce App",style: TextStyle(fontSize: 20),),
+            /*Text("E-Commerce App",style: TextStyle(fontSize: 20),),*/
           ],
         ),
       ),

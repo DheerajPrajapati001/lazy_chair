@@ -41,7 +41,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     }*/
 
    http.post(
-        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/add-item',
+        Uri.parse('https://beta.saurabhenterprise.com/wp-json/wc/store/cart/add-item'),
         body: data,
         headers: requestHeaders).then((response) async{
 

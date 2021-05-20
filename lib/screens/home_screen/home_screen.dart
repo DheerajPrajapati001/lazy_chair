@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     prefs = await SharedPreferences.getInstance();
 
     Map<String, String> requestHeaders = {'Authorization': "Bearer "+GlobalData.tokenId};
-    final response = await http.get(Config.baseUrl+'wp-json/nonceapi/v1/get',
+    final response = await http.get(Uri.parse(Config.baseUrl+'wp-json/nonceapi/v1/get'),
         headers: requestHeaders);
 
     var j = json.decode(response.body);
@@ -138,6 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchItems = new TextEditingController();
   getSearchProducts() async{
 
+    searchProducts.clear();
+
     GlobalData.isLoading=true;
     setState(() {
 
@@ -149,7 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
 
     });
-    print(featuredProducts.toString());
+    print("Products in search Products : ${searchProducts.length} ");
+    print(searchProducts.toString());
   }
 
   @override
@@ -370,6 +373,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: TextField(
                       controller: searchItems,
+                      onChanged: (String value) async{
+                        if(value.length>2){
+                          getSearchProducts();
+                        }
+                      },
                       //enabled: false,
                       decoration: InputDecoration(
                           border: InputBorder.none,
@@ -379,7 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 if(searchItems.text==""){
                                   Show_toast_Now("Enter Search Item", Colors.red);
                                 }
-                                else{
+                                else if(searchItems.text.length>3){
                                   getSearchProducts();
                                 }
                               },child: Icon(Icons.search))),

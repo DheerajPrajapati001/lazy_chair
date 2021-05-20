@@ -26,12 +26,14 @@ class _TermsAndConditionScreenState extends State<TermsAndConditionScreen> {
 
     });
     http.get(
-      Config.termsConditionUrl,
+      Uri.parse(Config.termsConditionUrl),
     ).then((response) async{
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final jsonStr = json.decode(response.body);
         print('response gotten : '+response.body);
-        GlobalData.termsConditions =AllPageData.fromJson(jsonStr);
+        GlobalData.activePage =AllPageData.fromJson(jsonStr);
+        print(GlobalData.activePage.content.rendered);
+        print("success");
         GlobalData.isLoading=false;
         setState(() {
 

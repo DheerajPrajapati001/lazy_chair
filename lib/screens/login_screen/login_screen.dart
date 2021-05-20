@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
     prefs = await SharedPreferences.getInstance();
 
-    await http.post("https://beta.saurabhenterprise.com/wp-json/jwt-auth/v1/token", body: {
+    await http.post(Uri.parse("https://beta.saurabhenterprise.com/wp-json/jwt-auth/v1/token"), body: {
       "username": email.text.toString().trim(),
       "password": password.text.toString(),
 

@@ -102,7 +102,7 @@ class _ShippingState extends State<Shipping> {
     prefs = await SharedPreferences.getInstance();
 
     await http.post(
-        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/apply-coupon',
+        Uri.parse('https://beta.saurabhenterprise.com/wp-json/wc/store/cart/apply-coupon'),
         body: data,
         headers: requestHeaders).then((response) async{
 
@@ -193,7 +193,7 @@ class _ShippingState extends State<Shipping> {
     }*/
 
     await http.post(
-        'https://beta.saurabhenterprise.com/wp-json/wc/store/cart/remove-coupon',
+        Uri.parse('https://beta.saurabhenterprise.com/wp-json/wc/store/cart/remove-coupon'),
         body: data,
         headers: requestHeaders).then((response) async{
 
@@ -337,7 +337,7 @@ class _ShippingState extends State<Shipping> {
     };
     //encode Map to JSON
     var body = json.encode(data);
-    await http.post(Config.jsonUrl+"orders"+"?"+"consumer_key=ck_b41339e6bc5df240cc4d02427ea1cd68f4736f85&consumer_secret=cs_89828f212a6e0b99c1be5cdf0e7fff7f880face6",
+    await http.post(Uri.parse(Config.jsonUrl+"orders"+"?"+"consumer_key=ck_b41339e6bc5df240cc4d02427ea1cd68f4736f85&consumer_secret=cs_89828f212a6e0b99c1be5cdf0e7fff7f880face6"),
       body: body,
       headers: {"Content-Type": "application/json"},
 
