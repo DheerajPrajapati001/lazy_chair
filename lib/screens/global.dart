@@ -40,6 +40,8 @@ class GlobalData{
   static AllPageData aboutUsPage;
   static AllPageData activePage;
   static AllPageData termsConditions;
+  static String phoneNumber;
+  static String password;
 
 
 }

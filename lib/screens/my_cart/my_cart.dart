@@ -45,6 +45,7 @@ class _MyCartState extends State<MyCart> {
 
   var totalPrice=0;
   viewCartItems() async {
+    //GlobalData.cartProductList.clear();
     GlobalData.isLoading=true;
     setState(() {
 
@@ -317,7 +318,6 @@ class _MyCartState extends State<MyCart> {
     });*/
 
   }
-
 
   @override
   void initState() {

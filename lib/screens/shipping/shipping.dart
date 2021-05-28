@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lazy_chair/config/config.dart';
@@ -6,6 +7,7 @@ import 'package:lazy_chair/models/apply_coupon.dart';
 import 'package:lazy_chair/models/cart_products.dart';
 import 'package:lazy_chair/models/new_apply_coupon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../woocommerce.dart';
 import '../global.dart';
@@ -56,6 +58,40 @@ class _ShippingState extends State<Shipping> {
   TextEditingController notes = new TextEditingController();
   TextEditingController coupon = new TextEditingController();
 
+  List<TextSpan> textSpans = <TextSpan>[
+    TextSpan(
+      text: 'By Placing an order you agree to Niu Niu’s ',
+    ),
+    TextSpan(
+        text: 'Terms and Conditions',
+        recognizer: TapGestureRecognizer()..onTap=()async{
+
+          const url = 'https://beta.saurabhenterprise.com/terms-and-condition';
+          if (await canLaunch(url)) {
+            await launch(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+        },
+        style: TextStyle(
+          color: Colors.blue,
+          decoration: TextDecoration.underline,
+        )),
+   /* TextSpan(text: '& confirm that you have read the '),
+    TextSpan(
+        text: 'Privacy Policy',
+        recognizer: TapGestureRecognizer()..onTap=()async{
+
+          const url = 'http://app.talentboxx.com/privacy';
+          if (await canLaunch(url)) {
+            await launch(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+        },
+        style: TextStyle(
+            color: Colors.blue, decoration: TextDecoration.underline)),*/
+  ];
 
   var _formKey = GlobalKey<FormState>();
   bool isApplied = false;
@@ -256,13 +292,63 @@ class _ShippingState extends State<Shipping> {
   }*/
 
 
+  void emptyCart(){
+
+    for(int i =0; i<GlobalData.cartProductList.length;i++){
+      deleteCartItems(key: GlobalData.cartProductList[i]['product_id']);
+    }
+
+  }
+
+
+  Future deleteCartItems(
+      {@required String key,}) async {
+
+    Map<String, dynamic> data = {
+      'key':key,
+
+    };
+    Map<String, String> requestHeaders = {
+      'Authorization': 'Bearer '+GlobalData.tokenId,
+      'X-WC-Store-API-Nonce': GlobalData.nonceKey
+    };
+    /*if (variations != null)
+    {data['variations'] = variations;}
+    else{
+      data['variations'] = "";
+    }*/
+
+    await http.post(
+        Uri.parse('https://beta.saurabhenterprise.com/wp-json/wc/store/cart/remove-item/'),
+        body: data,
+        headers: requestHeaders).then((response) async{
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final jsonStr = json.decode(response.body);
+        print('Item Deleted: ' + jsonStr.toString());
+        Show_toast_Now("Product Removed Successfully", Colors.green);
+
+        setState(() {
+
+        });
+        // return WooCartItem.fromJson(jsonStr);
+      } else {
+        WooCommerceError err =
+        WooCommerceError.fromJson(json.decode(response.body));
+        throw err;
+      }
+    });
+
+
+  }
+
   void _submit() async{
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
    await placeOrder(productList: GlobalData.cartProductList);
-    //deleteAllCartItems();
+   //emptyCart();
     _formKey.currentState.save();
   }
 
@@ -682,6 +768,18 @@ class _ShippingState extends State<Shipping> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 5,),
+                  Container(
+                      child: RichText(
+                        text: TextSpan(
+                            style: TextStyle(
+                                color: GlobalData.black, fontSize: 12),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                //Navigator.pushNamed(context, 'login');
+                              },
+                            children: textSpans),
+                      )),
                   /*Padding(
                     padding: const EdgeInsets.only(left: 2),
                     child: Row(

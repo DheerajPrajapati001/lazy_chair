@@ -24,6 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController lastName = new TextEditingController();
   TextEditingController email = new TextEditingController();
   TextEditingController password = new TextEditingController();
+  TextEditingController phoneNo = new TextEditingController();
 
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
@@ -120,6 +121,79 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
 
+  registerCustomer()async{
+    BuildContext loadContext;
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) {
+          loadContext = ctx;
+          return AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              content: Container(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            //Center(child: CircularProgressIndicator())
+          );
+        });
+    isLoading = true;
+    setState(() {
+
+    });
+    Map data = {
+
+      'email':email.text,
+      'password':password.text,
+      'username':userName.text,
+      "phone_no": phoneNo.text,
+
+    };
+    //encode Map to JSON
+    var body = json.encode(data);
+    bool ret = false;
+    await http.post(Uri.parse("https://beta.saurabhenterprise.com/wp-json/wp/v2/users/register"),
+      body: body,
+      headers: {"Content-Type": "application/json"},
+    ).then((response) async {
+      var status = jsonDecode(response.body);
+      print(response.body.toString());
+
+
+
+      print(response.statusCode);
+      if (response.statusCode == 201)
+      {
+
+        print("CUSTOMER REGISTERED");
+        Navigator.pop(loadContext);
+        //saving(context);
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
+        Show_toast_Now("Registered Successfully", Colors.green);
+
+
+      } else {
+        Navigator.pop(loadContext);
+        var document =parse(status['message']);
+        final String parsedString = parse(document.body.text).documentElement.text;
+        print(parsedString);
+
+        Show_toast_Now(parsedString, Colors.red);
+      }
+
+    });
+
+    setState(() {
+
+    });
+    isLoading = false;
+    setState(() {
+
+    });
+    return ret;
+  }
+
+
   createCustomer()async{
     BuildContext loadContext;
     showDialog(
@@ -140,15 +214,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
 
     });
-    bool ret = false;
-    await http.post(Uri.parse(Config.jsonUrl+Config.customerUrl+"?"+"consumer_key="+Config.key+"&"+"consumer_secret="+Config.secret), body: {
+    Map data = {
+
       'email':email.text,
       'first_name':firstName.text,
       'last_name':lastName.text,
       'password':password.text,
-      'username':userName.text
+      'username':userName.text,
+      "billing": {
+        "email": email.text,
+        "phone": phoneNo.text
+      },
 
-    },).then((response) async {
+    };
+    //encode Map to JSON
+    var body = json.encode(data);
+    bool ret = false;
+    await http.post(Uri.parse(Config.jsonUrl+Config.customerUrl+"?"+"consumer_key="+Config.key+"&"+"consumer_secret="+Config.secret),
+      body: body,
+      headers: {"Content-Type": "application/json"},
+    ).then((response) async {
       var status = jsonDecode(response.body);
       print(response.body.toString());
 
@@ -160,6 +245,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
         print("LOGIN DONEEEEEEEEEEEEEEEE");
         Navigator.pop(loadContext);
+        await registerCustomer();
+        //Navigator.pop(loadContext);
         await login();
         Navigator.pop(loadContext);
         //saving(context);
@@ -187,6 +274,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
     return ret;
   }
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -307,6 +396,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
 
+                        CustomTextField(
+                          title: "Phone",
+                          keyboardType: TextInputType.number,
+                          controller: phoneNo,
+                          hintText: "Enter Phone Number",
+                          validator: (value){
+                            if (value == null || value.isEmpty) {
+                              return 'Enter Phone Number';
+                            }
+                            return null;
+                          },
+                        ),
                         SizedBox(height: 20,),
                         Center(
                           child: GestureDetector(

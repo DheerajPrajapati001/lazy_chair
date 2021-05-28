@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:lazy_chair/screens/home_screen/home_screen.dart';
+import 'package:lazy_chair/screens/login_screen/phone_login.dart';
 import 'package:lazy_chair/screens/signup_screen/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../global.dart';
@@ -235,13 +236,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
+                      SizedBox(height: 10,),
+                      Center(
+                          child: GestureDetector(
+                              onTap:(){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>PhoneLoginScreen()));
+                              },
+                              child: Text("Phone Login",style: TextStyle(color: GlobalData.black,fontSize: 14),)
+                          )
+                      ),
                       SizedBox(height: 20,),
                       Center(
                           child: GestureDetector(
                               onTap:(){
                                 //Navigator.push(context, MaterialPageRoute(builder: (context)=>UserSignup()));
                                 },
-                              child: Text("Forgot Password?",style: TextStyle(color: GlobalData.black,fontSize: 14),)))
+                              child: Text("Forgot Password?",style: TextStyle(color: GlobalData.black,fontSize: 14),)
+                          )
+                      )
                     ],
                   ),
                 ),

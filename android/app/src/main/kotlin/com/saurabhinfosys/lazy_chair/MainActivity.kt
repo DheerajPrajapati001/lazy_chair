@@ -1,4 +1,4 @@
-package com.saurabhinfosys.lazy_chair
+package com.mvpsoftwaredevelopment.nuinui
 
 import io.flutter.embedding.android.FlutterActivity
 
