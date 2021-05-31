@@ -1,187 +1,15 @@
-
-
-
-/*
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-
-class PhoneLoginScreen extends StatefulWidget {
-  static String route = "MyLogin";
-
-  @override
-  _PhoneLoginScreenState createState() => _PhoneLoginScreenState();
-}
-
-class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
-  TextEditingController phoneController = TextEditingController();
-
-  FirebaseAuth auth = FirebaseAuth.instance;
-
-
-
-
-  String phoneNumber, verificationId;
-  String otp, authStatus = "";
-
-  Future<void> verifyPhoneNumber(BuildContext context) async {
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: "+91${phoneController.text}",
-      timeout: const Duration(seconds: 20),
-      verificationCompleted: (AuthCredential authCredential) {
-        FirebaseAuth.instance.signInWithCredential(authCredential).then((value) async {
-          if(value.user!=null && value.user.uid!=null){
-
-          }
-        });
-
-      },
-      verificationFailed: (authException) {
-        setState(() {
-          authStatus = "Authentication failed";
-        });
-      },
-      codeSent: (String verId, [int forceCodeResent]) {
-        verificationId = verId;
-        setState(() {
-          authStatus = "OTP has been successfully send";
-        });
-        otpDialogBox(context).then((value) {});
-      },
-      codeAutoRetrievalTimeout: (String verId) {
-        verificationId = verId;
-        setState(() {
-          authStatus = "TIMEOUT";
-        });
-      },
-    );
-  }
-
-  otpDialogBox(BuildContext context) {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return new AlertDialog(
-            title: Text('Enter your OTP'),
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: new OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(30),
-                    ),
-                  ),
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  otp = value;
-
-                },
-              ),
-            ),
-            contentPadding: EdgeInsets.all(10.0),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () async {
-                  signIn(otp);
-                },
-                child: Text(
-                  'Submit',
-                ),
-              ),
-            ],
-          );
-        });
-  }
-
-  Future<void> signIn(String otp) async {
-    await FirebaseAuth.instance
-        .signInWithCredential(PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: otp,
-    ))
-        .then((value) async {
-
-      print("User Logged");
-
-    }).catchError((onError) {
-      if (onError != null && onError.message != null) {
-        print(onError.message);
-
-      }
-    });
-  }
-
-
-
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: Form(
-            key: _formKey,
-            child: Container(
-              height: MediaQuery.of(context).size.height * .5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-
-                  TextField(
-
-                    keyboardType: TextInputType.phone,
-                    controller: phoneController,
-
-                    onChanged: (v) {
-                      phoneNumber = v;
-                    },
-
-                  ),
-
-                  RaisedButton(
-                      child: Text("Get OTP"),
-                      onPressed: () {
-                        print(phoneNumber);
-                        verifyPhoneNumber(context);
-
-                      })
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-
-
-
-}*/
-
-
-
 import 'dart:convert';
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_country_picker/country.dart';
+import 'package:flutter_country_picker/flutter_country_picker.dart';
 import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:lazy_chair/screens/global.dart';
+import 'package:lazy_chair/screens/signup_screen/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sms_autofill/sms_autofill.dart';
-
 import '../global.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -201,9 +29,11 @@ class _OtpScreenState extends State<OtpScreen> {
   String _verificationId;
   final SmsAutoFill _autoFill = SmsAutoFill();
   SharedPreferences prefs;
-  void showSnackbar(String message) {
+  Country countryCode = Country.IN;
+
+  /*void showSnackbar(String message) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
-  }
+  }*/
 
   @override
   void initState() {
@@ -211,20 +41,68 @@ class _OtpScreenState extends State<OtpScreen> {
     verifyPhoneNumber();
     super.initState();
   }
+  var _formKey = GlobalKey<FormState>();
+
+  void _submit() {
+    final isValid = _formKey.currentState.validate();
+    if (!isValid) {
+      return;
+    }
+    signInWithPhoneNumber();
+    _formKey.currentState.save();
+  }
+  int resendToken;
+
+  sendOtp() async {
+    try {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: GlobalData.phoneNumber,
+        forceResendingToken: resendToken,
+        timeout: const Duration(seconds: 15),
+        verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
+          await _auth.signInWithCredential(phoneAuthCredential);
+          //showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+        },
+        verificationFailed: (FirebaseAuthException authException) {
+          if (authException.code == 'invalid-phone-number') {
+            print('The provided phone number is not valid.');
+          }
+          //showSnackbar('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
+        },
+        codeSent: (String verificationId, int forceResendingToken) async {
+          resendToken = forceResendingToken;
+          String smsCode = _smsController.text;
+
+          // Create a PhoneAuthCredential with the code
+          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+
+          // Sign the user in (or link) with the credential
+          await _auth.signInWithCredential(credential);
+          //showSnackbar('Please check your phone for the verification code.');
+          _verificationId = verificationId;
+        },
+        codeAutoRetrievalTimeout:  (String verificationId) {
+          //showSnackbar("verification code: " + verificationId);
+          _verificationId = verificationId;
+        },);
+    } catch (e) {
+      //showSnackbar("Failed to Verify Phone Number: ${e}");
+    }
+  }
  void verifyPhoneNumber()async{
     try {
       await _auth.verifyPhoneNumber(
-          phoneNumber: "+91"+GlobalData.phoneNumber,
-          timeout: const Duration(seconds: 5),
+          phoneNumber: GlobalData.phoneNumber,
+          timeout: const Duration(seconds: 15),
           verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
             await _auth.signInWithCredential(phoneAuthCredential);
-            showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+            //showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
           },
         verificationFailed: (FirebaseAuthException authException) {
           if (authException.code == 'invalid-phone-number') {
             print('The provided phone number is not valid.');
           }
-          showSnackbar('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
+          //showSnackbar('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
         },
         codeSent: (String verificationId, int forceResendingToken) async {
           String smsCode = _smsController.text;
@@ -234,15 +112,15 @@ class _OtpScreenState extends State<OtpScreen> {
 
           // Sign the user in (or link) with the credential
           await _auth.signInWithCredential(credential);
-          showSnackbar('Please check your phone for the verification code.');
+          //showSnackbar('Please check your phone for the verification code.');
           _verificationId = verificationId;
         },
         codeAutoRetrievalTimeout:  (String verificationId) {
-          showSnackbar("verification code: " + verificationId);
+          //showSnackbar("verification code: " + verificationId);
           _verificationId = verificationId;
         },);
     } catch (e) {
-      showSnackbar("Failed to Verify Phone Number: ${e}");
+      //showSnackbar("Failed to Verify Phone Number: ${e}");
     }
   }
 
@@ -306,16 +184,17 @@ class _OtpScreenState extends State<OtpScreen> {
             Show_toast_Now("Login Successfully", Colors.green);
           }
         });
-Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
-      Show_toast_Now("Login Successfully", Colors.green);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
+                  Show_toast_Now("Login Successfully", Colors.green);
 
-      showSnackbar("Successfully signed in UID: ${user.uid}");
+                  //showSnackbar("Successfully signed in UID: ${user.uid}");
     } catch (e) {
-      showSnackbar("Failed to sign in: " + e.toString());
+      //showSnackbar("Failed to sign in: " + e.toString());
+      print(e.toString());
     }
   }
 
-  phoneVerificationDone(){
+  /*phoneVerificationDone(){
     PhoneVerificationCompleted verificationCompleted =
         (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
@@ -335,66 +214,76 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
       _verificationId = verificationId;
     };
   }
-
   phoneCodeRetrieval(){
     PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
         (String verificationId) {
       showSnackbar("verification code: " + verificationId);
       _verificationId = verificationId;
     };
-  }
+  }*/
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+        backgroundColor: Colors.orange.shade50,
         key: _scaffoldKey,
         //resizeToAvoidBottomPadding: false,
-        body: Padding(padding: const EdgeInsets.all(8),
-          child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  /*TextFormField(
-                    controller: _phoneNumberController,
-                    decoration: const InputDecoration(labelText: 'Phone number (+xx xxx-xxx-xxxx)'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    alignment: Alignment.center,
-                    child: RaisedButton(child: Text("Get current number"),
-                        onPressed: () async => {
-                          _phoneNumberController.text = await _autoFill.hint
-                        },
-                        color: Colors.greenAccent[700]),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    alignment: Alignment.center,
-                    child: RaisedButton(
-                      color: Colors.greenAccent[400],
-                      child: Text("Verify Number"),
-                      onPressed: () async {
-                        verifyPhoneNumber();
-                      },
-                    ),
-                  ),*/
-                  TextFormField(
-                    controller: _smsController,
-                    decoration: const InputDecoration(labelText: 'Verification code'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    alignment: Alignment.center,
-                    child: RaisedButton(
-                        color: Colors.greenAccent[200],
-                        onPressed: () async {
-                          signInWithPhoneNumber();
-                        },
-                        child: Text("Sign in")),
-                  ),
-                ],
-              )
+        body: Center(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Padding(padding: const EdgeInsets.all(8),
+                child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Center(child: Image.asset("assets/logo.png",height: 100,)),
+                        SizedBox(height: 30,),
+                        CustomTextField(
+                          controller: _smsController,
+                          title: "Enter the OTP send on "+GlobalData.phoneNumber,
+                          hintText: 'Enter OTP here',
+                          validator: (value){
+                            if (value == null || value.isEmpty) {
+                              return 'Enter OTP';
+                            }
+                            return null;
+                          },
+                        ),
+
+                        /*ElevatedButton(
+                            onPressed: (){
+                              Navigator.pop(context);
+                              sendOtp();
+                            }, child: Text("Resend Code")),*/
+                        SizedBox(height: 20,),
+                        GestureDetector(
+                          onTap: ()async{
+                            _submit();
+                          },
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.orange,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: GlobalData.white)
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                                child: Text("Login",style: TextStyle(fontSize: 16,color: Colors.white),textAlign: TextAlign.center,),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    )
+                ),
+              ),
+            ),
           ),
         )
     );
@@ -417,6 +306,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
   bool _obscureText = true;
+  Country countryCode = Country.IN;
+
   SharedPreferences prefs;
   void _submit() {
     final isValid = _formKey.currentState.validate();
@@ -447,7 +338,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
     prefs = await SharedPreferences.getInstance();
     Map data = {
 
-      "phone_no": phoneController.text.toString(),
+      "phone_no": "+"+countryCode.dialingCode+phoneController.text.toString(),
 
     };
     //encode Map to JSON
@@ -463,9 +354,10 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
         print("FALSE");
         print("Not Allowed");
         print("Not Allowed");
+        Show_toast_Now("Invalid Phone Number", Colors.red);
         Navigator.pop(loadContext);
 
-        Show_toast_Now("Invalid Phone Number", Colors.red);
+
 
       }
       else
@@ -482,58 +374,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
         GlobalData.password=status['password'];
         print(GlobalData.phoneNumber);
         Navigator.push(context, MaterialPageRoute(builder: (context)=>OtpScreen()));
-        /*prefs = await SharedPreferences.getInstance();
 
-        await http.post(Uri.parse("https://beta.saurabhenterprise.com/wp-json/jwt-auth/v1/token"),
-            body: {
-          "username": status['email'],
-          "password": status['password'],
-
-        }).then((response) async {
-          var status = jsonDecode(response.body);
-          print(response.body.toString());
-
-          if (status['success']==false) {
-            print("Not Allowed");
-            print("Not Allowed");
-            Navigator.pop(loadContext);
-
-            Show_toast_Now("Invalid Username or Password", Colors.red);
-
-          }
-          else
-          {
-            Navigator.pop(loadContext);
-            //saving(context);
-
-            GlobalData.userId= status['data']['id'];
-            print(status['data']['id']);
-            print(GlobalData.userId);
-            prefs.setInt("Id", GlobalData.userId);
-            prefs.setString("TokenId", status['data']['token']);
-            prefs.setString("Email", status['data']['email']);
-            prefs.setString("NiceName", status['data']['nicename']);
-            prefs.setString("FirstName", status['data']['firstName']);
-            prefs.setString("LastName", status['data']['lastName']);
-
-
-            GlobalData.tokenId=status['data']['token'];
-            GlobalData.userId= status['data']['id'];
-            GlobalData.emailId= status['data']['email'];
-            GlobalData.firstName = status['data']['firstName'];
-            GlobalData.lastName = status['data']['lastName'];
-            GlobalData.niceName = status['data']['nicename'];
-            print("Id: "+GlobalData.userId.toString());
-            print("Token Id: "+GlobalData.tokenId);
-            print("Email Id: "+GlobalData.emailId);
-            print("First Name: "+GlobalData.firstName);
-            print("Last Name: "+GlobalData.lastName);
-            print("Nice Name: "+GlobalData.niceName);
-            print("Allowed");
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
-            Show_toast_Now("Login Successfully", Colors.green);
-          }
-        });*/
 
       }
     });
@@ -549,47 +390,119 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Phone Login"),
-      ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Container(
-                child: CustomTextField(
-                  controller: phoneController,
-                  title: "Phone Number",
-                  keyboardType: TextInputType.number,
-                  validator: (value){
-                    if (value == null || value.isEmpty) {
-                      return 'Enter phone number';
-                    }
-                    return null;
-                  },
-                ),
+      backgroundColor: Colors.orange.shade50,
+      
+      body: Center(
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                children: [
+                  SizedBox(height: 30,),
+                  Center(child: Image.asset("assets/logo.png",height: 100,)),
+                  SizedBox(height: 30,),
+                  Container(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text("Phone Login"),
+                            SizedBox(height: 10,),
+                            CountryPicker(
+                              dense: false,
+                              showFlag: true,
+                              showDialingCode: true,
+                              showCurrency: false,
+                              showCurrencyISO: false,
+                              showName: false,
+                              onChanged: (Country country) {
+                                setState(() {
+                                  countryCode = country;
+                                });
+                              },
+                              selectedCountry: countryCode,
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: CustomTextField(
+                            controller: phoneController,
+                            title: "",
+                            keyboardType: TextInputType.number,
+                            validator: (value){
+                              if (value == null || value.isEmpty) {
+                                return 'Enter phone number';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
 
+                  ),
+
+                  SizedBox(height: 20,),
+
+                  GestureDetector(
+                    onTap: (){
+                      print("+"+countryCode.dialingCode+phoneController.text);
+                      _submit();
+                    },
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.orange,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: GlobalData.white)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                          child: Text("Send OTP",style: TextStyle(fontSize: 16,color: Colors.white),textAlign: TextAlign.center,),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Spacer(),
+                      RichText(
+                        text: TextSpan(
+                            text: "Don't have an account? ",
+                            style: TextStyle(
+                                fontSize: 13,color: GlobalData.black,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: "Create Account",
+                                  style: TextStyle(
+                                      fontSize: 13,color: GlobalData.black,decoration: TextDecoration.underline
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (context)=>SignUpScreen()));
+                                    }
+                              )
+                            ]
+                        ),),
+                      Spacer(),
+
+                    ],
+                  ),
+                ],
               ),
             ),
-            GestureDetector(
-              onTap: (){
-                _submit();
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: GlobalData.white)
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                  child: Text("Login",style: TextStyle(fontSize: 16,color: Colors.black),),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

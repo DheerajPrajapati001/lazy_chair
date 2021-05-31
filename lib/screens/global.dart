@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_country_picker/country.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lazy_chair/models/page_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,6 +43,7 @@ class GlobalData{
   static AllPageData termsConditions;
   static String phoneNumber;
   static String password;
+  static String userName;
 
 
 }
@@ -58,11 +60,14 @@ LogoutFunction(context)async {
   GlobalData.lastName="";
   GlobalData.tokenId="";
   GlobalData.emailId="";
+  GlobalData.phoneNumber="";
+  GlobalData.userName="";
+  GlobalData.password="";
 
 
 
   Navigator.of(context)
-      .pushNamedAndRemoveUntil('LoginPage', (Route<dynamic> route) => false);
+      .pushNamedAndRemoveUntil('PhoneLogin', (Route<dynamic> route) => false);
 }
 
 Show_toast_Now(String msg,Color color){
@@ -72,7 +77,7 @@ Show_toast_Now(String msg,Color color){
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb	: 1,
       backgroundColor: color,
-      textColor: Colors.white,
+      textColor: Colors.black,
       fontSize: 16.0
   );
 }

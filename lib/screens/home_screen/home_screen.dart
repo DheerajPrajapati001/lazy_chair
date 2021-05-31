@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:carousel_slider/carousel_options.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -169,6 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String disp = '';
+  int _current = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -408,56 +411,69 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * .2,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [
-                              GlobalData.orange.withOpacity(0.8),
-                              GlobalData.orange
-                            ], end: Alignment.centerRight, begin: Alignment.centerLeft),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Row(
-                          children: [
-                            Spacer(),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Hot Offer',
-                                  style: TextStyle(
-                                      color: Colors.white.withOpacity(0.5),
-                                      fontSize:
-                                      MediaQuery.of(context).size.width * .05),
-                                ),
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height * .01,
-                                ),
-                                Text(
-                                  '30%',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: MediaQuery.of(context).size.width * .1),
-                                ),
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height * .01,
-                                ),
-                                Text(
-                                  'Discount',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize:
-                                      MediaQuery.of(context).size.width * .07),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * .1,
-                            )
-                          ],
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          height: 180.0,
+                          enlargeCenterPage: true,
+                          autoPlay: true,
+                          aspectRatio: 16 / 9,
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enableInfiniteScroll: true,
+                          autoPlayAnimationDuration: Duration(milliseconds: 800),
+                          viewportFraction: 0.8,
+                          initialPage: 0,
+                          /*onScrolled: (index){
+                            setState(() {
+                              _current=index;
+                            });
+                          },*/
                         ),
+
+                        items: <Widget>[
+                          Container(height: 300,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              image: DecorationImage(
+                                image: NetworkImage("https://beta.saurabhenterprise.com/wp-content/uploads/2021/03/pexels-bess-hamiti-35188.jpg"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+
+
+
+
+                          ),
+
+
+                          Container(height: 300,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              image: DecorationImage(
+                                image: NetworkImage("https://beta.saurabhenterprise.com/wp-content/uploads/2021/03/pexels-bess-hamiti-35188.jpg"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+
+
+                          ),
+
+
+
+                          Container(height: 300,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              image: DecorationImage(
+                                image: NetworkImage("https://beta.saurabhenterprise.com/wp-content/uploads/2021/03/pexels-bess-hamiti-35188.jpg"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+
+                          ),
+                        ],
+
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .03,

@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
     else
     {
       print("Apple");
-      Navigator.of(context).pushReplacementNamed('LoginPage');
+      Navigator.of(context).pushReplacementNamed('PhoneLogin');
     }
   }
 
@@ -138,6 +138,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange.shade50,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
