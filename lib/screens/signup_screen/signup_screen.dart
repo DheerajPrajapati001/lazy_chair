@@ -33,7 +33,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
   bool _obscureText = true;
-  Country countryCode = Country.IN;
+  Country countryCode = Country.MY;
+
 
   void _submit() {
     final isValid = _formKey.currentState.validate();
@@ -248,7 +249,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
 
       print(response.statusCode);
-      if (response.statusCode == 201)
+      if (response.statusCode >= 200 && response.statusCode < 300)
       {
 
         print("LOGIN DONEEEEEEEEEEEEEEEE");
@@ -456,7 +457,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             onTap: (){
 
 
-                               if(phoneNo.text.length==11||phoneNo.text.length==10)
+                               if(phoneNo.text.length==11||phoneNo.text.length==10||phoneNo.text.length==9||phoneNo.text.length==8)
                                {
                                  _submit();
                                }
@@ -723,12 +724,16 @@ class _OtpScreenState extends State<OtpScreen> {
         timeout: const Duration(seconds: 15),
         verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
           await _auth.signInWithCredential(phoneAuthCredential);
+          print("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
           //showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
         },
         verificationFailed: (FirebaseAuthException authException) {
           if (authException.code == 'invalid-phone-number') {
             print('The provided phone number is not valid.');
           }
+          Show_toast_Now('too-many-requests. We have blocked all requests from this device due to unusual activity.', Colors.red);
+
+          print('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
           //showSnackbar('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
         },
         codeSent: (String verificationId, int forceResendingToken) async {
@@ -740,14 +745,18 @@ class _OtpScreenState extends State<OtpScreen> {
 
           // Sign the user in (or link) with the credential
           await _auth.signInWithCredential(credential);
+          print('Please check your phone for the verification code.');
           //showSnackbar('Please check your phone for the verification code.');
           _verificationId = verificationId;
         },
         codeAutoRetrievalTimeout:  (String verificationId) {
+          print("verification code: " + verificationId);
+          Show_toast_Now("OTP Send", Colors.green);
           //showSnackbar("verification code: " + verificationId);
           _verificationId = verificationId;
         },);
     } catch (e) {
+      print("Failed to Verify Phone Number: ${e}");
       //showSnackbar("Failed to Verify Phone Number: ${e}");
     }
   }
@@ -758,12 +767,15 @@ class _OtpScreenState extends State<OtpScreen> {
         timeout: const Duration(seconds: 15),
         verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
           await _auth.signInWithCredential(phoneAuthCredential);
+          print("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
          // showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
         },
         verificationFailed: (FirebaseAuthException authException) {
           if (authException.code == 'invalid-phone-number') {
             print('The provided phone number is not valid.');
           }
+          Show_toast_Now('too-many-requests. We have blocked all requests from this device due to unusual activity.', Colors.red);
+          print('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
           //showSnackbar('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
         },
         codeSent: (String verificationId, int forceResendingToken) async {
@@ -774,19 +786,38 @@ class _OtpScreenState extends State<OtpScreen> {
 
           // Sign the user in (or link) with the credential
           await _auth.signInWithCredential(credential);
+          print('Please check your phone for the verification code.');
           //showSnackbar('Please check your phone for the verification code.');
           _verificationId = verificationId;
         },
         codeAutoRetrievalTimeout:  (String verificationId) {
+          print("verification code: " + verificationId);
+          Show_toast_Now("OTP Send", Colors.green);
           //showSnackbar("verification code: " + verificationId);
           _verificationId = verificationId;
         },);
     } catch (e) {
+      print("Failed to Verify Phone Number: ${e}");
       //showSnackbar("Failed to Verify Phone Number: ${e}");
     }
   }
 
   void signInWithPhoneNumber() async {
+    BuildContext loadContext;
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) {
+          loadContext = ctx;
+          return AlertDialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              content: Container(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            //Center(child: CircularProgressIndicator())
+          );
+        });
     try {
       final AuthCredential credential = PhoneAuthProvider.credential(
         verificationId: _verificationId,

@@ -15,7 +15,7 @@ import 'package:lazy_chair/config/config.dart';
 import 'package:lazy_chair/screens/my_cart/my_cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:lazy_chair/models/banner_data.dart';
 import '../../woocommerce.dart';
 
 
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<WooProduct> searchProducts = [];
   List<WooShippingZone> shippingZone = [];
   List<WooShippingZoneMethod> shippingZoneMethodId = [];
-
+  List<BannerData> banner =[];
   WooCommerce wooCommerce = WooCommerce(
     baseUrl: Config.baseUrl,
     consumerKey: Config.key,
@@ -157,10 +157,47 @@ class _HomeScreenState extends State<HomeScreen> {
     print(searchProducts.toString());
   }
 
+  getBanner()async{
+
+    GlobalData.isLoading=true;
+    setState(() {
+
+    });
+    await http.post(
+        Uri.parse('https://beta.saurabhenterprise.com/wp-json/wp/v2/users/banner'),
+    ).then((response) async{
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final jsonStr = json.decode(response.body);
+        print('Banner: ' + jsonStr.toString());
+
+
+        for(var p in jsonStr){
+          var prod = BannerData.fromJson(p);
+          print('product gotten here : '+prod.id);
+          GlobalData.bannerUrl=prod.pic;
+          print("Banner Url"+GlobalData.bannerUrl);
+          banner.add(prod);
+        }
+        setState(() {
+        });
+        GlobalData.isLoading=false;
+        setState(() {
+
+        });
+        // return WooCartItem.fromJson(jsonStr);
+      } else {
+        WooCommerceError err =
+        WooCommerceError.fromJson(json.decode(response.body));
+        throw err;
+      }
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getBanner();
     getProducts();
     getShippingZone();
     //getShippingZoneMethodId();
@@ -411,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      CarouselSlider(
+                      CarouselSlider.builder(
                         options: CarouselOptions(
                           height: 180.0,
                           enlargeCenterPage: true,
@@ -428,9 +465,36 @@ class _HomeScreenState extends State<HomeScreen> {
                             });
                           },*/
                         ),
-
-                        items: <Widget>[
+                          itemCount: banner.length,
+                        itemBuilder: (context, itemIndex, realIndex)
+                        {
+                          return GlobalData.isLoading==true?
                           Container(height: 300,
+                            width: MediaQuery.of(context).size.width,
+                            child: Center(child: Text("Loading...")),
+
+
+                          ):Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(height: 300,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                image: DecorationImage(
+                                  image: NetworkImage(banner[itemIndex].pic),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+
+
+                            ),
+                          );
+                        },
+
+
+
+
+                          /*Container(height: 300,
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8.0),
@@ -472,7 +536,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
 
                           ),
-                        ],
+                        ],*/
 
                       ),
                       SizedBox(

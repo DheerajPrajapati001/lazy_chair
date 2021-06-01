@@ -44,6 +44,7 @@ class GlobalData{
   static String phoneNumber;
   static String password;
   static String userName;
+  static String bannerUrl;
 
 
 }
