@@ -85,7 +85,7 @@ class _OtpScreenState extends State<OtpScreen> {
           _verificationId = verificationId;
         },
         codeAutoRetrievalTimeout:  (String verificationId) {
-          Show_toast_Now("OTP Send", Colors.green);
+          Show_toast_Now("OTP Sent Successfully", Colors.green);
           print("verification code: " + verificationId);
           //showSnackbar("verification code: " + verificationId);
           _verificationId = verificationId;
@@ -127,7 +127,7 @@ class _OtpScreenState extends State<OtpScreen> {
           _verificationId = verificationId;
         },
         codeAutoRetrievalTimeout:  (String verificationId) {
-          Show_toast_Now("OTP Send", Colors.green);
+          Show_toast_Now("OTP Sent Successfully", Colors.green);
           print("verification code: " + verificationId);
           //showSnackbar("verification code: " + verificationId);
           _verificationId = verificationId;
@@ -274,7 +274,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         SizedBox(height: 30,),
                         CustomTextField(
                           controller: _smsController,
-                          title: "Enter the OTP send on "+GlobalData.phoneNumber,
+                          title: "Enter the OTP sent on "+GlobalData.phoneNumber,
                           hintText: 'Enter OTP here',
                           validator: (value){
                             if (value == null || value.isEmpty) {
@@ -385,7 +385,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
         print("FALSE");
         print("Not Allowed");
         print("Not Allowed");
-        Show_toast_Now("Invalid Phone Number", Colors.red);
+        Show_toast_Now("User Not Registered", Colors.red);
         Navigator.pop(loadContext);
 
 
