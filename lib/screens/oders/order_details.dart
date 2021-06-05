@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/localization/language_constants.dart';
 
 import '../../woocommerce.dart';
 import '../global.dart';
@@ -61,7 +62,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
        appBar: AppBar(
-         title: Text("Order Details",style: TextStyle(
+         title: Text(getTranslated(context, "order_details"),style: TextStyle(
              color: Colors.black,
              fontSize: MediaQuery.of(context).size.width * .045,
              fontWeight: FontWeight.w500)),
@@ -91,7 +92,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
                         children: [
                           Expanded(
-                            child: Text("Order Summary",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
+                            child: Text(getTranslated(context, "order_summary"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
                           ),
                           Expanded(
                             child: Container(
@@ -109,36 +110,36 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
                       SizedBox(height: 20,),
                       CustomTextInRow(
-                        mainText: "Order Id",
+                        mainText: getTranslated(context, "order_id"),
                         price: "#"+orders.id.toString(),
 
                       ),
 
                       CustomTextInRow(
-                        mainText: "Order Created",
+                        mainText: getTranslated(context, "order_created"),
                         price: orders.dateCreated.substring(0,10),
 
                       ),
 
                       CustomTextInRow(
-                        mainText: "Subtotal",
+                        mainText: getTranslated(context, "subtotal"),
                         price: orders.currency+" "+((double.parse(orders.total))-(double.parse(orders.shippingTotal))).toString(),
 
                       ),
                       CustomTextInRow(
-                        mainText: "Payment Method",
+                        mainText: getTranslated(context, "payment_method"),
                         price: orders.paymentMethodTitle,
 
                       ),
                       CustomTextInRow(
-                        mainText: "Shipping Total",
+                        mainText: getTranslated(context, "shipping_total"),
                         price: orders.currency+" "+orders.shippingTotal,
 
                       ),
                       Divider(color: GlobalData.black,),
                       SizedBox(height: 10,),
                       CustomTextInRow(
-                        mainText: "Total",
+                        mainText: getTranslated(context, "total"),
                         price: orders.currency+" "+orders.total,
 
                       ),
@@ -152,19 +153,19 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       print(double.parse(orders.shippingTotal).toInt());
                       print(orders.total);
                     }, child: Text("ok")),*/
-                    Text("Shipping Details",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
+                    Text(getTranslated(context, "shipping_details"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
 
                       SizedBox(height: 15,),
 
                       CustomTextInRow(
-                        mainText: "Name",
+                        mainText: getTranslated(context, "name"),
                         price: orders.shipping.firstName+" "+orders.shipping.lastName
 
                       ),
 
 
                       CustomTextInRow(
-                          mainText: "Address",
+                          mainText: getTranslated(context, "address"),
                           price: orders.shipping.address1+", "+orders.shipping.city+", "+orders.shipping.state+", "+orders.shipping.country
                           +", \n"+orders.shipping.postcode
 
@@ -172,14 +173,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
 
                       CustomTextInRow(
-                          mainText: "Customer Note",
+                          mainText: getTranslated(context, "customer_note"),
                           price: orders.customerNote
 
                       ),
 
                       SizedBox(height: 15,),
 
-                      Text("Items",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
+                      Text(getTranslated(context, "items"),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
                       SizedBox(height: 10,),
                       ListView.builder(
                         itemCount: orders.lineItems.length,
@@ -200,7 +201,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text("Quantity "+orders.lineItems[i].quantity.toString()),
+                                      Text(getTranslated(context, "quantity")+orders.lineItems[i].quantity.toString()),
                                       Text("USD "+orders.lineItems[i].total),
                                     ],
                                   )),
@@ -221,8 +222,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             // foreground
                           ),
                           onPressed: (){
-                            customDialogBox(context,title: "Cancel Order",msg:
-                            "Do you want to cancel Order",
+                            customDialogBox(context,title: getTranslated(context, "cancel_order"),msg:
+                            getTranslated(context, "do_you_want_to_cancel_order"),
                                 onPressed:(){
                                   deleteOrder();
                                   Navigator.pushNamed(context, "HomePage");
@@ -230,7 +231,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
                             });
 
-                          }, child: Text("Cancel Order",style: TextStyle(color: GlobalData.black),))
+                          }, child: Text(getTranslated(context, "cancel_order"),style: TextStyle(color: GlobalData.black),))
                     ],
                   ),
                 ),

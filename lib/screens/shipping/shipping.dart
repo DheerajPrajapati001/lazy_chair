@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/localization/language_constants.dart';
 import 'package:lazy_chair/models/apply_coupon.dart';
 import 'package:lazy_chair/models/cart_products.dart';
 import 'package:lazy_chair/models/new_apply_coupon.dart';
@@ -562,7 +563,7 @@ class _ShippingState extends State<Shipping> {
           backgroundColor: GlobalData.orange,
           centerTitle: true,
           title: Text(
-            "Shipping",
+            getTranslated(context, "shipping"),
             style: TextStyle(
                 color: Colors.black,
                 fontSize: MediaQuery.of(context).size.width * .045,
@@ -589,12 +590,12 @@ class _ShippingState extends State<Shipping> {
                           children: [
                             Expanded(
                               child: CustomTextField(
-                                title: 'First Name',
+                                title: getTranslated(context, "first_name"),
                                 controller: firstName,
-                                hintText: "Enter First Name",
+                                hintText: getTranslated(context, "enter_first_name"),
                                 validator: (value){
                                   if (value == null || value.isEmpty) {
-                                    return 'Enter first name';
+                                    return getTranslated(context, "enter_first_name");
                                   }
                                   return null;
 
@@ -605,12 +606,12 @@ class _ShippingState extends State<Shipping> {
                             ),
                             Expanded(
                               child: CustomTextField(
-                                title: 'Last Name',
+                                title: getTranslated(context, "last_name"),
                                 controller: lastName,
-                                hintText: "Enter Last Name",
+                                hintText: getTranslated(context, "enter_last_name"),
                                 validator: (value){
                                   if (value == null || value.isEmpty) {
-                                    return 'Enter last name';
+                                    return getTranslated(context, "enter_last_name");
                                   }
                                   return null;
 
@@ -623,12 +624,12 @@ class _ShippingState extends State<Shipping> {
                           height: MediaQuery.of(context).size.height*.02,
                         ),
                         CustomTextField(
-                          title: 'Address',
+                          title: getTranslated(context, "address"),
                           controller: address,
-                          hintText: "Enter Address",
+                          hintText: getTranslated(context, "enter_address"),
                           validator: (value){
                             if (value == null || value.isEmpty) {
-                              return 'Enter address';
+                              return getTranslated(context, "enter_address");
                             }
                             return null;
 
@@ -641,12 +642,12 @@ class _ShippingState extends State<Shipping> {
                           children: [
                             Expanded(
                               child: CustomTextField(
-                                title: 'City',
+                                title: getTranslated(context, "city"),
                                 controller: city,
-                                hintText: "Enter City",
+                                hintText: getTranslated(context, "enter_city"),
                                 validator: (value){
                                   if (value == null || value.isEmpty) {
-                                    return 'Enter city';
+                                    return getTranslated(context, "enter_city");
                                   }
                                   return null;
 
@@ -658,12 +659,12 @@ class _ShippingState extends State<Shipping> {
                             ),
                             Expanded(
                               child: CustomTextField(
-                                title: 'ZIP Code',
+                                title: getTranslated(context, "zip_code"),
                                 controller: pinCode,
-                                hintText: "Enter Zip Code",
+                                hintText: getTranslated(context, "enter_zip_code"),
                                 validator: (value){
                                   if (value == null || value.isEmpty) {
-                                    return 'Enter zip code';
+                                    return getTranslated(context, "enter_zip_code");
                                   }
                                   return null;
 
@@ -679,12 +680,12 @@ class _ShippingState extends State<Shipping> {
                           children: [
                             Expanded(
                               child: CustomTextField(
-                                title: 'Country',
+                                title: getTranslated(context, "country"),
                                 controller: country,
-                                hintText: "Enter Country",
+                                hintText: getTranslated(context, "enter_country"),
                                 validator: (value){
                                   if (value == null || value.isEmpty) {
-                                    return 'Enter country';
+                                    return getTranslated(context, "enter_country");
                                   }
                                   return null;
 
@@ -696,12 +697,12 @@ class _ShippingState extends State<Shipping> {
                             ),
                             Expanded(
                               child: CustomTextField(
-                                title: 'State',
+                                title: getTranslated(context, "states"),
                                 controller: state,
-                                hintText: "Enter State",
+                                hintText: getTranslated(context, "enter_states"),
                                 validator: (value){
                                   if (value == null || value.isEmpty) {
-                                    return 'Enter state';
+                                    return getTranslated(context, "enter_states");
                                   }
                                   return null;
 
@@ -717,14 +718,14 @@ class _ShippingState extends State<Shipping> {
                           children: [
                             Expanded(
                               child: CustomTextField(
-                                title: 'Email',
+                                title: getTranslated(context,"email"),
                                 controller: emailId,
-                                hintText: "Enter Email",
+                                hintText: getTranslated(context, "email_hint"),
                                 validator: (value){
                                   if (value.isEmpty ||
                                       !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                           .hasMatch(value)) {
-                                    return 'Enter email';
+                                    return getTranslated(context, "email_hint");
                                   }
                                   return null;
 
@@ -736,12 +737,12 @@ class _ShippingState extends State<Shipping> {
                             ),
                             Expanded(
                               child: CustomTextField(
-                                title: 'Phone',
+                                title: getTranslated(context,"phone_number"),
                                 controller: phoneNo,
-                                hintText: "Enter Phone Number",
+                                hintText: getTranslated(context,"enter_phone_number"),
                                 validator: (value){
                                   if (value == null || value.isEmpty) {
-                                    return 'Enter phone number';
+                                    return getTranslated(context,"enter_phone_number");
                                   }
                                   return null;
 
@@ -754,9 +755,9 @@ class _ShippingState extends State<Shipping> {
                           height: MediaQuery.of(context).size.height*.02,
                         ),
                         CustomTextField(
-                          title: 'Notes',
+                          title: getTranslated(context, "notes"),
                           controller: notes,
-                          hintText: "Enter Notes",
+                          hintText: getTranslated(context, "enter_notes"),
                           /*validator: (value){
                             if (value == null || value.isEmpty) {
                               return 'Enter phone number';
@@ -823,7 +824,7 @@ class _ShippingState extends State<Shipping> {
                           GlobalData.couponCode!=null&&GlobalData.isRemoveCoupon==false||isApplied==true?
                           Row(
                             children: [
-                              Expanded(child: Text("Coupon Applied: "+GlobalData.couponCode)),
+                              Expanded(child: Text(getTranslated(context, "coupon_applied")+": "+GlobalData.couponCode)),
                               Expanded(
                                 child: GestureDetector(
                                   onTap:()async{
@@ -840,14 +841,14 @@ class _ShippingState extends State<Shipping> {
 
                                     });
                           },
-                                    child: Text("Remove Coupon",style: TextStyle(color: Colors.red),)),
+                                    child: Text(getTranslated(context, "remove_coupon"),style: TextStyle(color: Colors.red),)),
                               ),
                             ],
                           ):SizedBox(),
                           SizedBox(height: 10,),
                           Row(
                             children: [
-                              Text("Coupon: "),
+                              Text(getTranslated(context, "coupons")+": "),
                               Expanded(
                                 flex: 10,
                                 child: TextField(
@@ -872,7 +873,7 @@ class _ShippingState extends State<Shipping> {
                                       //prefs.setString("cartTotal", GlobalData.cartTotal);
                                       applyCoupon(code: coupon.text);
 
-                                    }, child: Text("Apply")),
+                                    }, child: Text(getTranslated(context, "apply"))),
                               )
                             ],
                           ),
@@ -886,7 +887,7 @@ class _ShippingState extends State<Shipping> {
                           Row(
                             children: [
                               Text(
-                                'Discount',
+                                getTranslated(context, "discount"),
                                 style: TextStyle(
                                     color: Colors.black.withOpacity(0.5),
                                     fontSize:
@@ -909,7 +910,7 @@ class _ShippingState extends State<Shipping> {
                           Row(
                             children: [
                               Text(
-                                'Sub Total',
+                                getTranslated(context, "subtotal"),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -935,7 +936,7 @@ class _ShippingState extends State<Shipping> {
                           Row(
                             children: [
                               Text(
-                                'Total',
+                                getTranslated(context, "total"),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -1007,7 +1008,7 @@ class _ShippingState extends State<Shipping> {
                                 splashColor: Colors.black.withOpacity(0.1),
                                 child: Center(
                                   child: Text(
-                                    'Place Order',
+                                    getTranslated(context, "place_order"),
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white),

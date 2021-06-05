@@ -15,6 +15,10 @@ import 'package:lazy_chair/screens/settings_screen/setting_screen.dart';
 import 'package:lazy_chair/screens/shipping/shipping.dart';
 import 'package:lazy_chair/screens/splash_screen/splash_screen.dart';
 import 'package:lazy_chair/screens/terms_conditions/terms_conditions_page.dart';
+import 'package:lazy_chair/localization/demo_localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:lazy_chair/localization/language_constants.dart';
+import 'package:lazy_chair/screens/language_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,12 +28,33 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({Key key}) : super(key: key);
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
+    state.setLocale(newLocale);
+  }
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+
+  Locale _locale;
+  setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    getLocale().then((locale) {
+      setState(() {
+        this._locale = locale;
+      });
+    });
+    super.didChangeDependencies();
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -37,10 +62,41 @@ class _MyAppState extends State<MyApp> {
   }
   @override
   Widget build(BuildContext context) {
+
+    if (this._locale == null) {
+      return Container(
+        child: Center(
+          child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[800])),
+        ),
+      );
+    }
+    else{
     return MaterialApp(
       theme: ThemeData(
       ),
       debugShowCheckedModeBanner: false,
+      locale: _locale,
+      supportedLocales: [
+        Locale("en", "US"),
+        Locale("zh", "CN"),
+        Locale("ms", "MY"),
+      ],
+      localizationsDelegates: [
+        DemoLocalization.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (var supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale.languageCode &&
+              supportedLocale.countryCode == locale.countryCode) {
+            return locale;
+          }
+        }
+        return supportedLocales.first;
+      },
       routes: {
         'ChairDetails':(context)=> ProductDetails(),
         'BottomNav':(context)=> BottomNavBar(),
@@ -55,10 +111,11 @@ class _MyAppState extends State<MyApp> {
         'Coupons':(context)=> Coupon(),
         'AboutUs':(context)=> AboutUsScreen(),
         'TermsConditions':(context)=> TermsAndConditionScreen(),
-        'PhoneLogin':(context)=> PhoneLoginScreen()
+        'PhoneLogin':(context)=> PhoneLoginScreen(),
+        'LanguageScreen':(context)=> LanguagePage()
       },
       home: SplashScreen(),
-    );
+    );}
   }
 }
 

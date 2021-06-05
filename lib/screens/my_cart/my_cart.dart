@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lazy_chair/chairs.dart';
 import 'package:lazy_chair/config/config.dart';
 import 'package:lazy_chair/images.dart';
+import 'package:lazy_chair/localization/language_constants.dart';
 import 'package:lazy_chair/models/cart_item.dart';
 import 'package:lazy_chair/models/cart_products.dart';
 import 'package:http/http.dart' as http;
@@ -348,7 +349,7 @@ class _MyCartState extends State<MyCart> {
             },
               child: Icon(Icons.arrow_back)):SizedBox(),
           title: Text(
-            "My Cart",
+            getTranslated(context, "my_cart"),
             style: TextStyle(
                 color: Colors.black,
                 fontSize: MediaQuery.of(context).size.width * .045,
@@ -360,7 +361,7 @@ class _MyCartState extends State<MyCart> {
         ),
         body: SafeArea(
           child: GlobalData.isLoading==true?Center(child: Text("Loading...")):cartItems.isEmpty?
-          Center(child: Text("No Items in Cart")):Column(
+          Center(child: Text(getTranslated(context, "no_cart_items"))):Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -376,7 +377,7 @@ class _MyCartState extends State<MyCart> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Total Items: "+cartItems.length.toString(),
+                        getTranslated(context, "total_items")+": "+cartItems.length.toString(),
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize:
@@ -433,7 +434,7 @@ class _MyCartState extends State<MyCart> {
                                         Row(
                                           children: [
                                             Text(
-                                              'Qty:',
+                                              getTranslated(context, "qty")+": ",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14),
@@ -571,7 +572,7 @@ class _MyCartState extends State<MyCart> {
 
 
                                             },
-                                            child: Text("Remove",style: TextStyle(color: Colors.red),))
+                                            child: Text(getTranslated(context, "remove"),style: TextStyle(color: Colors.red),))
 
                                       ],
                                     ),
@@ -635,7 +636,7 @@ class _MyCartState extends State<MyCart> {
                       Row(
                         children: [
                           Text(
-                            'Subtotal',
+                            getTranslated(context,"subtotal"),
                             style: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
                                 fontSize:
@@ -657,7 +658,7 @@ class _MyCartState extends State<MyCart> {
                       Row(
                         children: [
                           Text(
-                            'Shipping Fee',
+                            getTranslated(context, "shipping_fee"),
                             style: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
                                 fontSize:
@@ -682,7 +683,7 @@ class _MyCartState extends State<MyCart> {
                       Row(
                         children: [
                           Text(
-                            'Total',
+                            getTranslated(context, "total"),
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -730,7 +731,7 @@ class _MyCartState extends State<MyCart> {
                             splashColor: Colors.black.withOpacity(0.1),
                             child: Center(
                               child: Text(
-                                'Proceed To Buy',
+                                getTranslated(context, "proceed_to_buy"),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),

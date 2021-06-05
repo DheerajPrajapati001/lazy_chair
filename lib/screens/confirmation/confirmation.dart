@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_chair/localization/language_constants.dart';
 import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
 
 import '../global.dart';
@@ -13,7 +14,8 @@ class Confirmation extends StatelessWidget {
           backgroundColor: GlobalData.orange,
           centerTitle: true,
           automaticallyImplyLeading: false,
-          title: Text("Confirmation",
+          title: Text(
+            getTranslated(context,"confirmation"),
             style: TextStyle(
                 color: Colors.black,
                 fontSize: MediaQuery.of(context).size.width * .045,
@@ -48,7 +50,7 @@ class Confirmation extends StatelessWidget {
                       SizedBox(
                         height: MediaQuery.of(context).size.height*.03,
                       ),
-                      Text('Hey '+GlobalData.niceName+'\nThanks for your purchase',textAlign: TextAlign.center,style: TextStyle(
+                      Text(getTranslated(context,"hey")+" "+GlobalData.niceName+'\n'+getTranslated(context,"thanks_for_purchase"),textAlign: TextAlign.center,style: TextStyle(
                         fontSize: MediaQuery.of(context).size.height*.025
                       ),),
                     ],
@@ -69,7 +71,7 @@ class Confirmation extends StatelessWidget {
                       height: MediaQuery.of(context).size.height*.01,
                     ),
                     CustomRow(
-                      text: 'Sub Total',
+                      text: getTranslated(context, "subtotal"),
                       price: GlobalData.totalPrice,
                     ),
                     /*CustomRow(
@@ -77,7 +79,7 @@ class Confirmation extends StatelessWidget {
                       price: '5.50',
                     ),*/
                     CustomRow(
-                      text: 'Shipping Charge',
+                      text: getTranslated(context, "shipping_charge"),
                       price: GlobalData.shippingMethodTotalPrice,
                     ),
                     SizedBox(
@@ -92,7 +94,7 @@ class Confirmation extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Total',
+                          getTranslated(context, "total"),
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -133,7 +135,7 @@ class Confirmation extends StatelessWidget {
                           splashColor: Colors.black.withOpacity(0.1),
                           child: Center(
                             child: Text(
-                              'Order Details',
+                              getTranslated(context, "order_details"),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -146,7 +148,7 @@ class Confirmation extends StatelessWidget {
                       height: MediaQuery.of(context).size.height*.02,
                     ),
                     Text(
-                      'Order'+" "+"#"+GlobalData.orderId.toString(),
+                      getTranslated(context, "order")+" "+"#"+GlobalData.orderId.toString(),
                       style: TextStyle(
                           color: Colors.black.withOpacity(0.5),
                           fontSize:
@@ -177,7 +179,7 @@ class Confirmation extends StatelessWidget {
                       splashColor: Colors.black.withOpacity(0.1),
                       child: Center(
                         child: Text(
-                          'Continue Shopping',
+                          getTranslated(context, "continue_shopping"),
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white),

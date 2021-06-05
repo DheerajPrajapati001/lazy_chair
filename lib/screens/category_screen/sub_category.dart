@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/localization/language_constants.dart';
 import 'package:lazy_chair/models/product_category.dart';
 import 'package:lazy_chair/screens/category_screen/sub_sub_category.dart';
 
@@ -57,7 +58,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
         centerTitle: true,
         automaticallyImplyLeading: true,
         title: Text(
-          "Sub Category",
+          getTranslated(context, "sub_category"),
           style: TextStyle(
               color: Colors.black,
               fontSize: MediaQuery.of(context).size.width * .045,
@@ -68,7 +69,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
       ),
       body: SafeArea(
         child: GlobalData.isLoading==true?Center(child: Text("Loading...")):category.isEmpty?
-        Center(child: Text("Empty Category List")):
+        Center(child: Text(getTranslated(context, "empty_category_list"))):
         CustomScrollView(
           slivers: <Widget>[
             /*SliverToBoxAdapter(

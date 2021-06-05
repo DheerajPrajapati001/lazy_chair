@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lazy_chair/localization/language_constants.dart';
 import 'package:lazy_chair/screens/home_screen/home_screen.dart';
 
 import '../global.dart';
@@ -17,7 +18,7 @@ class _SettingState extends State<Setting> {
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text(
-          "Settings",
+            getTranslated(context, 'settings'),
           style: TextStyle(
               color: Colors.black,
               fontSize: MediaQuery.of(context).size.width * .045,
@@ -74,7 +75,7 @@ class _SettingState extends State<Setting> {
 
                   DrawerItem(
                     icon: Icons.info_outline,
-                    title: 'About Us',
+                    title: getTranslated(context, 'about_us'),
                     click: (){
                       GlobalData.activePage=GlobalData.aboutUsPage;
                       Navigator.pushNamed(context, 'AboutUs');
@@ -83,7 +84,7 @@ class _SettingState extends State<Setting> {
                   ),
                   DrawerItem(
                     icon: Icons.policy,
-                    title: 'Terms & Conditions',
+                    title: getTranslated(context, "terms_conditions"),
                     click: (){
                       GlobalData.activePage=GlobalData.termsConditions;
                       Navigator.pushNamed(context, 'TermsConditions');
@@ -92,7 +93,7 @@ class _SettingState extends State<Setting> {
                   ),
                   DrawerItem(
                       icon: Icons.inventory,
-                      title: 'View Orders',
+                      title: getTranslated(context, "view_orders"),
                       click: (){
                         Navigator.pushNamed(context, 'ViewOrders');
 
@@ -101,7 +102,7 @@ class _SettingState extends State<Setting> {
                   ),
                   DrawerItem(
                     icon: Icons.shopping_cart,
-                    title: 'View Cart',
+                    title: getTranslated(context, "view_cart"),
                     click: (){
                       GlobalData.isAdded=true;
                       Navigator.pushNamed(context, 'MyCart');
@@ -109,28 +110,29 @@ class _SettingState extends State<Setting> {
                   ),
                   DrawerItem(
                     icon: Icons.favorite,
-                    title: 'My Wishlist',
+                    title: getTranslated(context, "my_wishList"),
                     click: (){
                       //Navigator.pushNamed(context, 'MyCart');
                     },
                   ),
                   DrawerItem(
                     icon: Icons.card_giftcard,
-                    title: 'My Coupons',
+                    title: getTranslated(context, "my_coupons"),
                     click: (){
                       Navigator.pushNamed(context, 'Coupons');
                     },
                   ),
                   DrawerItem(
                     icon: Icons.language,
-                    title: 'Change Language',
+                    title: getTranslated(context, "change_language"),
+
                     click: (){
-                      //Navigator.pushNamed(context, 'MyCart');
+                      Navigator.pushNamed(context, 'LanguageScreen');
                     },
                   ),
                   DrawerItem(
                     icon: Icons.exit_to_app_sharp,
-                    title: 'Sign Out',
+                    title: getTranslated(context, "sign_out"),
                     click: (){
                       LogoutFunction(context);
                     },

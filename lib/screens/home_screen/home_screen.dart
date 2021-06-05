@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:lazy_chair/chairs.dart';
+import 'package:lazy_chair/localization/language_constants.dart';
 import 'package:lazy_chair/models/products.dart';
 import 'package:lazy_chair/models/shipping_zone.dart';
 import 'package:lazy_chair/models/shipping_zone_method.dart';
@@ -220,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
           automaticallyImplyLeading: false,
           backgroundColor: GlobalData.orange,
           title: Text(
-           "Welcome "+GlobalData.niceName,
+            getTranslated(context, "welcome")+" "+GlobalData.niceName,
             style: TextStyle(
                 color: Colors.black,
                 fontSize: MediaQuery.of(context).size.width * .045,
@@ -421,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       //enabled: false,
                       decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Search',
+                          hintText: getTranslated(context, "search"),
                           suffixIcon: GestureDetector(
                               onTap:(){
                                 if(searchItems.text==""){
@@ -438,11 +439,6 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * .03,
               ),
-
-
-
-
-
 
               Expanded(
                 child: SingleChildScrollView(
@@ -547,7 +543,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       searchItems.text==""?SizedBox():Row(
                         children: [
                           Text(
-                            'Searched Products',
+                          getTranslated(context, "searched_products"),
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -567,7 +563,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       GlobalData.isLoading==true&&searchItems.text!=""?Center(child: Text("Loading...")):
                           searchItems.text==""?SizedBox():
-                      searchProducts.isEmpty?Text("Products not available"):
+                      searchProducts.isEmpty?Text(getTranslated(context, "products_unavailable"),):
                       Container(
                         height: 250,
                         child: ListView.builder(
@@ -598,7 +594,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           Text(
-                            'Featured Products',
+                            getTranslated(context, "featured_products"),
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -617,7 +613,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: MediaQuery.of(context).size.height * .04,
                       ),
                       GlobalData.isLoading==true && searchItems.text==""?Center(child: Text("Loading...")):
-                      featuredProducts.isEmpty?Text("No Featured Products"):
+                      featuredProducts.isEmpty?Text(getTranslated(context, "no_featured_products"),):
                       Container(
                         height: 250,
                         child: ListView.builder(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lazy_chair/config/config.dart';
+import 'package:lazy_chair/localization/language_constants.dart';
 import 'package:lazy_chair/models/product_category.dart';
 import 'package:lazy_chair/models/products.dart';
 import 'package:lazy_chair/screens/chair_details/chair_details.dart';
@@ -90,7 +91,7 @@ class _SubSubCategoryScreenState extends State<SubSubCategoryScreen> {
         centerTitle: true,
         automaticallyImplyLeading: true,
         title: Text(
-          category.isEmpty?"Product":"Sub Category",
+          category.isEmpty?getTranslated(context, "product"):getTranslated(context, "sub_category"),
           style: TextStyle(
               color: Colors.black,
               fontSize: MediaQuery.of(context).size.width * .045,

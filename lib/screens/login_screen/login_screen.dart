@@ -8,6 +8,8 @@ import 'package:lazy_chair/screens/login_screen/phone_login.dart';
 import 'package:lazy_chair/screens/signup_screen/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../global.dart';
+import 'package:lazy_chair/localization/language_constants.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -197,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           RichText(
                             text: TextSpan(
-                            text: "Don't have an account? ",
+                            text: getTranslated(context, "don't_have_an_account"),
                                 style: TextStyle(
                                     fontSize: 12,color: GlobalData.black
                                 ),
