@@ -32,12 +32,12 @@
  */
 
 class WooCart {
-  String currency;
-  int itemCount;
-  List<WooCartItems> items;
-  bool needsShipping;
-  String totalPrice;
-  int totalWeight;
+  String? currency;
+  int? itemCount;
+  List<WooCartItems>? items;
+  bool? needsShipping;
+  String? totalPrice;
+  int? totalWeight;
 
   WooCart(
       {this.currency,
@@ -51,9 +51,9 @@ class WooCart {
     currency = json['currency'];
     itemCount = json['item_count'];
     if (json['items'] != null) {
-      items = new List<WooCartItems>();
+      items = <WooCartItems>[];
       json['items'].forEach((v) {
-        items.add(new WooCartItems.fromJson(v));
+        items!.add(new WooCartItems.fromJson(v));
       });
     }
     needsShipping = json['needs_shipping'];
@@ -66,7 +66,7 @@ class WooCart {
     data['currency'] = this.currency;
     data['item_count'] = this.itemCount;
     if (this.items != null) {
-      data['items'] = this.items.map((v) => v.toJson()).toList();
+      data['items'] = this.items!.map((v) => v.toJson()).toList();
     }
     data['needs_shipping'] = this.needsShipping;
     data['total_price'] = this.totalPrice;
@@ -77,16 +77,16 @@ class WooCart {
 }
 
 class WooCartItems {
-  String key;
-  int id;
-  int quantity;
-  String name;
-  String sku;
-  String permalink;
-  List<WooCartImages> images;
-  String price;
-  String linePrice;
-  List<String> variation;
+  String? key;
+  int? id;
+  int? quantity;
+  String? name;
+  String? sku;
+  String? permalink;
+  List<WooCartImages>? images;
+  String? price;
+  String? linePrice;
+  List<String>? variation;
 
   WooCartItems(
       {this.key,
@@ -108,9 +108,9 @@ class WooCartItems {
     sku = json['sku'];
     permalink = json['permalink'];
     if (json['images'] != null) {
-      images = new List<WooCartImages>();
+      images =  <WooCartImages>[];
       json['images'].forEach((v) {
-        images.add(new WooCartImages.fromJson(v));
+        images!.add(new WooCartImages.fromJson(v));
       });
     }
     price = json['price'];
@@ -127,7 +127,7 @@ class WooCartItems {
     data['sku'] = this.sku;
     data['permalink'] = this.permalink;
     if (this.images != null) {
-      data['images'] = this.images.map((v) => v.toJson()).toList();
+      data['images'] = this.images!.map((v) => v.toJson()).toList();
     }
     data['price'] = this.price;
     data['line_price'] = this.linePrice;
@@ -137,13 +137,13 @@ class WooCartItems {
 }
 
 class WooCartImages {
-  String id;
-  String src;
-  String thumbnail;
-  String srcset;
-  String sizes;
-  String name;
-  String alt;
+  String? id;
+  String? src;
+  String? thumbnail;
+  String? srcset;
+  String? sizes;
+  String? name;
+  String? alt;
 
   WooCartImages(
       {this.id,

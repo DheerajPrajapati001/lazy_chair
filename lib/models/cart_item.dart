@@ -32,18 +32,18 @@
  */
 
 class WooCartItem {
-  String key;
-  int id;
-  int quantity;
-  int quantity_limit;
-  String name;
-  String sku;
-  String permalink;
-  List<WooCartItemImages> images;
-  Prices prices;
-  Total total;
-  String linePrice;
-  List<String> variation;
+  String? key;
+  int? id;
+  int? quantity;
+  int? quantity_limit;
+  String? name;
+  String? sku;
+  String? permalink;
+  List<WooCartItemImages>? images;
+  Prices? prices;
+  Total? total;
+  String? linePrice;
+  List<String>? variation;
 
   WooCartItem(
       {this.key,
@@ -68,9 +68,9 @@ class WooCartItem {
     permalink = json['permalink'];
     quantity_limit = json['quantity_limit'];
     if (json['images'] != null) {
-      images = new List<WooCartItemImages>();
+      images = <WooCartItemImages>[];
       json['images'].forEach((v) {
-        images.add(new WooCartItemImages.fromJson(v));
+        images!.add(new WooCartItemImages.fromJson(v));
       });
     }
     prices = json['prices'] != null ? new Prices.fromJson(json['prices']) : null;
@@ -90,10 +90,10 @@ class WooCartItem {
     data['quantity_limit'] = this.quantity_limit;
     data['permalink'] = this.permalink;
     if (this.images != null) {
-      data['images'] = this.images.map((v) => v.toJson()).toList();
+      data['images'] = this.images!.map((v) => v.toJson()).toList();
     }
     if (this.prices != null) {
-      data['prices'] = this.prices.toJson();
+      data['prices'] = this.prices!.toJson();
     }
     data['line_price'] = this.linePrice;
     data['variation'] = this.variation;
@@ -103,18 +103,18 @@ class WooCartItem {
 }
 
 class Prices {
-  String price;
-  String regularPrice;
-  String salePrice;
-  Null priceRange;
-  String currencyCode;
-  String currencySymbol;
-  int currencyMinorUnit;
-  String currencyDecimalSeparator;
-  String currencyThousandSeparator;
-  String currencyPrefix;
-  String currencySuffix;
-  RawPrices rawPrices;
+  String? price;
+  String? regularPrice;
+  String? salePrice;
+  Null? priceRange;
+  String? currencyCode;
+  String? currencySymbol;
+  int? currencyMinorUnit;
+  String? currencyDecimalSeparator;
+  String? currencyThousandSeparator;
+  String? currencyPrefix;
+  String? currencySuffix;
+  RawPrices? rawPrices;
 
   Prices({this.price, this.regularPrice, this.salePrice, this.priceRange, this.currencyCode, this.currencySymbol, this.currencyMinorUnit, this.currencyDecimalSeparator, this.currencyThousandSeparator, this.currencyPrefix, this.currencySuffix, this.rawPrices});
 
@@ -147,24 +147,24 @@ class Prices {
     data['currency_prefix'] = this.currencyPrefix;
     data['currency_suffix'] = this.currencySuffix;
     if (this.rawPrices != null) {
-      data['raw_prices'] = this.rawPrices.toJson();
+      data['raw_prices'] = this.rawPrices!.toJson();
     }
     return data;
   }
 }
 
 class Total {
-  String lineSubtotal;
-  String lineSubtotalTax;
-  String lineTotal;
-  String lineTotalTax;
-  String currencyCode;
-  String currencySymbol;
-  int currencyMinorUnit;
-  String currencyDecimalSeparator;
-  String currencyThousandSeparator;
-  String currencyPrefix;
-  String currencySuffix;
+  String? lineSubtotal;
+  String? lineSubtotalTax;
+  String? lineTotal;
+  String? lineTotalTax;
+  String? currencyCode;
+  String? currencySymbol;
+  int? currencyMinorUnit;
+  String? currencyDecimalSeparator;
+  String? currencyThousandSeparator;
+  String? currencyPrefix;
+  String? currencySuffix;
 
   Total({this.lineSubtotal, this.lineSubtotalTax, this.lineTotal, this.lineTotalTax, this.currencyCode, this.currencySymbol,
     this.currencyMinorUnit, this.currencyDecimalSeparator, this.currencyThousandSeparator, this.currencyPrefix,
@@ -204,10 +204,10 @@ class Total {
 
 
 class RawPrices {
-  int precision;
-  String price;
-  String regularPrice;
-  String salePrice;
+  int? precision;
+  String? price;
+  String? regularPrice;
+  String? salePrice;
 
   RawPrices({this.precision, this.price, this.regularPrice, this.salePrice});
 
@@ -229,13 +229,13 @@ class RawPrices {
 }
 
 class WooCartItemImages {
-  String id;
-  String src;
-  String thumbnail;
-  bool srcset;
-  String sizes;
-  String name;
-  String alt;
+  String? id;
+  String? src;
+  String? thumbnail;
+  bool? srcset;
+  String? sizes;
+  String? name;
+  String? alt;
 
   WooCartItemImages(
       {this.id,

@@ -18,26 +18,26 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.19.6 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  curved_navigation_bar: ^0.3.7
-  fluttertoast: 8.0.4
+  curved_navigation_bar:
+  fluttertoast:
   #woocommerce: ^0.9.7
-  http: ^0.13.3
-  shared_preferences: ^2.0.5
-  flutter_html: ^2.0.0
-  html: ^0.15.0
-  crypto: ^3.0.1
-  flutter_secure_storage: ^4.2.0
-  firebase_core: ^1.2.0
-  firebase_auth: ^1.2.0
-  flutter_country_picker: ^0.1.6
-  sms_autofill: ^2.0.0
-  url_launcher: ^6.0.4
-  carousel_slider: ^3.0.0
+  http:
+  shared_preferences:
+  flutter_html:
+  html:
+  crypto:
+  flutter_secure_storage:
+  firebase_core:
+  firebase_auth:
+  #flutter_country_picker: 0.1.6
+  sms_autofill:
+  url_launcher:
+  carousel_slider:
   flutter_localizations:
     sdk: flutter
 

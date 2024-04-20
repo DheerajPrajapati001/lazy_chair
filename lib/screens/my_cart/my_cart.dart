@@ -146,7 +146,7 @@ class _MyCartState extends State<MyCart> {
 
 
   Future deleteCartItems(
-      {@required String key,}) async {
+      {@required String? key,}) async {
 
     Map<String, dynamic> data = {
       'key':key,

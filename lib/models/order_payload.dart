@@ -32,21 +32,21 @@
  */
 
 class WooOrderPayload {
-  String paymentMethod;
-  String paymentMethodTitle;
-  bool setPaid;
-  String status;
-  String currency;
-  int customerId;
-  String customerNote;
-  int parentId;
-  List<WooOrderPayloadMetaData> metaData;
-  List<WooOrderPayloadFeeLines> feeLines;
-  List<WooOrderPayloadCouponLines> couponLines;
-  WooOrderPayloadBilling billing;
-  WooOrderPayloadShipping shipping;
-  List<LineItems> lineItems;
-  List<ShippingLines> shippingLines;
+  String? paymentMethod;
+  String? paymentMethodTitle;
+  bool? setPaid;
+  String? status;
+  String? currency;
+  int? customerId;
+  String? customerNote;
+  int? parentId;
+  List<WooOrderPayloadMetaData>? metaData;
+  List<WooOrderPayloadFeeLines>? feeLines;
+  List<WooOrderPayloadCouponLines>? couponLines;
+  WooOrderPayloadBilling? billing;
+  WooOrderPayloadShipping? shipping;
+  List<LineItems>? lineItems;
+  List<ShippingLines>? shippingLines;
 
   WooOrderPayload(
       {this.paymentMethod,
@@ -75,21 +75,21 @@ class WooOrderPayload {
     customerNote = json['customer_note'];
     parentId = json['parent_id'];
     if (json['meta_data'] != null) {
-      metaData = new List<WooOrderPayloadMetaData>();
+      metaData = <WooOrderPayloadMetaData>[];
       json['meta_data'].forEach((v) {
-        metaData.add(new WooOrderPayloadMetaData.fromJson(v));
+        metaData!.add(new WooOrderPayloadMetaData.fromJson(v));
       });
     }
     if (json['fee_lines'] != null) {
-      feeLines = new List<WooOrderPayloadFeeLines>();
+      feeLines = <WooOrderPayloadFeeLines>[];
       json['fee_lines'].forEach((v) {
-        feeLines.add(new WooOrderPayloadFeeLines.fromJson(v));
+        feeLines!.add(new WooOrderPayloadFeeLines.fromJson(v));
       });
     }
     if (json['coupon_lines'] != null) {
-      couponLines = new List<WooOrderPayloadCouponLines>();
+      couponLines = <WooOrderPayloadCouponLines>[];
       json['coupon_lines'].forEach((v) {
-        couponLines.add(new WooOrderPayloadCouponLines.fromJson(v));
+        couponLines!.add(new WooOrderPayloadCouponLines.fromJson(v));
       });
     }
     billing =
@@ -98,15 +98,15 @@ class WooOrderPayload {
         ? new WooOrderPayloadShipping.fromJson(json['shipping'])
         : null;
     if (json['line_items'] != null) {
-      lineItems = new List<LineItems>();
+      lineItems = <LineItems>[];
       json['line_items'].forEach((v) {
-        lineItems.add(new LineItems.fromJson(v));
+        lineItems!.add(new LineItems.fromJson(v));
       });
     }
     if (json['shipping_lines'] != null) {
-      shippingLines = new List<ShippingLines>();
+      shippingLines = <ShippingLines>[];
       json['shipping_lines'].forEach((v) {
-        shippingLines.add(new ShippingLines.fromJson(v));
+        shippingLines!.add(new ShippingLines.fromJson(v));
       });
     }
   }
@@ -122,26 +122,26 @@ class WooOrderPayload {
     data['customer_note'] = this.customerNote;
     data['parent_id'] = this.parentId;
     if (this.metaData != null) {
-      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+      data['meta_data'] = this.metaData!.map((v) => v.toJson()).toList();
     }
     if (this.feeLines != null) {
-      data['fee_lines'] = this.feeLines.map((v) => v.toJson()).toList();
+      data['fee_lines'] = this.feeLines!.map((v) => v.toJson()).toList();
     }
     if (this.couponLines != null) {
-      data['coupon_lines'] = this.couponLines.map((v) => v.toJson()).toList();
+      data['coupon_lines'] = this.couponLines!.map((v) => v.toJson()).toList();
     }
     if (this.billing != null) {
-      data['billing'] = this.billing.toJson();
+      data['billing'] = this.billing!.toJson();
     }
     if (this.shipping != null) {
-      data['shipping'] = this.shipping.toJson();
+      data['shipping'] = this.shipping!.toJson();
     }
     if (this.lineItems != null) {
-      data['line_items'] = this.lineItems.map((v) => v.toJson()).toList();
+      data['line_items'] = this.lineItems!.map((v) => v.toJson()).toList();
     }
     if (this.shippingLines != null) {
       data['shipping_lines'] =
-          this.shippingLines.map((v) => v.toJson()).toList();
+          this.shippingLines!.map((v) => v.toJson()).toList();
     }
     return data;
   }

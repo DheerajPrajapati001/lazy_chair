@@ -27,21 +27,21 @@ class ApplyCoupon {
     this.extensions,
   });
 
-  List<Coupon> coupons;
-  List<WelcomeShippingRate> shippingRates;
-  IngAddress shippingAddress;
-  IngAddress billingAddress;
-  List<WelcomeItem> items;
-  int itemsCount;
-  int itemsWeight;
-  bool needsPayment;
-  bool needsShipping;
-  bool hasCalculatedShipping;
-  List<dynamic> fees;
-  WelcomeTotals totals;
-  List<dynamic> errors;
-  List<String> paymentRequirements;
-  Extensions extensions;
+  List<Coupon>? coupons;
+  List<WelcomeShippingRate>? shippingRates;
+  IngAddress? shippingAddress;
+  IngAddress? billingAddress;
+  List<WelcomeItem>? items;
+  int? itemsCount;
+  int? itemsWeight;
+  bool? needsPayment;
+  bool? needsShipping;
+  bool? hasCalculatedShipping;
+  List<dynamic>? fees;
+  WelcomeTotals? totals;
+  List<dynamic>? errors;
+  List<String>? paymentRequirements;
+  Extensions? extensions;
 
   factory ApplyCoupon.fromJson(Map<String, dynamic> json) => ApplyCoupon(
     coupons: List<Coupon>.from(json["coupons"].map((x) => Coupon.fromJson(x))),
@@ -62,21 +62,21 @@ class ApplyCoupon {
   );
 
   Map<String, dynamic> toJson() => {
-    "coupons": List<dynamic>.from(coupons.map((x) => x.toJson())),
-    "shipping_rates": List<dynamic>.from(shippingRates.map((x) => x.toJson())),
-    "shipping_address": shippingAddress.toJson(),
-    "billing_address": billingAddress.toJson(),
-    "items": List<dynamic>.from(items.map((x) => x.toJson())),
+    "coupons": List<dynamic>.from(coupons!.map((x) => x.toJson())),
+    "shipping_rates": List<dynamic>.from(shippingRates!.map((x) => x.toJson())),
+    "shipping_address": shippingAddress!.toJson(),
+    "billing_address": billingAddress!.toJson(),
+    "items": List<dynamic>.from(items!.map((x) => x.toJson())),
     "items_count": itemsCount,
     "items_weight": itemsWeight,
     "needs_payment": needsPayment,
     "needs_shipping": needsShipping,
     "has_calculated_shipping": hasCalculatedShipping,
-    "fees": List<dynamic>.from(fees.map((x) => x)),
-    "totals": totals.toJson(),
-    "errors": List<dynamic>.from(errors.map((x) => x)),
-    "payment_requirements": List<dynamic>.from(paymentRequirements.map((x) => x)),
-    "extensions": extensions.toJson(),
+    "fees": List<dynamic>.from(fees!.map((x) => x)),
+    "totals": totals!.toJson(),
+    "errors": List<dynamic>.from(errors!.map((x) => x)),
+    "payment_requirements": List<dynamic>.from(paymentRequirements!.map((x) => x)),
+    "extensions": extensions!.toJson(),
   };
 }
 
@@ -95,17 +95,17 @@ class IngAddress {
     this.phone,
   });
 
-  String firstName;
-  String lastName;
-  String company;
-  String address1;
-  String address2;
-  String city;
-  String state;
-  String postcode;
-  String country;
-  String email;
-  String phone;
+  String? firstName;
+  String? lastName;
+  String? company;
+  String? address1;
+  String? address2;
+  String? city;
+  String? state;
+  String? postcode;
+  String? country;
+  String? email;
+  String? phone;
 
   factory IngAddress.fromJson(Map<String, dynamic> json) => IngAddress(
     firstName: json["first_name"],
@@ -143,9 +143,9 @@ class Coupon {
     this.totals,
   });
 
-  String code;
-  String discountType;
-  CouponTotals totals;
+  String? code;
+  String? discountType;
+  CouponTotals? totals;
 
   factory Coupon.fromJson(Map<String, dynamic> json) => Coupon(
     code: json["code"],
@@ -156,7 +156,7 @@ class Coupon {
   Map<String, dynamic> toJson() => {
     "code": code,
     "discount_type": discountType,
-    "totals": totals.toJson(),
+    "totals": totals!.toJson(),
   };
 }
 
@@ -173,15 +173,15 @@ class CouponTotals {
     this.currencySuffix,
   });
 
-  String totalDiscount;
-  String totalDiscountTax;
-  String currencyCode;
-  String currencySymbol;
-  int currencyMinorUnit;
-  String currencyDecimalSeparator;
-  String currencyThousandSeparator;
-  String currencyPrefix;
-  String currencySuffix;
+  String? totalDiscount;
+  String? totalDiscountTax;
+  String? currencyCode;
+  String? currencySymbol;
+  int? currencyMinorUnit;
+  String? currencyDecimalSeparator;
+  String? currencyThousandSeparator;
+  String? currencyPrefix;
+  String? currencySuffix;
 
   factory CouponTotals.fromJson(Map<String, dynamic> json) => CouponTotals(
     totalDiscount: json["total_discount"],
@@ -242,26 +242,26 @@ class WelcomeItem {
     this.extensions,
   });
 
-  String key;
-  int id;
-  int quantity;
-  int quantityLimit;
-  String name;
-  String shortDescription;
-  String description;
-  String sku;
+  String? key;
+  int? id;
+  int? quantity;
+  int? quantityLimit;
+  String? name;
+  String? shortDescription;
+  String? description;
+  String? sku;
   dynamic lowStockRemaining;
-  bool backordersAllowed;
-  bool showBackorderBadge;
-  bool soldIndividually;
-  String permalink;
-  List<Image> images;
-  List<dynamic> variation;
-  List<dynamic> itemData;
-  Prices prices;
-  ItemTotals totals;
-  String catalogVisibility;
-  Extensions extensions;
+  bool? backordersAllowed;
+  bool? showBackorderBadge;
+  bool? soldIndividually;
+  String? permalink;
+  List<Image>? images;
+  List<dynamic>? variation;
+  List<dynamic>? itemData;
+  Prices? prices;
+  ItemTotals? totals;
+  String? catalogVisibility;
+  Extensions? extensions;
 
   factory WelcomeItem.fromJson(Map<String, dynamic> json) => WelcomeItem(
     key: json["key"],
@@ -300,13 +300,13 @@ class WelcomeItem {
     "show_backorder_badge": showBackorderBadge,
     "sold_individually": soldIndividually,
     "permalink": permalink,
-    "images": List<dynamic>.from(images.map((x) => x.toJson())),
-    "variation": List<dynamic>.from(variation.map((x) => x)),
-    "item_data": List<dynamic>.from(itemData.map((x) => x)),
-    "prices": prices.toJson(),
-    "totals": totals.toJson(),
+    "images": List<dynamic>.from(images!.map((x) => x.toJson())),
+    "variation": List<dynamic>.from(variation!.map((x) => x)),
+    "item_data": List<dynamic>.from(itemData!.map((x) => x)),
+    "prices": prices!.toJson(),
+    "totals": totals!.toJson(),
     "catalog_visibility": catalogVisibility,
-    "extensions": extensions.toJson(),
+    "extensions": extensions!.toJson(),
   };
 }
 
@@ -321,13 +321,13 @@ class Image {
     this.alt,
   });
 
-  int id;
-  String src;
-  String thumbnail;
-  String srcset;
-  String sizes;
-  String name;
-  String alt;
+  int? id;
+  String? src;
+  String? thumbnail;
+  String? srcset;
+  String? sizes;
+  String? name;
+  String? alt;
 
   factory Image.fromJson(Map<String, dynamic> json) => Image(
     id: json["id"],
@@ -366,18 +366,18 @@ class Prices {
     this.rawPrices,
   });
 
-  String price;
-  String regularPrice;
-  String salePrice;
+  String? price;
+  String? regularPrice;
+  String? salePrice;
   dynamic priceRange;
-  String currencyCode;
-  String currencySymbol;
-  int currencyMinorUnit;
-  String currencyDecimalSeparator;
-  String currencyThousandSeparator;
-  String currencyPrefix;
-  String currencySuffix;
-  RawPrices rawPrices;
+  String? currencyCode;
+  String? currencySymbol;
+  int? currencyMinorUnit;
+  String? currencyDecimalSeparator;
+  String? currencyThousandSeparator;
+  String? currencyPrefix;
+  String? currencySuffix;
+  RawPrices? rawPrices;
 
   factory Prices.fromJson(Map<String, dynamic> json) => Prices(
     price: json["price"],
@@ -406,7 +406,7 @@ class Prices {
     "currency_thousand_separator": currencyThousandSeparator,
     "currency_prefix": currencyPrefix,
     "currency_suffix": currencySuffix,
-    "raw_prices": rawPrices.toJson(),
+    "raw_prices": rawPrices!.toJson(),
   };
 }
 
@@ -418,10 +418,10 @@ class RawPrices {
     this.salePrice,
   });
 
-  int precision;
-  String price;
-  String regularPrice;
-  String salePrice;
+  int? precision;
+  String? price;
+  String? regularPrice;
+  String? salePrice;
 
   factory RawPrices.fromJson(Map<String, dynamic> json) => RawPrices(
     precision: json["precision"],
@@ -453,17 +453,17 @@ class ItemTotals {
     this.currencySuffix,
   });
 
-  String lineSubtotal;
-  String lineSubtotalTax;
-  String lineTotal;
-  String lineTotalTax;
-  String currencyCode;
-  String currencySymbol;
-  int currencyMinorUnit;
-  String currencyDecimalSeparator;
-  String currencyThousandSeparator;
-  String currencyPrefix;
-  String currencySuffix;
+  String? lineSubtotal;
+  String? lineSubtotalTax;
+  String? lineTotal;
+  String? lineTotalTax;
+  String? currencyCode;
+  String? currencySymbol;
+  int? currencyMinorUnit;
+  String? currencyDecimalSeparator;
+  String? currencyThousandSeparator;
+  String? currencyPrefix;
+  String? currencySuffix;
 
   factory ItemTotals.fromJson(Map<String, dynamic> json) => ItemTotals(
     lineSubtotal: json["line_subtotal"],
@@ -503,11 +503,11 @@ class WelcomeShippingRate {
     this.shippingRates,
   });
 
-  int packageId;
-  String name;
-  Destination destination;
-  List<ShippingRateItem> items;
-  List<ShippingRateShippingRate> shippingRates;
+  int? packageId;
+  String? name;
+  Destination? destination;
+  List<ShippingRateItem>? items;
+  List<ShippingRateShippingRate>? shippingRates;
 
   factory WelcomeShippingRate.fromJson(Map<String, dynamic> json) => WelcomeShippingRate(
     packageId: json["package_id"],
@@ -520,9 +520,9 @@ class WelcomeShippingRate {
   Map<String, dynamic> toJson() => {
     "package_id": packageId,
     "name": name,
-    "destination": destination.toJson(),
-    "items": List<dynamic>.from(items.map((x) => x.toJson())),
-    "shipping_rates": List<dynamic>.from(shippingRates.map((x) => x.toJson())),
+    "destination": destination!.toJson(),
+    "items": List<dynamic>.from(items!.map((x) => x.toJson())),
+    "shipping_rates": List<dynamic>.from(shippingRates!.map((x) => x.toJson())),
   };
 }
 
@@ -536,12 +536,12 @@ class Destination {
     this.country,
   });
 
-  String address1;
-  String address2;
-  String city;
-  String state;
-  String postcode;
-  String country;
+  String? address1;
+  String? address2;
+  String? city;
+  String? state;
+  String? postcode;
+  String? country;
 
   factory Destination.fromJson(Map<String, dynamic> json) => Destination(
     address1: json["address_1"],
@@ -569,9 +569,9 @@ class ShippingRateItem {
     this.quantity,
   });
 
-  String key;
-  String name;
-  int quantity;
+  String? key;
+  String? name;
+  int? quantity;
 
   factory ShippingRateItem.fromJson(Map<String, dynamic> json) => ShippingRateItem(
     key: json["key"],
@@ -607,23 +607,23 @@ class ShippingRateShippingRate {
     this.currencySuffix,
   });
 
-  String rateId;
-  String name;
-  String description;
-  String deliveryTime;
-  String price;
-  String taxes;
-  int instanceId;
-  String methodId;
-  List<MetaDatum> metaData;
-  bool selected;
-  String currencyCode;
-  String currencySymbol;
-  int currencyMinorUnit;
-  String currencyDecimalSeparator;
-  String currencyThousandSeparator;
-  String currencyPrefix;
-  String currencySuffix;
+  String? rateId;
+  String? name;
+  String? description;
+  String? deliveryTime;
+  String? price;
+  String? taxes;
+  int? instanceId;
+  String? methodId;
+  List<MetaDatum>? metaData;
+  bool? selected;
+  String? currencyCode;
+  String? currencySymbol;
+  int? currencyMinorUnit;
+  String? currencyDecimalSeparator;
+  String? currencyThousandSeparator;
+  String? currencyPrefix;
+  String? currencySuffix;
 
   factory ShippingRateShippingRate.fromJson(Map<String, dynamic> json) => ShippingRateShippingRate(
     rateId: json["rate_id"],
@@ -654,7 +654,7 @@ class ShippingRateShippingRate {
     "taxes": taxes,
     "instance_id": instanceId,
     "method_id": methodId,
-    "meta_data": List<dynamic>.from(metaData.map((x) => x.toJson())),
+    "meta_data": List<dynamic>.from(metaData!.map((x) => x.toJson())),
     "selected": selected,
     "currency_code": currencyCode,
     "currency_symbol": currencySymbol,
@@ -672,8 +672,8 @@ class MetaDatum {
     this.value,
   });
 
-  String key;
-  String value;
+  String? key;
+  String? value;
 
   factory MetaDatum.fromJson(Map<String, dynamic> json) => MetaDatum(
     key: json["key"],
@@ -708,24 +708,24 @@ class WelcomeTotals {
     this.currencySuffix,
   });
 
-  String totalItems;
-  String totalItemsTax;
-  String totalFees;
-  String totalFeesTax;
-  String totalDiscount;
-  String totalDiscountTax;
-  String totalShipping;
-  String totalShippingTax;
-  String totalPrice;
-  String totalTax;
-  List<dynamic> taxLines;
-  String currencyCode;
-  String currencySymbol;
-  int currencyMinorUnit;
-  String currencyDecimalSeparator;
-  String currencyThousandSeparator;
-  String currencyPrefix;
-  String currencySuffix;
+  String? totalItems;
+  String? totalItemsTax;
+  String? totalFees;
+  String? totalFeesTax;
+  String? totalDiscount;
+  String? totalDiscountTax;
+  String? totalShipping;
+  String? totalShippingTax;
+  String? totalPrice;
+  String? totalTax;
+  List<dynamic>? taxLines;
+  String? currencyCode;
+  String? currencySymbol;
+  int? currencyMinorUnit;
+  String? currencyDecimalSeparator;
+  String? currencyThousandSeparator;
+  String? currencyPrefix;
+  String? currencySuffix;
 
   factory WelcomeTotals.fromJson(Map<String, dynamic> json) => WelcomeTotals(
     totalItems: json["total_items"],
@@ -759,7 +759,7 @@ class WelcomeTotals {
     "total_shipping_tax": totalShippingTax,
     "total_price": totalPrice,
     "total_tax": totalTax,
-    "tax_lines": List<dynamic>.from(taxLines.map((x) => x)),
+    "tax_lines": List<dynamic>.from(taxLines!.map((x) => x)),
     "currency_code": currencyCode,
     "currency_symbol": currencySymbol,
     "currency_minor_unit": currencyMinorUnit,

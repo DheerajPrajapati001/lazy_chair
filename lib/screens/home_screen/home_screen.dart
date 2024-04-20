@@ -39,10 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   SharedPreferences prefs;
 
-  Future Getnonse(String token) async {
+  Future Getnonse({String token}) async {
     prefs = await SharedPreferences.getInstance();
 
-    Map<String, String> requestHeaders = {'Authorization': "Bearer "+GlobalData.tokenId};
+    Map<String, String> requestHeaders = {'Authorization': "Bearer "+token};
     final response = await http.get(Uri.parse(Config.baseUrl+'wp-json/nonceapi/v1/get'),
         headers: requestHeaders);
 

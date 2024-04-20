@@ -32,49 +32,51 @@
  */
 
 import 'package:flutter/material.dart';
+
+import 'customer.dart';
 class WooOrder {
-  int id;
-  int parentId;
-  String number;
-  String orderKey;
-  String createdVia;
-  String version;
-  String status;
-  String currency;
-  String dateCreated;
-  String dateCreatedGmt;
-  String dateModified;
-  String dateModifiedGmt;
-  String discountTotal;
-  String discountTax;
-  String shippingTotal;
-  String shippingTax;
-  String cartTax;
-  String total;
-  String totalTax;
-  bool pricesIncludeTax;
-  int customerId;
-  String customerIpAddress;
-  String customerUserAgent;
-  String customerNote;
-  Billing billing;
-  Shipping shipping;
-  String paymentMethod;
-  String paymentMethodTitle;
-  String transactionId;
-  String datePaid;
-  String datePaidGmt;
-  String dateCompleted;
-  String dateCompletedGmt;
-  String cartHash;
-  List<MetaData> metaData;
-  List<LineItems> lineItems;
-  List<TaxLines> taxLines;
-  List<ShippingLines> shippingLines;
-  List<WooOrderFeeLine> feeLines;
-  List<WooOrderCouponLine> couponLines;
-  List<Refunds> refunds;
-  Links links;
+  int? id;
+  int? parentId;
+  String? number;
+  String? orderKey;
+  String? createdVia;
+  String? version;
+  String? status;
+  String? currency;
+  String? dateCreated;
+  String? dateCreatedGmt;
+  String? dateModified;
+  String? dateModifiedGmt;
+  String? discountTotal;
+  String? discountTax;
+  String? shippingTotal;
+  String? shippingTax;
+  String? cartTax;
+  String? total;
+  String? totalTax;
+  bool? pricesIncludeTax;
+  int? customerId;
+  String? customerIpAddress;
+  String? customerUserAgent;
+  String? customerNote;
+  Billing? billing;
+  Shipping? shipping;
+  String? paymentMethod;
+  String? paymentMethodTitle;
+  String? transactionId;
+  String? datePaid;
+  String? datePaidGmt;
+  String? dateCompleted;
+  String? dateCompletedGmt;
+  String? cartHash;
+  List<MetaData>? metaData;
+  List<LineItems>? lineItems;
+  List<TaxLines>? taxLines;
+  List<ShippingLines>? shippingLines;
+  List<WooOrderFeeLine>? feeLines;
+  List<WooOrderCouponLine>? couponLines;
+  List<Refunds>? refunds;
+  Links? links;
 
   WooOrder(
       {@required this.id,
@@ -161,40 +163,40 @@ class WooOrder {
     metaData =
         (json['meta_data'] as List).map((i) => MetaData.fromJson(i)).toList();
     if (json['line_items'] != null) {
-      lineItems = new List<LineItems>();
+      lineItems = <LineItems>[];
       json['line_items'].forEach((v) {
-        lineItems.add(new LineItems.fromJson(v));
+        lineItems!.add(new LineItems.fromJson(v));
       });
     }
     if (json['tax_lines'] != null) {
-      taxLines = new List<TaxLines>();
+      taxLines = <TaxLines>[];
       json['tax_lines'].forEach((v) {
-        taxLines.add(new TaxLines.fromJson(v));
+        taxLines!.add(new TaxLines.fromJson(v));
       });
     }
     if (json['shipping_lines'] != null) {
-      shippingLines = new List<ShippingLines>();
+      shippingLines = <ShippingLines>[];
       json['shipping_lines'].forEach((v) {
-        shippingLines.add(new ShippingLines.fromJson(v));
+        shippingLines!.add(new ShippingLines.fromJson(v));
       });
     }
     if (json['fee_lines'] != null) {
-      feeLines = new List<WooOrderFeeLine>();
+      feeLines = <WooOrderFeeLine>[];
       json['fee_lines'].forEach((v) {
-        feeLines.add(new WooOrderFeeLine.fromJson(v));
+        feeLines!.add(new WooOrderFeeLine.fromJson(v));
       });
     }
     if (json['coupon_lines'] != null) {
-      couponLines = new List<WooOrderCouponLine>();
+      couponLines = <WooOrderCouponLine>[];
       json['coupon_lines'].forEach((v) {
-        couponLines.add(new WooOrderCouponLine.fromJson(v));
+        couponLines!.add(new WooOrderCouponLine.fromJson(v));
       });
     }
 
     if (json['refunds'] != null) {
-      refunds = new List<Refunds>();
+      refunds = <Refunds>[];
       json['refunds'].forEach((v) {
-        refunds.add(new Refunds.fromJson(v));
+        refunds!.add(new Refunds.fromJson(v));
       });
     }
     links = json['_links'] != null ? new Links.fromJson(json['_links']) : null;
@@ -227,10 +229,10 @@ class WooOrder {
     data['customer_user_agent'] = this.customerUserAgent;
     data['customer_note'] = this.customerNote;
     if (this.billing != null) {
-      data['billing'] = this.billing.toJson();
+      data['billing'] = this.billing!.toJson();
     }
     if (this.shipping != null) {
-      data['shipping'] = this.shipping.toJson();
+      data['shipping'] = this.shipping!.toJson();
     }
     data['payment_method'] = this.paymentMethod;
     data['payment_method_title'] = this.paymentMethodTitle;
@@ -241,30 +243,30 @@ class WooOrder {
     data['date_completed_gmt'] = this.dateCompletedGmt;
     data['cart_hash'] = this.cartHash;
     if (this.metaData != null) {
-      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+      data['meta_data'] = this.metaData!.map((v) => v.toJson()).toList();
     }
     if (this.lineItems != null) {
-      data['line_items'] = this.lineItems.map((v) => v.toJson()).toList();
+      data['line_items'] = this.lineItems!.map((v) => v.toJson()).toList();
     }
     if (this.taxLines != null) {
-      data['tax_lines'] = this.taxLines.map((v) => v.toJson()).toList();
+      data['tax_lines'] = this.taxLines!.map((v) => v.toJson()).toList();
     }
     if (this.shippingLines != null) {
       data['shipping_lines'] =
-          this.shippingLines.map((v) => v.toJson()).toList();
+          this.shippingLines!.map((v) => v.toJson()).toList();
     }
     if (this.feeLines != null) {
-      data['fee_lines'] = this.feeLines.map((v) => v.toJson()).toList();
+      data['fee_lines'] = this.feeLines!.map((v) => v.toJson()).toList();
     }
     if (this.couponLines != null) {
-      data['coupon_lines'] = this.couponLines.map((v) => v.toJson()).toList();
+      data['coupon_lines'] = this.couponLines!.map((v) => v.toJson()).toList();
     }
 
     if (this.refunds != null) {
-      data['refunds'] = this.refunds.map((v) => v.toJson()).toList();
+      data['refunds'] = this.refunds!.map((v) => v.toJson()).toList();
     }
     if (this.links != null) {
-      data['_links'] = this.links.toJson();
+      data['_links'] = this.links!.toJson();
     }
     return data;
   }
@@ -272,11 +274,11 @@ class WooOrder {
 }
 
 class WooOrderCouponLine {
-  int id;
-  String code;
-  String discount;
-  String discountTax;
-  List<MetaData> metaData;
+  int? id;
+  String? code;
+  String? discount;
+  String? discountTax;
+  List<MetaData>? metaData;
 
   WooOrderCouponLine(
       this.id, this.code, this.discount, this.discountTax, this.metaData);
@@ -296,20 +298,20 @@ class WooOrderCouponLine {
     data['code'] = this.code;
     data['discount'] = this.discount;
     data['discount_tax'] = this.discountTax;
-    data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+    data['meta_data'] = this.metaData!.map((v) => v.toJson()).toList();
     return data;
   }
 }
 
 class WooOrderFeeLine {
-  int id;
-  String name;
-  String taxClass;
-  String taxStatus;
-  String total;
-  String totalTax;
-  List<FeeLineTax> taxes;
-  List<MetaData> metaData;
+  int? id;
+  String? name;
+  String? taxClass;
+  String? taxStatus;
+  String? total;
+  String? totalTax;
+  List<FeeLineTax>? taxes;
+  List<MetaData>? metaData;
 
   WooOrderFeeLine(this.id, this.name, this.taxClass, this.taxStatus, this.totalTax,
       this.taxes, this.metaData);
@@ -336,20 +338,20 @@ class WooOrderFeeLine {
     data['total'] = this.total;
     data['total_tax'] = this.totalTax;
     data['taxes'] = this.taxes;
-    data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+    data['meta_data'] = this.metaData!.map((v) => v.toJson()).toList();
     return data;
   }
 }
 
 class FeeLineTax {
-  int id;
-  String rateCode;
-  String rateId;
-  String label;
-  bool compound;
-  String taxTotal;
-  String shippingTaxTotal;
-  List<MetaData> metaData;
+  int? id;
+  String? rateCode;
+  String? rateId;
+  String? label;
+  bool? compound;
+  String? taxTotal;
+  String? shippingTaxTotal;
+  List<MetaData>? metaData;
 
   FeeLineTax(this.id, this.rateCode, this.rateId, this.label, this.compound,
       this.taxTotal, this.shippingTaxTotal, this.metaData);
@@ -383,17 +385,17 @@ class FeeLineTax {
 }
 
 class Billing {
-  String firstName;
-  String lastName;
-  String company;
-  String address1;
-  String address2;
-  String city;
-  String state;
-  String postcode;
-  String country;
-  String email;
-  String phone;
+  String? firstName;
+  String? lastName;
+  String? company;
+  String? address1;
+  String? address2;
+  String? city;
+  String? state;
+  String? postcode;
+  String? country;
+  String? email;
+  String? phone;
 
   Billing(
       {this.firstName,
@@ -440,15 +442,15 @@ class Billing {
 }
 
 class Shipping {
-  String firstName;
-  String lastName;
-  String company;
-  String address1;
-  String address2;
-  String city;
-  String state;
-  String postcode;
-  String country;
+  String? firstName;
+  String? lastName;
+  String? company;
+  String? address1;
+  String? address2;
+  String? city;
+  String? state;
+  String? postcode;
+  String? country;
 
   Shipping(
       {this.firstName,
@@ -489,9 +491,9 @@ class Shipping {
 }
 
 class MetaData {
-  int id;
-  String key;
-  String value;
+  int? id;
+  String? key;
+  String? value;
 
   MetaData({this.id, this.key, this.value});
 
@@ -511,9 +513,9 @@ class MetaData {
 }
 
 class Refunds {
-  int id;
-  String reason;
-  String total;
+  int? id;
+  String? reason;
+  String? total;
 
   Refunds({this.id, this.reason, this.total});
 
@@ -533,20 +535,20 @@ class Refunds {
 }
 
 class LineItems {
-  int id;
-  String name;
-  int productId;
-  int variationId;
-  int quantity;
-  String taxClass;
-  String subtotal;
-  String subtotalTax;
-  String total;
-  String totalTax;
-  List<Taxes> taxes;
-  List<MetaData> metaData;
-  String sku;
-  String price;
+  int? id;
+  String? name;
+  int? productId;
+  int? variationId;
+  int? quantity;
+  String? taxClass;
+  String? subtotal;
+  String? subtotalTax;
+  String? total;
+  String? totalTax;
+  List<Taxes>? taxes;
+  List<MetaData>? metaData;
+  String? sku;
+  String? price;
 
   LineItems(
       {this.id,
@@ -595,10 +597,10 @@ class LineItems {
     data['total'] = this.total;
     data['total_tax'] = this.totalTax;
     if (this.taxes != null) {
-      data['taxes'] = this.taxes.map((v) => v.toJson()).toList();
+      data['taxes'] = this.taxes!.map((v) => v.toJson()).toList();
     }
     if (this.metaData != null) {
-      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+      data['meta_data'] = this.metaData!.map((v) => v.toJson()).toList();
     }
     data['sku'] = this.sku;
     data['price'] = this.price;
@@ -608,9 +610,9 @@ class LineItems {
 }
 
 class Taxes {
-  int id;
-  String total;
-  String subtotal;
+  int? id;
+  String? total;
+  String? subtotal;
 
   Taxes({this.id, this.total, this.subtotal});
 
@@ -630,14 +632,14 @@ class Taxes {
 }
 
 class TaxLines {
-  int id;
-  String rateCode;
-  int rateId;
-  String label;
-  bool compound;
-  String taxTotal;
-  String shippingTaxTotal;
-  List<MetaData> metaData;
+  int? id;
+  String? rateCode;
+  int? rateId;
+  String? label;
+  bool? compound;
+  String? taxTotal;
+  String? shippingTaxTotal;
+  List<MetaData>? metaData;
 
   TaxLines(
       {this.id,
@@ -671,20 +673,20 @@ class TaxLines {
     data['tax_total'] = this.taxTotal;
     data['shipping_tax_total'] = this.shippingTaxTotal;
     if (this.metaData != null) {
-      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+      data['meta_data'] = this.metaData!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class ShippingLines {
-  int id;
-  String methodTitle;
-  String methodId;
-  String total;
-  String totalTax;
-  List<Taxes> taxes;
-  List<MetaData> metaData;
+  int? id;
+  String? methodTitle;
+  String? methodId;
+  String? total;
+  String? totalTax;
+  List<Taxes>? taxes;
+  List<MetaData>? metaData;
 
   ShippingLines(
       {this.id,
@@ -715,76 +717,13 @@ class ShippingLines {
     data['total'] = this.total;
     data['total_tax'] = this.totalTax;
     if (this.taxes != null) {
-      data['taxes'] = this.taxes.map((v) => v.toJson()).toList();
+      data['taxes'] = this.taxes!.map((v) => v.toJson()).toList();
     }
     if (this.metaData != null) {
-      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+      data['meta_data'] = this.metaData!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Links {
-  List<Self> self;
-  List<Collection> collection;
 
-  Links({this.self, this.collection});
-
-  Links.fromJson(Map<String, dynamic> json) {
-    if (json['self'] != null) {
-      self = new List<Self>();
-      json['self'].forEach((v) {
-        self.add(new Self.fromJson(v));
-      });
-    }
-    if (json['collection'] != null) {
-      collection = new List<Collection>();
-      json['collection'].forEach((v) {
-        collection.add(new Collection.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.self != null) {
-      data['self'] = this.self.map((v) => v.toJson()).toList();
-    }
-    if (this.collection != null) {
-      data['collection'] = this.collection.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Self {
-  String href;
-
-  Self({this.href});
-
-  Self.fromJson(Map<String, dynamic> json) {
-    href = json['href'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['href'] = this.href;
-    return data;
-  }
-}
-
-class Collection {
-  String href;
-
-  Collection({this.href});
-
-  Collection.fromJson(Map<String, dynamic> json) {
-    href = json['href'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['href'] = this.href;
-    return data;
-  }
-}

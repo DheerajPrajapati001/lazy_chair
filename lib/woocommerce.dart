@@ -132,15 +132,15 @@ class WooCommerce{
   bool isDebug;
 
   WooCommerce({
-    @required String baseUrl,
-    @required String consumerKey,
-    @required String consumerSecret,
+    @required String? baseUrl,
+    @required String? consumerKey,
+    @required String? consumerSecret,
     String apiPath = DEFAULT_WC_API_PATH,
     bool isDebug = false,
   }) {
-    this.baseUrl = baseUrl;
-    this.consumerKey = consumerKey;
-    this.consumerSecret = consumerSecret;
+    this.baseUrl = baseUrl!;
+    this.consumerKey = consumerKey!;
+    this.consumerSecret = consumerSecret!;
     this.apiPath = apiPath;
     this.isDebug = isDebug;
 
@@ -175,7 +175,7 @@ class WooCommerce{
   ///
   /// Associated endpoint : yourwebsite.com/wp-json/jwt-auth/v1/token
   Future authenticateViaJWT(
-      {String username, String password}) async {
+      {String? username, String? password}) async {
     final body = {
       'username': username,
       'password': password,
@@ -201,8 +201,8 @@ class WooCommerce{
 
   /// Authenticates the user via JWT and returns a WooCommerce customer object of the current logged in customer.
   loginCustomer({
-    @required String username,
-    @required String password,
+    @required String? username,
+    @required String? password,
   }) async{
     WooCustomer customer;
     try {

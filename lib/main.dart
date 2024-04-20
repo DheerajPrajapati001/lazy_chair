@@ -27,10 +27,10 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
   static void setLocale(BuildContext context, Locale newLocale) {
-    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
-    state.setLocale(newLocale);
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state!.setLocale(newLocale);
   }
 
   @override
@@ -39,7 +39,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  Locale _locale;
+  Locale? _locale;
   setLocale(Locale locale) {
     setState(() {
       _locale = locale;
@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
       return Container(
         child: Center(
           child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[800])),
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[800]!)),
         ),
       );
     }
@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
       ],
       localeResolutionCallback: (locale, supportedLocales) {
         for (var supportedLocale in supportedLocales) {
-          if (supportedLocale.languageCode == locale.languageCode &&
+          if (supportedLocale.languageCode == locale!.languageCode &&
               supportedLocale.countryCode == locale.countryCode) {
             return locale;
           }

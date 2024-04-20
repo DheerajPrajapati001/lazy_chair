@@ -32,23 +32,23 @@
  */
 
 class WooCustomer {
-  int id;
-  String dateCreated;
-  String dateCreatedGmt;
-  String dateModified;
-  String dateModifiedGmt;
-  String email;
-  String firstName;
-  String lastName;
-  String role;
-  String username;
-  String password;
-  Billing billing;
-  Shipping shipping;
-  bool isPayingCustomer;
-  String avatarUrl;
-  List<WooCustomerMetaData> metaData;
-  Links links;
+  int? id;
+  String? dateCreated;
+  String? dateCreatedGmt;
+  String? dateModified;
+  String? dateModifiedGmt;
+  String? email;
+  String? firstName;
+  String? lastName;
+  String? role;
+  String? username;
+  String? password;
+  Billing? billing;
+  Shipping? shipping;
+  bool? isPayingCustomer;
+  String? avatarUrl;
+  List<WooCustomerMetaData>? metaData;
+  Links? links;
 
   WooCustomer(
       {this.id,
@@ -111,18 +111,18 @@ class WooCustomer {
     data['username'] = this.username;
     data['password'] = this.password;
     if (this.billing != null) {
-      data['billing'] = this.billing.toJson();
+      data['billing'] = this.billing!.toJson();
     }
     if (this.shipping != null) {
-      data['shipping'] = this.shipping.toJson();
+      data['shipping'] = this.shipping!.toJson();
     }
     data['is_paying_customer'] = this.isPayingCustomer;
     data['avatar_url'] = this.avatarUrl;
     if (this.metaData != null) {
-      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
+      data['meta_data'] = this.metaData!.map((v) => v.toJson()).toList();
     }
     if (this.links != null) {
-      data['_links'] = this.links.toJson();
+      data['_links'] = this.links!.toJson();
     }
     return data;
   }
@@ -145,17 +145,17 @@ class WooCustomerMetaData {
 }
 
 class Billing {
-  String firstName;
-  String lastName;
-  String company;
-  String address1;
-  String address2;
-  String city;
-  String state;
-  String postcode;
-  String country;
-  String email;
-  String phone;
+  String? firstName;
+  String? lastName;
+  String? company;
+  String? address1;
+  String? address2;
+  String? city;
+  String? state;
+  String? postcode;
+  String? country;
+  String? email;
+  String? phone;
 
   Billing(
       {this.firstName,
@@ -202,15 +202,15 @@ class Billing {
 }
 
 class Shipping {
-  String firstName;
-  String lastName;
-  String company;
-  String address1;
-  String address2;
-  String city;
-  String state;
-  String postcode;
-  String country;
+  String? firstName;
+  String? lastName;
+  String? company;
+  String? address1;
+  String? address2;
+  String? city;
+  String? state;
+  String? postcode;
+  String? country;
 
   Shipping(
       {this.firstName,
@@ -251,22 +251,22 @@ class Shipping {
 }
 
 class Links {
-  List<Self> self;
-  List<Collection> collection;
+  List<Self>? self;
+  List<Collection>? collection;
 
   Links({this.self, this.collection});
 
   Links.fromJson(Map<String, dynamic> json) {
     if (json['self'] != null) {
-      self = new List<Self>();
+      self = <Self>[];
       json['self'].forEach((v) {
-        self.add(new Self.fromJson(v));
+        self!.add(new Self.fromJson(v));
       });
     }
     if (json['collection'] != null) {
-      collection = new List<Collection>();
+      collection = <Collection>[];
       json['collection'].forEach((v) {
-        collection.add(new Collection.fromJson(v));
+        collection!.add(new Collection.fromJson(v));
       });
     }
   }
@@ -274,17 +274,17 @@ class Links {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.self != null) {
-      data['self'] = this.self.map((v) => v.toJson()).toList();
+      data['self'] = this.self!.map((v) => v.toJson()).toList();
     }
     if (this.collection != null) {
-      data['collection'] = this.collection.map((v) => v.toJson()).toList();
+      data['collection'] = this.collection!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Self {
-  String href;
+  String? href;
 
   Self({this.href});
 
@@ -300,7 +300,7 @@ class Self {
 }
 
 class Collection {
-  String href;
+  String? href;
 
   Collection({this.href});
 

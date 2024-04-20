@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BannerData {
-  String id;
-  String pic;
+  String? id;
+  String? pic;
 
   BannerData({this.id, this.pic});
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CartProducts {
-  String productId;
-  String quantity;
-  String name;
+  String? productId;
+  String? quantity;
+  String? name;
   //String total;
 
   CartProducts({this.productId, this.quantity,this.name});

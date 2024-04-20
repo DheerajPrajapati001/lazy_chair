@@ -4,7 +4,7 @@ import 'package:lazy_chair/images.dart';
 
 class MyChair {
 
-  MyChair({this.images,this.bgColor, this.chairName, this.by, this.price, this.rating});
+  MyChair({required this.images,required this.bgColor, required this.chairName, required this.by, required this.price, required this.rating});
 
   final List<String> images;
   final int bgColor;
