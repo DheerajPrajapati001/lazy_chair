@@ -32,16 +32,16 @@
  */
 
 class WooProductCategory {
-  int id;
-  String name;
-  String slug;
-  int parent;
-  String description;
-  String display;
-  WooProductCategoryImage image;
-  int menuOrder;
-  int count;
-  WooProductCategoryLinks links;
+  int? id;
+  String? name;
+  String? slug;
+  int? parent;
+  String? description;
+  String? display;
+  WooProductCategoryImage? image;
+  int? menuOrder;
+  int? count;
+  WooProductCategoryLinks? links;
 
   WooProductCategory(
       {this.id,
@@ -77,12 +77,12 @@ class WooProductCategory {
     data['description'] = this.description;
     data['display'] = this.display;
     if (this.image != null) {
-      data['image'] = this.image.toJson();
+      data['image'] = this.image!.toJson();
     }
     data['menu_order'] = this.menuOrder;
     data['count'] = this.count;
     if (this.links != null) {
-      data['_links'] = this.links.toJson();
+      data['_links'] = this.links!.toJson();
     }
     return data;
   }
@@ -90,14 +90,14 @@ class WooProductCategory {
 }
 
 class WooProductCategoryImage {
-  int id;
-  String dateCreated;
-  String dateCreatedGmt;
-  String dateModified;
-  String dateModifiedGmt;
-  String src;
-  String name;
-  String alt;
+  int? id;
+  String? dateCreated;
+  String? dateCreatedGmt;
+  String? dateModified;
+  String? dateModifiedGmt;
+  String? src;
+  String? name;
+  String? alt;
 
   WooProductCategoryImage(
       {this.id,
@@ -135,22 +135,22 @@ class WooProductCategoryImage {
 }
 
 class WooProductCategoryLinks {
-  List<WooProductCategorySelf> self;
-  List<WooProductCategoryCollection> collection;
+  List<WooProductCategorySelf>? self;
+  List<WooProductCategoryCollection>? collection;
 
   WooProductCategoryLinks({this.self, this.collection});
 
   WooProductCategoryLinks.fromJson(Map<String, dynamic> json) {
     if (json['self'] != null) {
-      self = new List<WooProductCategorySelf>();
+      self = <WooProductCategorySelf>[];
       json['self'].forEach((v) {
-        self.add(new WooProductCategorySelf.fromJson(v));
+        self!.add(new WooProductCategorySelf.fromJson(v));
       });
     }
     if (json['collection'] != null) {
-      collection = new List<WooProductCategoryCollection>();
+      collection = <WooProductCategoryCollection>[];
       json['collection'].forEach((v) {
-        collection.add(new WooProductCategoryCollection.fromJson(v));
+        collection!.add(new WooProductCategoryCollection.fromJson(v));
       });
     }
   }
@@ -158,17 +158,17 @@ class WooProductCategoryLinks {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.self != null) {
-      data['self'] = this.self.map((v) => v.toJson()).toList();
+      data['self'] = this.self!.map((v) => v.toJson()).toList();
     }
     if (this.collection != null) {
-      data['collection'] = this.collection.map((v) => v.toJson()).toList();
+      data['collection'] = this.collection!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class WooProductCategorySelf {
-  String href;
+  String? href;
 
   WooProductCategorySelf({this.href});
 
@@ -184,7 +184,7 @@ class WooProductCategorySelf {
 }
 
 class WooProductCategoryCollection {
-  String href;
+  String? href;
 
   WooProductCategoryCollection({this.href});
 

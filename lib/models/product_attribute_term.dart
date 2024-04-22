@@ -31,14 +31,16 @@
 
  */
 
+import 'package:lazy_chair/models/product_attributes.dart';
+
 class WooProductAttributeTerm {
-  int id;
-  String name;
-  String slug;
-  String description;
-  int menuOrder;
-  int count;
-  WooProductAttributeTermLinks links;
+  int? id;
+  String? name;
+  String? slug;
+  String? description;
+  int? menuOrder;
+  int? count;
+  WooProductAttributeTermLinks? links;
 
   WooProductAttributeTerm(
       {this.id,
@@ -68,75 +70,10 @@ class WooProductAttributeTerm {
     data['menu_order'] = this.menuOrder;
     data['count'] = this.count;
     if (this.links != null) {
-      data['_links'] = this.links.toJson();
+      data['_links'] = this.links!.toJson();
     }
     return data;
   }
   @override toString() => this.toJson().toString();
 }
 
-class WooProductAttributeTermLinks {
-  List<WooProductAttributeTermSelf> self;
-  List<WooProductAttributeTermCollection> collection;
-
-  WooProductAttributeTermLinks({this.self, this.collection});
-
-  WooProductAttributeTermLinks.fromJson(Map<String, dynamic> json) {
-    if (json['self'] != null) {
-      self = new List<WooProductAttributeTermSelf>();
-      json['self'].forEach((v) {
-        self.add(new WooProductAttributeTermSelf.fromJson(v));
-      });
-    }
-    if (json['collection'] != null) {
-      collection = new List<WooProductAttributeTermCollection>();
-      json['collection'].forEach((v) {
-        collection.add(new WooProductAttributeTermCollection.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.self != null) {
-      data['self'] = this.self.map((v) => v.toJson()).toList();
-    }
-    if (this.collection != null) {
-      data['collection'] = this.collection.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-  @override toString() => this.toJson().toString();
-}
-
-class WooProductAttributeTermSelf {
-  String href;
-
-  WooProductAttributeTermSelf({this.href});
-
-  WooProductAttributeTermSelf.fromJson(Map<String, dynamic> json) {
-    href = json['href'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['href'] = this.href;
-    return data;
-  }
-}
-
-class WooProductAttributeTermCollection {
-  String href;
-
-  WooProductAttributeTermCollection({this.href});
-
-  WooProductAttributeTermCollection.fromJson(Map<String, dynamic> json) {
-    href = json['href'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['href'] = this.href;
-    return data;
-  }
-}

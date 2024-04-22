@@ -10,28 +10,28 @@ String welcomeToJson(AllPageData data) => json.encode(data.toJson());
 
 class AllPageData {
   AllPageData({
-    this.id,
-    this.date,
-    this.dateGmt,
-    this.guid,
-    this.modified,
-    this.modifiedGmt,
-    this.slug,
-    this.status,
-    this.type,
-    this.link,
-    this.title,
-    this.content,
-    this.excerpt,
-    this.author,
-    this.featuredMedia,
-    this.parent,
-    this.menuOrder,
-    this.commentStatus,
-    this.pingStatus,
-    this.template,
-    this.meta,
-    this.links,
+    required this.id,
+    required this.date,
+    required this.dateGmt,
+    required this.guid,
+    required this.modified,
+    required this.modifiedGmt,
+    required this.slug,
+    required this.status,
+    required this.type,
+    required this.link,
+    required this.title,
+    required this.content,
+    required this.excerpt,
+    required this.author,
+    required this.featuredMedia,
+    required this.parent,
+    required this.menuOrder,
+    required this.commentStatus,
+    required this.pingStatus,
+    required this.template,
+    required this.meta,
+    required this.links,
   });
 
   int id;
@@ -110,8 +110,8 @@ class AllPageData {
 
 class Content {
   Content({
-    this.rendered,
-    this.protected,
+    required this.rendered,
+    required this.protected,
   });
 
   String rendered;
@@ -130,7 +130,7 @@ class Content {
 
 class Guid {
   Guid({
-    this.rendered,
+    required this.rendered,
   });
 
   String rendered;
@@ -146,15 +146,15 @@ class Guid {
 
 class Links {
   Links({
-    this.self,
-    this.collection,
-    this.about,
-    this.author,
-    this.replies,
-    this.versionHistory,
-    this.predecessorVersion,
-    this.wpAttachment,
-    this.curies,
+    required this.self,
+    required this.collection,
+    required this.about,
+    required this.author,
+    required this.replies,
+    required this.versionHistory,
+    required this.predecessorVersion,
+    required this.wpAttachment,
+    required this.curies,
   });
 
   List<About> self;
@@ -194,7 +194,7 @@ class Links {
 
 class About {
   About({
-    this.href,
+    required this.href,
   });
 
   String href;
@@ -210,8 +210,8 @@ class About {
 
 class Author {
   Author({
-    this.embeddable,
-    this.href,
+    required this.embeddable,
+    required this.href,
   });
 
   bool embeddable;
@@ -230,9 +230,9 @@ class Author {
 
 class Cury {
   Cury({
-    this.name,
-    this.href,
-    this.templated,
+    required this.name,
+    required this.href,
+    required this.templated,
   });
 
   String name;
@@ -254,8 +254,8 @@ class Cury {
 
 class PredecessorVersion {
   PredecessorVersion({
-    this.id,
-    this.href,
+    required this.id,
+    required this.href,
   });
 
   int id;
@@ -274,8 +274,8 @@ class PredecessorVersion {
 
 class VersionHistory {
   VersionHistory({
-    this.count,
-    this.href,
+    required this.count,
+    required this.href,
   });
 
   int count;
@@ -297,7 +297,7 @@ class Meta {
     this.omDisableAllCampaigns,
   });
 
-  bool omDisableAllCampaigns;
+  bool? omDisableAllCampaigns;
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(
     omDisableAllCampaigns: json["om_disable_all_campaigns"],
