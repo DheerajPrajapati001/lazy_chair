@@ -658,7 +658,7 @@ class _MyCartState extends State<MyCart> {
                       Row(
                         children: [
                           Text(
-                            getTranslated(context, "shipping_fee"),
+                            getTranslated(context, "shipping_fee")!,
                             style: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
                                 fontSize:

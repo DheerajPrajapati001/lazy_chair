@@ -91,7 +91,7 @@ class _SubSubCategoryScreenState extends State<SubSubCategoryScreen> {
         centerTitle: true,
         automaticallyImplyLeading: true,
         title: Text(
-          category.isEmpty?getTranslated(context, "product"):getTranslated(context, "sub_category"),
+          category.isEmpty?getTranslated(context, "product")!:getTranslated(context, "sub_category")!,
           style: TextStyle(
               color: Colors.black,
               fontSize: MediaQuery.of(context).size.width * .045,
@@ -167,7 +167,7 @@ class _SubSubCategoryScreenState extends State<SubSubCategoryScreen> {
                                 ),
                                 Expanded(
                                   flex:2,
-                                    child: Text("\$"+product.price, style: Theme.of(context).textTheme.subtitle,)),
+                                    child: Text("\$"+product.price, style: Theme.of(context).textTheme.titleMedium,)),
 
                               ],
                             ),
@@ -261,7 +261,7 @@ class _SubSubCategoryScreenState extends State<SubSubCategoryScreen> {
                               //child: Text(category[index].name?? 'Loading...', style: Theme.of(context).textTheme.headline6.apply(color: Colors.blueGrey),),
                               radius: 60,
                               backgroundImage: category[index].image==null?NetworkImage("https://beta.saurabhenterprise.com/wp-content/uploads/2021/04/2.png"):
-                              NetworkImage(category[index].image.src),
+                              NetworkImage(category[index].image!.src!),
 
                             ),
                             /*Container(
@@ -277,7 +277,7 @@ class _SubSubCategoryScreenState extends State<SubSubCategoryScreen> {
                               ),
                               //child: Image.network(product.images[0].src, fit: BoxFit.cover,),
                             ),*/
-                            Text(category[index].name?? 'Loading...', style: Theme.of(context).textTheme.title.apply(color: Colors.blueGrey),),
+                            Text(category[index].name?? 'Loading...', style: Theme.of(context).textTheme.titleLarge!.apply(color: Colors.blueGrey),),
                             //Text("\$ 55", style: Theme.of(context).textTheme.subtitle,)
                           ],
                         ),

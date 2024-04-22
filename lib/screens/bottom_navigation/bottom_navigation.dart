@@ -77,8 +77,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
 }
 
 class MyRoute {
-  final IconData iconData;
-  final Widget page;
+  final IconData? iconData;
+  final Widget? page;
 
   MyRoute({this.iconData, this.page});
 }

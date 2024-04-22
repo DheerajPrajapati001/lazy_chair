@@ -37,19 +37,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
-  Future Getnonse({String token}) async {
+  Future Getnonse(String tokenId, {String? token}) async {
     prefs = await SharedPreferences.getInstance();
 
-    Map<String, String> requestHeaders = {'Authorization': "Bearer "+token};
+    Map<String, String> requestHeaders = {'Authorization': "Bearer "+token!};
     final response = await http.get(Uri.parse(Config.baseUrl+'wp-json/nonceapi/v1/get'),
         headers: requestHeaders);
 
     var j = json.decode(response.body);
     print(j);
     print(j['nonce']);
-    prefs.setString("NonceKey", j['nonce']);
+    prefs!.setString("NonceKey", j['nonce']);
     GlobalData.nonceKey=j['nonce'];
     print(GlobalData.nonceKey);
 
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
     for(int i=0; i<shippingZone.length; i++)
       {
         GlobalData.shippingZoneId=shippingZone[i].id.toString();
-        GlobalData.shippingZoneName = shippingZone[i].name;
+        GlobalData.shippingZoneName = shippingZone[i].name!;
         print("Shipping Zone Id: "+GlobalData.shippingZoneId);
         print("Shipping Zone Name: "+GlobalData.shippingZoneName);
       }
@@ -106,9 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
     GlobalData.isLoading=false;
     for(int i=0; i<shippingZoneMethodId.length; i++)
     {
-      GlobalData.shippingMethodId=shippingZoneMethodId[i].methodId;
-      GlobalData.shippingMethodTitle=shippingZoneMethodId[i].methodTitle;
-      GlobalData.shippingMethodTotalPrice=shippingZoneMethodId[i].settings.cost.value.toString();
+      GlobalData.shippingMethodId=shippingZoneMethodId[i].methodId!;
+      GlobalData.shippingMethodTitle=shippingZoneMethodId[i].methodTitle!;
+      GlobalData.shippingMethodTotalPrice=shippingZoneMethodId[i].settings!.cost!.value.toString();
 
 
       print("Shipping Method Id: "+GlobalData.shippingMethodId);
@@ -175,8 +175,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
         for(var p in jsonStr){
           var prod = BannerData.fromJson(p);
-          print('product gotten here : '+prod.id);
-          GlobalData.bannerUrl=prod.pic;
+          print('product gotten here : '+prod.id!);
+          GlobalData.bannerUrl=prod.pic!;
           print("Banner Url"+GlobalData.bannerUrl);
           banner.add(prod);
         }
@@ -221,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
           automaticallyImplyLeading: false,
           backgroundColor: GlobalData.orange,
           title: Text(
-            getTranslated(context, "welcome")+" "+GlobalData.niceName,
+            getTranslated(context, "welcome")!+" "+GlobalData.niceName,
             style: TextStyle(
                 color: Colors.black,
                 fontSize: MediaQuery.of(context).size.width * .045,
@@ -477,7 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8.0),
                                 image: DecorationImage(
-                                  image: NetworkImage(banner[itemIndex].pic),
+                                  image: NetworkImage(banner[itemIndex].pic!),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -543,7 +543,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       searchItems.text==""?SizedBox():Row(
                         children: [
                           Text(
-                          getTranslated(context, "searched_products"),
+                          getTranslated(context, "searched_products")!,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -563,7 +563,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       GlobalData.isLoading==true&&searchItems.text!=""?Center(child: Text("Loading...")):
                           searchItems.text==""?SizedBox():
-                      searchProducts.isEmpty?Text(getTranslated(context, "products_unavailable"),):
+                      searchProducts.isEmpty?Text(getTranslated(context, "products_unavailable")!,):
                       Container(
                         height: 250,
                         child: ListView.builder(
@@ -594,7 +594,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           Text(
-                            getTranslated(context, "featured_products"),
+                            getTranslated(context, "featured_products")!,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -613,7 +613,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: MediaQuery.of(context).size.height * .04,
                       ),
                       GlobalData.isLoading==true && searchItems.text==""?Center(child: Text("Loading...")):
-                      featuredProducts.isEmpty?Text(getTranslated(context, "no_featured_products"),):
+                      featuredProducts.isEmpty?Text(getTranslated(context, "no_featured_products")!,):
                       Container(
                         height: 250,
                         child: ListView.builder(
@@ -652,10 +652,10 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class ChairItem extends StatelessWidget {
-  final WooProduct products;
-  final VoidCallback onTap;
+  final WooProduct? products;
+  final VoidCallback? onTap;
 
-  const ChairItem({Key key, this.products, this.onTap}) : super(key: key);
+  const ChairItem({Key? key, this.products, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -686,14 +686,14 @@ class ChairItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.network(
-                        products.images==null?"https://ronakfabricatorworks.com/wp-content/uploads/2021/02/download.jpg":products.images[0].src,
+                        products!.images==null?"https://ronakfabricatorworks.com/wp-content/uploads/2021/02/download.jpg":products!.images[0].src,
                         height: MediaQuery.of(context).size.height*.15,
                       ),
                     ],
                   ),
                   Spacer(),
                   Text(
-                    products.name,
+                    products!.name,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: MediaQuery.of(context).size.height * .025),
@@ -717,13 +717,13 @@ class ChairItem extends StatelessWidget {
                         color: GlobalData.orange,
                       ),
                       Text(
-                        products.averageRating,
+                        products!.averageRating,
                         style: TextStyle(
                             fontSize: MediaQuery.of(context).size.height * .02),
                       ),
                       Spacer(),
                       Text(
-                        "\$"+products.price,
+                        "\$"+products!.price,
                         style: TextStyle(
                             fontSize: MediaQuery.of(context).size.height * .03,
                             fontWeight: FontWeight.bold),
@@ -747,11 +747,11 @@ class ChairItem extends StatelessWidget {
 
 class DrawerItem extends StatelessWidget {
 
-  final String title;
-  final IconData icon;
-  final VoidCallback click;
+  final String? title;
+  final IconData? icon;
+  final VoidCallback? click;
 
-  const DrawerItem({Key key, this.title, this.icon,this.click}) : super(key: key);
+  const DrawerItem({Key? key, this.title, this.icon,this.click}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -766,7 +766,7 @@ class DrawerItem extends StatelessWidget {
                 SizedBox(
                   width: MediaQuery.of(context).size.width*.04,
                 ),
-                Text(title,style: TextStyle(
+                Text(title!,style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16
                 ),)

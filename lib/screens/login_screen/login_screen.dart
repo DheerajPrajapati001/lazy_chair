@@ -24,21 +24,21 @@ class _LoginScreenState extends State<LoginScreen> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
   bool _obscureText = true;
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
 
   void _submit() {
-    final isValid = _formKey.currentState.validate();
+    final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
     login();
-    _formKey.currentState.save();
+    _formKey.currentState!.save();
   }
 
 
   login() async {
-    BuildContext loadContext;
+    BuildContext? loadContext;
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -66,25 +66,25 @@ class _LoginScreenState extends State<LoginScreen> {
       if (status['success']==false) {
         print("Not Allowed");
         print("Not Allowed");
-        Navigator.pop(loadContext);
+        Navigator.pop(loadContext!);
 
         Show_toast_Now("Invalid Username or Password", Colors.red);
 
       }
       else
         {
-          Navigator.pop(loadContext);
+          Navigator.pop(loadContext!);
           //saving(context);
 
         GlobalData.userId= status['data']['id'];
         print(status['data']['id']);
         print(GlobalData.userId);
-        prefs.setInt("Id", GlobalData.userId);
-        prefs.setString("TokenId", status['data']['token']);
-        prefs.setString("Email", status['data']['email']);
-        prefs.setString("NiceName", status['data']['nicename']);
-        prefs.setString("FirstName", status['data']['firstName']);
-        prefs.setString("LastName", status['data']['lastName']);
+        prefs!.setInt("Id", GlobalData.userId);
+        prefs!.setString("TokenId", status['data']['token']);
+        prefs!.setString("Email", status['data']['email']);
+        prefs!.setString("NiceName", status['data']['nicename']);
+        prefs!.setString("FirstName", status['data']['firstName']);
+        prefs!.setString("LastName", status['data']['lastName']);
 
 
         GlobalData.tokenId=status['data']['token'];

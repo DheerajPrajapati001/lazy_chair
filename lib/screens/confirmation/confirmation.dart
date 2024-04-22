@@ -15,7 +15,7 @@ class Confirmation extends StatelessWidget {
           centerTitle: true,
           automaticallyImplyLeading: false,
           title: Text(
-            getTranslated(context,"confirmation"),
+            getTranslated(context,"confirmation")!,
             style: TextStyle(
                 color: Colors.black,
                 fontSize: MediaQuery.of(context).size.width * .045,
@@ -50,7 +50,7 @@ class Confirmation extends StatelessWidget {
                       SizedBox(
                         height: MediaQuery.of(context).size.height*.03,
                       ),
-                      Text(getTranslated(context,"hey")+" "+GlobalData.niceName+'\n'+getTranslated(context,"thanks_for_purchase"),textAlign: TextAlign.center,style: TextStyle(
+                      Text(getTranslated(context,"hey")!+" "+GlobalData.niceName+'\n'+getTranslated(context,"thanks_for_purchase")!,textAlign: TextAlign.center,style: TextStyle(
                         fontSize: MediaQuery.of(context).size.height*.025
                       ),),
                     ],
@@ -71,7 +71,7 @@ class Confirmation extends StatelessWidget {
                       height: MediaQuery.of(context).size.height*.01,
                     ),
                     CustomRow(
-                      text: getTranslated(context, "subtotal"),
+                      text: getTranslated(context, "subtotal")!,
                       price: GlobalData.totalPrice,
                     ),
                     /*CustomRow(
@@ -79,7 +79,7 @@ class Confirmation extends StatelessWidget {
                       price: '5.50',
                     ),*/
                     CustomRow(
-                      text: getTranslated(context, "shipping_charge"),
+                      text: getTranslated(context, "shipping_charge")!,
                       price: GlobalData.shippingMethodTotalPrice,
                     ),
                     SizedBox(
@@ -94,7 +94,7 @@ class Confirmation extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          getTranslated(context, "total"),
+                          getTranslated(context, "total")!,
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class Confirmation extends StatelessWidget {
                           splashColor: Colors.black.withOpacity(0.1),
                           child: Center(
                             child: Text(
-                              getTranslated(context, "order_details"),
+                              getTranslated(context, "order_details")!,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -148,7 +148,7 @@ class Confirmation extends StatelessWidget {
                       height: MediaQuery.of(context).size.height*.02,
                     ),
                     Text(
-                      getTranslated(context, "order")+" "+"#"+GlobalData.orderId.toString(),
+                      getTranslated(context, "order")!+" "+"#"+GlobalData.orderId.toString(),
                       style: TextStyle(
                           color: Colors.black.withOpacity(0.5),
                           fontSize:
@@ -179,7 +179,7 @@ class Confirmation extends StatelessWidget {
                       splashColor: Colors.black.withOpacity(0.1),
                       child: Center(
                         child: Text(
-                          getTranslated(context, "continue_shopping"),
+                          getTranslated(context, "continue_shopping")!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
@@ -201,10 +201,10 @@ class Confirmation extends StatelessWidget {
 
 class CustomRow extends StatelessWidget {
 
-  final String text;
-  final String price;
+  final String? text;
+  final String? price;
 
-  const CustomRow({Key key, this.text, this.price}) : super(key: key);
+  const CustomRow({Key? key, this.text, this.price}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +213,7 @@ class CustomRow extends StatelessWidget {
         Row(
           children: [
             Text(
-              text,
+              text!,
               style: TextStyle(
                   color: Colors.black.withOpacity(0.5),
                   fontSize:
@@ -221,7 +221,7 @@ class CustomRow extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              '\$'+price,
+              '\$'+price!,
               style: TextStyle(
                   color: Colors.black,
                   fontSize:

@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_country_picker/country.dart';
-import 'package:flutter_country_picker/flutter_country_picker.dart';
-import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
+//import 'package:flutter_country_picker/country.dart';
+//import 'package:lazy_chair/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:lazy_chair/screens/global.dart';
 import 'package:lazy_chair/screens/signup_screen/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sms_autofill/sms_autofill.dart';
+import '../bottom_navigation/bottom_navigation.dart';
 import '../global.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({Key key}) : super(key: key);
+  const OtpScreen({Key? key}) : super(key: key);
 
   @override
   _OtpScreenState createState() => _OtpScreenState();
@@ -26,9 +26,9 @@ class _OtpScreenState extends State<OtpScreen> {
   //authStatus="";
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _smsController = TextEditingController();
-  String _verificationId;
+  String? _verificationId;
   final SmsAutoFill _autoFill = SmsAutoFill();
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
   /*void showSnackbar(String message) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
@@ -43,14 +43,14 @@ class _OtpScreenState extends State<OtpScreen> {
   var _formKey = GlobalKey<FormState>();
 
   void _submit() {
-    final isValid = _formKey.currentState.validate();
+    final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
     signInWithPhoneNumber();
-    _formKey.currentState.save();
+    _formKey.currentState!.save();
   }
-  int resendToken;
+  int? resendToken;
 
   sendOtp() async {
     try {
@@ -60,7 +60,7 @@ class _OtpScreenState extends State<OtpScreen> {
         timeout: const Duration(seconds: 15),
         verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
           await _auth.signInWithCredential(phoneAuthCredential);
-          print("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+          print("Phone number automatically verified and user signed in: ${_auth.currentUser!.uid}");
           //showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
         },
         verificationFailed: (FirebaseAuthException authException) {
@@ -71,12 +71,12 @@ class _OtpScreenState extends State<OtpScreen> {
           print('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
           //showSnackbar('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
         },
-        codeSent: (String verificationId, int forceResendingToken) async {
+        codeSent: (String? verificationId, int? forceResendingToken) async {
           resendToken = forceResendingToken;
           String smsCode = _smsController.text;
 
           // Create a PhoneAuthCredential with the code
-          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId!, smsCode: smsCode);
 
           // Sign the user in (or link) with the credential
           await _auth.signInWithCredential(credential);
@@ -102,7 +102,7 @@ class _OtpScreenState extends State<OtpScreen> {
           timeout: const Duration(seconds: 15),
           verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
             await _auth.signInWithCredential(phoneAuthCredential);
-            print("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+            print("Phone number automatically verified and user signed in: ${_auth.currentUser!.uid}");
             //showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
           },
         verificationFailed: (FirebaseAuthException authException) {
@@ -114,11 +114,11 @@ class _OtpScreenState extends State<OtpScreen> {
           print('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
           //showSnackbar('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
         },
-        codeSent: (String verificationId, int forceResendingToken) async {
+        codeSent: (String? verificationId, int? forceResendingToken) async {
           String smsCode = _smsController.text;
 
           // Create a PhoneAuthCredential with the code
-          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId!, smsCode: smsCode);
 
           // Sign the user in (or link) with the credential
           await _auth.signInWithCredential(credential);
@@ -156,11 +156,11 @@ class _OtpScreenState extends State<OtpScreen> {
         });
     try {
       final AuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: _verificationId,
+        verificationId: _verificationId!,
         smsCode: _smsController.text,
       );
 
-      final User user = (await _auth.signInWithCredential(credential)).user;
+      final User? user = (await _auth.signInWithCredential(credential)).user;
       prefs = await SharedPreferences.getInstance();
 
         await http.post(Uri.parse("https://beta.saurabhenterprise.com/wp-json/jwt-auth/v1/token"),
@@ -188,12 +188,12 @@ class _OtpScreenState extends State<OtpScreen> {
             GlobalData.userId= status['data']['id'];
             print(status['data']['id']);
             print(GlobalData.userId);
-            prefs.setInt("Id", GlobalData.userId);
-            prefs.setString("TokenId", status['data']['token']);
-            prefs.setString("Email", status['data']['email']);
-            prefs.setString("NiceName", status['data']['nicename']);
-            prefs.setString("FirstName", status['data']['firstName']);
-            prefs.setString("LastName", status['data']['lastName']);
+            prefs!.setInt("Id", GlobalData.userId);
+            prefs!.setString("TokenId", status['data']['token']);
+            prefs!.setString("Email", status['data']['email']);
+            prefs!.setString("NiceName", status['data']['nicename']);
+            prefs!.setString("FirstName", status['data']['firstName']);
+            prefs!.setString("LastName", status['data']['lastName']);
 
 
             GlobalData.tokenId=status['data']['token'];
@@ -215,7 +215,7 @@ class _OtpScreenState extends State<OtpScreen> {
         });
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavBar()));
                   Show_toast_Now("Login Successfully", Colors.green);
-      print("Successfully signed in UID: ${user.uid}");
+      print("Successfully signed in UID: ${user!.uid}");
                   //showSnackbar("Successfully signed in UID: ${user.uid}");
     } catch (e) {
       Show_toast_Now(e.toString(),Colors.red);
@@ -325,7 +325,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
 
 class PhoneLoginScreen extends StatefulWidget {
-  const PhoneLoginScreen({Key key}) : super(key: key);
+  const PhoneLoginScreen({Key? key}) : super(key: key);
 
   @override
   _PhoneLoginScreenState createState() => _PhoneLoginScreenState();
@@ -337,21 +337,21 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
   bool _obscureText = true;
-  Country countryCode = Country.MY;
+  //Country countryCode = Country.MY;
 
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
   void _submit() {
-    final isValid = _formKey.currentState.validate();
+    final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
     phoneLogin();
-    _formKey.currentState.save();
+    //_formKey.currentState.save();
   }
 
 
   phoneLogin() async {
-    BuildContext loadContext;
+    BuildContext? loadContext;
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -368,8 +368,9 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
         });
     prefs = await SharedPreferences.getInstance();
     Map data = {
+      "phone_no": "+"+"91"+phoneController.text.toString(),
 
-      "phone_no": "+"+countryCode.dialingCode+phoneController.text.toString(),
+      //"phone_no": "+"+countryCode.dialingCode+phoneController.text.toString(),
 
     };
     //encode Map to JSON
@@ -386,7 +387,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
         print("Not Allowed");
         print("Not Allowed");
         Show_toast_Now("User Not Registered", Colors.red);
-        Navigator.pop(loadContext);
+        Navigator.pop(loadContext!);
 
 
 
@@ -446,20 +447,20 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                           children: [
                             Text("Phone Login"),
                             SizedBox(height: 10,),
-                            CountryPicker(
-                              dense: false,
-                              showFlag: true,
-                              showDialingCode: true,
-                              showCurrency: false,
-                              showCurrencyISO: false,
-                              showName: false,
-                              onChanged: (Country country) {
-                                setState(() {
-                                  countryCode = country;
-                                });
-                              },
-                              selectedCountry: countryCode,
-                            ),
+                            // CountryPicker(
+                            //   dense: false,
+                            //   showFlag: true,
+                            //   showDialingCode: true,
+                            //   showCurrency: false,
+                            //   showCurrencyISO: false,
+                            //   showName: false,
+                            //   onChanged: (Country country) {
+                            //     setState(() {
+                            //       countryCode = country;
+                            //     });
+                            //   },
+                            //   selectedCountry: countryCode,
+                            // ),
                           ],
                         ),
                         Expanded(
@@ -484,7 +485,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
                   GestureDetector(
                     onTap: (){
-                      print("+"+countryCode.dialingCode+phoneController.text);
+                      //print("+"+countryCode.dialingCode+phoneController.text);
                       _submit();
                     },
                     child: SizedBox(

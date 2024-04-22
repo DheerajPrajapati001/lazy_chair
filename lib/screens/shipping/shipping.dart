@@ -349,7 +349,7 @@ class _ShippingState extends State<Shipping> {
       return;
     }
    await placeOrder(productList: GlobalData.cartProductList);
-   //emptyCart();
+   emptyCart();
     _formKey.currentState.save();
   }
 

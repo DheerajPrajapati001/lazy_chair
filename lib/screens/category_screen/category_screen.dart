@@ -58,7 +58,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text(
-          getTranslated(context, "category"),
+          getTranslated(context, "category")!,
           style: TextStyle(
               color: Colors.black,
               fontSize: MediaQuery.of(context).size.width * .045,
@@ -69,7 +69,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       ),
       body: SafeArea(
         child: GlobalData.isLoading==true?Center(child: Text("Loading...")):category.isEmpty?
-        Center(child: Text(getTranslated(context, "empty_category_list"))):
+        Center(child: Text(getTranslated(context, "empty_category_list")!)):
         CustomScrollView(
           slivers: <Widget>[
 
@@ -114,7 +114,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               radius: 60,
                               backgroundColor: GlobalData.black.withOpacity(0.2),
                               backgroundImage: category[index].image==null?NetworkImage("https://beta.saurabhenterprise.com/wp-content/uploads/2021/04/2.png"):
-                              NetworkImage(category[index].image.src),
+                              NetworkImage(category[index].image!.src!),
 
                             ),
                             /*Container(
@@ -130,7 +130,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               ),
                               //child: Image.network(product.images[0].src, fit: BoxFit.cover,),
                             ),*/
-                            Text(category[index].name?? 'Loading...', style: Theme.of(context).textTheme.title.apply(color: Colors.blueGrey),),
+                            Text(category[index].name?? 'Loading...', style: Theme.of(context).textTheme.titleMedium!.apply(color: Colors.blueGrey),),
                             //Text("\$ 55", style: Theme.of(context).textTheme.subtitle,)
                           ],
                         ),

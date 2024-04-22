@@ -11,8 +11,8 @@ import '../../woocommerce_error.dart';
 import '../global.dart';
 
 class ProductDetails extends StatefulWidget {
-  final WooProduct productDetails;
-  const ProductDetails({Key key, @required this.productDetails}) : super(key: key);
+  final WooProduct? productDetails;
+  const ProductDetails({Key? key, @required this.productDetails}) : super(key: key);
 
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
@@ -21,7 +21,7 @@ class ProductDetails extends StatefulWidget {
 class _ProductDetailsState extends State<ProductDetails> {
   int _counter = 1;
 
-  Future addToMyCartfix({@required String itemId, @required String quantity, List variations})
+  Future addToMyCartfix({@required String? itemId, @required String? quantity, List? variations})
   async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var jwt = await prefs.getString('jwt');
@@ -172,7 +172,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         Row(
                           children: [
                             Text(
-                              widget.productDetails.name.toString(),
+                              widget.productDetails!.name.toString(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: MediaQuery.of(context).size.height *
@@ -180,7 +180,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                             Spacer(),
                             Text(
-                              '\$${widget.productDetails.price}',
+                              '\$${widget.productDetails!.price}',
                               style: TextStyle(
                                   fontSize:
                                       MediaQuery.of(context).size.height * .03,
@@ -211,7 +211,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               width: 10,
                             ),
                             Text(
-                              widget.productDetails.averageRating,
+                              widget.productDetails!.averageRating,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize:
@@ -297,7 +297,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           height: MediaQuery.of(context).size.height * .015,
                         ),
                         Html(
-                          data: widget.productDetails.description,
+                          data: widget.productDetails!.description,
                           style: {
                             "p":Style(
                               textAlign: TextAlign.justify,fontSize: FontSize.large,
@@ -393,7 +393,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 right: MediaQuery.of(context).size.width * .2,
                 top: MediaQuery.of(context).size.height * .1,
                 child:  Image.network(
-                  widget.productDetails.images==null?"https://ronakfabricatorworks.com/wp-content/uploads/2021/02/download.jpg":widget.productDetails.images[0].src,
+                  widget.productDetails!.images==null?"https://ronakfabricatorworks.com/wp-content/uploads/2021/02/download.jpg":widget.productDetails!.images[0].src,
                   height: MediaQuery.of(context).size.height*.20,
                 ),
               ),
@@ -416,9 +416,9 @@ class _ProductDetailsState extends State<ProductDetails> {
 }
 
 class ChairColors extends StatelessWidget {
-  final Color color;
+  final Color? color;
 
-  const ChairColors({Key key, this.color}) : super(key: key);
+  const ChairColors({Key? key, this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

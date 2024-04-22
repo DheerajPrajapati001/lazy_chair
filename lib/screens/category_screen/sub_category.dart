@@ -58,7 +58,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
         centerTitle: true,
         automaticallyImplyLeading: true,
         title: Text(
-          getTranslated(context, "sub_category"),
+          getTranslated(context, "sub_category")!,
           style: TextStyle(
               color: Colors.black,
               fontSize: MediaQuery.of(context).size.width * .045,
@@ -69,7 +69,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
       ),
       body: SafeArea(
         child: GlobalData.isLoading==true?Center(child: Text("Loading...")):category.isEmpty?
-        Center(child: Text(getTranslated(context, "empty_category_list"))):
+        Center(child: Text(getTranslated(context, "empty_category_list")!)):
         CustomScrollView(
           slivers: <Widget>[
             /*SliverToBoxAdapter(
@@ -113,7 +113,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                               //child: Text(category[index].name?? 'Loading...', style: Theme.of(context).textTheme.headline6.apply(color: Colors.blueGrey),),
                               radius: 60,
                               backgroundImage: category[index].image==null?NetworkImage("https://beta.saurabhenterprise.com/wp-content/uploads/2021/04/2.png"):
-                              NetworkImage(category[index].image.src),
+                              NetworkImage(category[index].image!.src!),
 
                             ),
                             /*Container(
@@ -129,7 +129,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                               ),
                               //child: Image.network(product.images[0].src, fit: BoxFit.cover,),
                             ),*/
-                            Text(category[index].name?? 'Loading...', style: Theme.of(context).textTheme.title.apply(color: Colors.blueGrey),),
+                            Text(category[index].name?? 'Loading...', style: Theme.of(context).textTheme.titleLarge!.apply(color: Colors.blueGrey),),
                             //Text("\$ 55", style: Theme.of(context).textTheme.subtitle,)
                           ],
                         ),

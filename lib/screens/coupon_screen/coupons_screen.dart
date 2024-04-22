@@ -101,14 +101,14 @@ class _CouponState extends State<Coupon> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(15.0),
-                                        child: Center(child: Text(coupon[i].code)),
+                                        child: Center(child: Text(coupon[i].code!)),
                                       )),
                                     Spacer(),
-                                  Text("Valid till "+coupon[i].dateExpires.substring(0,10))
+                                  Text("Valid till "+coupon[i].dateExpires!.substring(0,10))
                                 ],
                               ),
                              SizedBox(height: 5,),
-                              Text("Get "+coupon[i].amount+" "+coupon[i].discountType+" off on cart items"),
+                              Text("Get "+coupon[i].amount!+" "+coupon[i].discountType!+" off on cart items"),
                               //Text(coupon[i].minimumAmount),
                             ],
                           ),
