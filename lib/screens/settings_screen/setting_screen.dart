@@ -18,7 +18,7 @@ class _SettingState extends State<Setting> {
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: Text(
-            getTranslated(context, 'settings'),
+            getTranslated(context, 'settings')!,
           style: TextStyle(
               color: Colors.black,
               fontSize: MediaQuery.of(context).size.width * .045,

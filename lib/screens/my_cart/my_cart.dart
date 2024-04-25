@@ -15,9 +15,9 @@ import '../global.dart';
 
 class MyCart extends StatefulWidget {
 
-  final WooCartItem cartItem;
+  final WooCartItem? cartItem;
 
-  const MyCart({Key key, this.cartItem}) : super(key: key);
+  const MyCart({Key? key, this.cartItem}) : super(key: key);
 
   @override
   _MyCartState createState() => _MyCartState();
@@ -26,7 +26,7 @@ class MyCart extends StatefulWidget {
 class _MyCartState extends State<MyCart> {
   int _counter = 1;
 
-  List<WooCartItem> cartItems = [];
+  List<WooCartItem>? cartItems = [];
   /*var cartProducts = <CartProducts>[
     CartProducts(
         productId: "168",
@@ -99,8 +99,8 @@ class _MyCartState extends State<MyCart> {
         for(var p in jsonStr){
           var prod = WooCartItem.fromJson(p);
           print('prod gotten here : '+prod.name.toString());
-          cartItems.add(prod);
-          GlobalData.itemKey=prod.key;
+          cartItems!.add(prod);
+          GlobalData.itemKey=prod.key!;
           GlobalData.productId=prod.id.toString();
           print("price");
           print(GlobalData.itemKey);
@@ -138,8 +138,8 @@ class _MyCartState extends State<MyCart> {
 
     totalPrice=0;
 
-    for (var i = 0; i < cartItems.length; i++) {
-      totalPrice += (int.parse(cartItems[i].total.lineTotal)*cartItems[i].quantity);
+    for (var i = 0; i < cartItems!.length; i++) {
+      totalPrice += (int.parse(cartItems![i].total!.lineTotal!)*cartItems![i].quantity!);
     }
   }
 
@@ -189,9 +189,9 @@ class _MyCartState extends State<MyCart> {
 
 
   Future updateCartItems(
-      {@required String key, @required String itemId,
-        @required String quantity,
-        List variations}) async {
+      {@required String? key, @required String? itemId,
+        @required String? quantity,
+        List? variations}) async {
 
     Map<String, dynamic> data = {
       'key':key,
@@ -349,7 +349,7 @@ class _MyCartState extends State<MyCart> {
             },
               child: Icon(Icons.arrow_back)):SizedBox(),
           title: Text(
-            getTranslated(context, "my_cart"),
+            getTranslated(context, "my_cart")!,
             style: TextStyle(
                 color: Colors.black,
                 fontSize: MediaQuery.of(context).size.width * .045,
@@ -360,8 +360,8 @@ class _MyCartState extends State<MyCart> {
           elevation: 0,
         ),
         body: SafeArea(
-          child: GlobalData.isLoading==true?Center(child: Text("Loading...")):cartItems.isEmpty?
-          Center(child: Text(getTranslated(context, "no_cart_items"))):Column(
+          child: GlobalData.isLoading==true?Center(child: Text("Loading...")):cartItems!.isEmpty?
+          Center(child: Text(getTranslated(context, "no_cart_items")!)):Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -377,7 +377,7 @@ class _MyCartState extends State<MyCart> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        getTranslated(context, "total_items")+": "+cartItems.length.toString(),
+                        getTranslated(context, "total_items")!+": "+cartItems!.length.toString(),
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize:
@@ -388,7 +388,7 @@ class _MyCartState extends State<MyCart> {
                       ),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: cartItems.length,
+                          itemCount: cartItems!.length,
                           itemBuilder: (c,index){
                             return Column(
                               children: [
@@ -402,7 +402,7 @@ class _MyCartState extends State<MyCart> {
                                           borderRadius: BorderRadius.circular(10)
                                       ),
                                       child: Center(
-                                        child: Image.network(cartItems[index].images[0].src,height: MediaQuery.of(context).size.height*.1,),
+                                        child: Image.network(cartItems![index].images![0].src!,height: MediaQuery.of(context).size.height*.1,),
                                       ),
                                     ),
                                     SizedBox(
@@ -413,7 +413,7 @@ class _MyCartState extends State<MyCart> {
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          cartItems[index].name,
+                                          cartItems![index].name!,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
@@ -434,7 +434,7 @@ class _MyCartState extends State<MyCart> {
                                         Row(
                                           children: [
                                             Text(
-                                              getTranslated(context, "qty")+": ",
+                                              getTranslated(context, "qty")!+": ",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14),
@@ -447,8 +447,8 @@ class _MyCartState extends State<MyCart> {
                                               children: [
                                                 GestureDetector(
                                                   onTap: () async {
-                                                    if(cartItems[index].quantity<=cartItems[index].quantity_limit){
-                                                      BuildContext loadContext;
+                                                    if(cartItems![index].quantity!<=cartItems![index].quantity_limit!){
+                                                      BuildContext? loadContext;
                                                       showDialog(
                                                           barrierDismissible: false,
                                                           context: context,
@@ -463,15 +463,15 @@ class _MyCartState extends State<MyCart> {
                                                               //Center(child: CircularProgressIndicator())
                                                             );
                                                           });
-                                                      cartItems[index].quantity--;
+                                                      cartItems![index].quantity--;
 
 
                                                       setState(() {
 
                                                       });
 
-                                                      await updateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
-                                                      Navigator.pop(loadContext);
+                                                      await updateCartItems(key: cartItems![index].key, itemId: GlobalData.productId, quantity: cartItems![index].quantity.toString());
+                                                      Navigator.pop(loadContext!);
 
                                                       updateCart();
                                                       GlobalData.cartProductList.clear();
@@ -488,16 +488,16 @@ class _MyCartState extends State<MyCart> {
                                                     }
 
                                                     else{
-                                                      Show_toast_Now("Please select quantity less then "+cartItems[index].quantity_limit.toString(), Colors.red);
+                                                      Show_toast_Now("Please select quantity less then "+cartItems![index].quantity_limit.toString(), Colors.red);
                                                     }
 
 
-                                                    if(cartItems[index].quantity==0){
+                                                    if(cartItems![index].quantity==0){
 
                                                       Fluttertoast.showToast(msg: "Removing from Cart");
 
-                                                      cartItems.removeAt(index);
-                                                      deleteCartItems(key: cartItems[index].key);
+                                                      cartItems!.removeAt(index);
+                                                      deleteCartItems(key: cartItems![index].key);
                                                     }
 
                                                   },
@@ -506,15 +506,15 @@ class _MyCartState extends State<MyCart> {
                                                 SizedBox(
                                                   width: MediaQuery.of(context).size.width*.04,
                                                 ),
-                                                Text(cartItems[index].quantity.toString(),style: TextStyle(fontWeight: FontWeight.bold,
+                                                Text(cartItems![index].quantity.toString(),style: TextStyle(fontWeight: FontWeight.bold,
                                                     fontSize: MediaQuery.of(context).size.width*.05),),
                                                 SizedBox(
                                                   width: MediaQuery.of(context).size.width*.04,
                                                 ),
                                                 GestureDetector(
                                                     onTap: () async {
-                                                      if(cartItems[index].quantity<=cartItems[index].quantity_limit){
-                                                        BuildContext loadContext;
+                                                      if(cartItems![index].quantity!<=cartItems![index].quantity_limit!){
+                                                        BuildContext? loadContext;
                                                         showDialog(
                                                             barrierDismissible: false,
                                                             context: context,
@@ -529,7 +529,7 @@ class _MyCartState extends State<MyCart> {
                                                                 //Center(child: CircularProgressIndicator())
                                                               );
                                                             });
-                                                        cartItems[index].quantity++;
+                                                        cartItems![index].quantity++;
 
 
                                                         setState(() {
@@ -537,8 +537,8 @@ class _MyCartState extends State<MyCart> {
                                                         });
 
 
-                                                        await updateCartItems(key: cartItems[index].key, itemId: GlobalData.productId, quantity: cartItems[index].quantity.toString());
-                                                        Navigator.pop(loadContext);
+                                                        await updateCartItems(key: cartItems![index].key, itemId: GlobalData.productId, quantity: cartItems![index].quantity.toString());
+                                                        Navigator.pop(loadContext!);
                                                         updateCart();
                                                         GlobalData.cartProductList.clear();
                                                         Show_toast_Now("Cart Updated Successfully ", Colors.green);
@@ -552,7 +552,7 @@ class _MyCartState extends State<MyCart> {
                                                         });
                                                       }
                                                       else{
-                                                        Show_toast_Now("Please select quantity less then "+cartItems[index].quantity_limit.toString(), Colors.red);
+                                                        Show_toast_Now("Please select quantity less then "+cartItems![index].quantity_limit.toString(), Colors.red);
                                                       }
 
                                                     },
@@ -566,13 +566,13 @@ class _MyCartState extends State<MyCart> {
                                           onTap:(){
                                             Fluttertoast.showToast(msg: "Removing from Cart");
 
-                                            deleteCartItems(key: cartItems[index].key);
-                                            cartItems.removeAt(index);
+                                            deleteCartItems(key: cartItems![index].key);
+                                            cartItems!.removeAt(index);
 
 
 
                                             },
-                                            child: Text(getTranslated(context, "remove"),style: TextStyle(color: Colors.red),))
+                                            child: Text(getTranslated(context, "remove")!,style: TextStyle(color: Colors.red),))
 
                                       ],
                                     ),
@@ -582,8 +582,8 @@ class _MyCartState extends State<MyCart> {
                                         SizedBox(
                                           height: MediaQuery.of(context).size.height*.06,
                                         ),
-                                        Text(cartItems[index].prices.currencySymbol+
-                                            ((int.parse(cartItems[index].prices.price)/100)*(cartItems[index].quantity)).toStringAsFixed(2),
+                                        Text(cartItems![index].prices!.currencySymbol!+
+                                            ((int.parse(cartItems![index].prices!.price!)/100)*(cartItems![index].quantity!)).toStringAsFixed(2),
                                           style: TextStyle(
                                               fontSize:14,
                                               fontWeight: FontWeight.bold),
@@ -636,7 +636,7 @@ class _MyCartState extends State<MyCart> {
                       Row(
                         children: [
                           Text(
-                            getTranslated(context,"subtotal"),
+                            getTranslated(context,"subtotal")!,
                             style: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
                                 fontSize:
@@ -683,7 +683,7 @@ class _MyCartState extends State<MyCart> {
                       Row(
                         children: [
                           Text(
-                            getTranslated(context, "total"),
+                            getTranslated(context, "total")!,
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -731,7 +731,7 @@ class _MyCartState extends State<MyCart> {
                             splashColor: Colors.black.withOpacity(0.1),
                             child: Center(
                               child: Text(
-                                getTranslated(context, "proceed_to_buy"),
+                                getTranslated(context, "proceed_to_buy")!,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),

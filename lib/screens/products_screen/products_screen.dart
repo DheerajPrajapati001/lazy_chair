@@ -147,7 +147,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 ),
                                 Expanded(
                                     flex:2,
-                                    child: Text("\$"+product.price, style: Theme.of(context).textTheme.subtitle,)),
+                                    child: Text("\$"+product.price, style: Theme.of(context).textTheme.subtitle1,)),
 
                               ],
                             ),

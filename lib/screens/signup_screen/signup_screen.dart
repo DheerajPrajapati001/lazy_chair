@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter_country_picker/flutter_country_picker.dart';
+//import 'package:flutter_country_picker/flutter_country_picker.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
@@ -33,25 +33,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
   bool _obscureText = true;
-  Country countryCode = Country.MY;
+ // Country countryCode = Country.MY;
 
 
   void _submit() {
-    final isValid = _formKey.currentState.validate();
+    final isValid = _formKey.currentState!.validate();
     if (!isValid) {
-      print(countryCode.dialingCode+phoneNo.text);
+      //print(countryCode.dialingCode+phoneNo.text);
       return;
     }
     //SignUp();
     //register();
-    print("+"+countryCode.dialingCode+phoneNo.text);
+    //print("+"+countryCode.dialingCode+phoneNo.text);
     createCustomer();
     //saving(context);
    // Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoryPage()));
 
-    _formKey.currentState.save();
+    _formKey.currentState!.save();
   }
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
   /*login() async {
     BuildContext loadContext;
     showDialog(
@@ -204,7 +204,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
 
   createCustomer()async{
-    BuildContext loadContext;
+    BuildContext? loadContext;
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -232,7 +232,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       'username':userName.text,
       "billing": {
         "email": email.text,
-        "phone": "+"+countryCode.dialingCode+phoneNo.text
+        "phone": "+"+"91"+phoneNo.text
       },
 
     };
@@ -253,7 +253,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       {
 
         print("LOGIN DONEEEEEEEEEEEEEEEE");
-        GlobalData.phoneNumber="+"+countryCode.dialingCode+phoneNo.text.toString();
+        GlobalData.phoneNumber="+"+"91"+phoneNo.text.toString();
         GlobalData.password=password.text.toString();
         GlobalData.emailId=email.text;
         GlobalData.userName=userName.text;

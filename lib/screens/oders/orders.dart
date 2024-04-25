@@ -111,12 +111,12 @@ class _OrdersState extends State<Orders> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomOrders(
-                        totalItems: orders[i].lineItems.length.toString()+" Items",
-                        date: "Ordered Date: "+orders[i].dateCreated.substring(0,10),
+                        totalItems: orders[i].lineItems!.length.toString()+" Items",
+                        date: "Ordered Date: "+orders[i].dateCreated!.substring(0,10),
                         description: "Order Id: "+"#"+orders[i].id.toString(),
-                        price: orders[i].total,
+                        price: orders[i].total!,
                         click: (){
-                          GlobalData.orderId=orders[i].id;
+                          GlobalData.orderId=orders[i].id!;
                           print(GlobalData.orderId);
 
                           Navigator.pushNamed(context, 'OrderDetails');
@@ -149,11 +149,11 @@ class _OrdersState extends State<Orders> {
 
 class CustomOrders extends StatelessWidget {
 
-  final String totalItems;
-  final String description;
-  final String date;
-  final String price;
-  final VoidCallback click;
+  final String? totalItems;
+  final String? description;
+  final String? date;
+  final String? price;
+  final VoidCallback? click;
 
   CustomOrders({
     this.price,this.description,this.date,this.totalItems,this.click
@@ -188,14 +188,14 @@ class CustomOrders extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(totalItems,style: TextStyle(
+                  Text(totalItems!,style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: MediaQuery.of(context).size.width*.04
                   ),),
                   SizedBox(
                     height: MediaQuery.of(context).size.height*.01,
                   ),
-                  Text(description,style: TextStyle(
+                  Text(description!,style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width*.03,
                     color: GlobalData.black
                   ),)
@@ -206,14 +206,14 @@ class CustomOrders extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
-                  Text(date,style: TextStyle(
+                  Text(date!,style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: MediaQuery.of(context).size.width*.04
                   ),),
                   SizedBox(
                     height: MediaQuery.of(context).size.height*.01,
                   ),
-                  Text('\$'+price,style: TextStyle(
+                  Text('\$'+price!,style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.green,
                       fontSize: MediaQuery.of(context).size.width*.05
